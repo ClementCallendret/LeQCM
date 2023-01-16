@@ -1,4 +1,5 @@
 from flask import Flask, redirect, url_for, request
+import main
 
 @app.route('register',methods = ['POST','GET'])
 def register():
