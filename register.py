@@ -7,3 +7,4 @@ def register():
         password = request.form['password']
         #entrer name + password dans fichier txt
         fileIO.login.add([login,password])
+        return redirect(url_for('connected',login = login))

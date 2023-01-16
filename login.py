@@ -9,6 +9,5 @@ def login():
         #rechercher si password correspond
         if (fileIO.lofin.check([login,password])):
                 #afficher son compte
+                return redirect(url_for('connected',login = login))
 
-                #supprimer le print quand l'affichage est fait
-                print("It's workingg")
