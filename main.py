@@ -1,4 +1,5 @@
 from flask import render_template, Flask
+import login,register,connected
 
 app = Flask(__name__)
 @app.route('/')
