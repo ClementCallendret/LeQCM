@@ -5,9 +5,9 @@
 .login :
     #done
     fileIO.login.create("email", "password") -> add to the login table
+    fileIO.login.check(["email", "password"]) -> return true if the password is correct
     #to-do
     fileIO.login.remove(["email", "password"]) -> remove from the login table and delete all question registered if the password is correct
-    fileIO.login.check(["email", "password"]) -> return true if the password is correct
 
 #to-do
 .question : 
@@ -17,4 +17,20 @@
     fileIO.question.listByAccount("email") -> return all questions created by the account
     fileIO.question.listByTag("tag(s)") -> return all questions with the given tags
     fileIO.question.getById("questionID") -> return the question with the given ID
+
+struct question(table):
+    [[account, questionID, tag],[....]]
+
+static(file):
+    question.txt -> account\nquestionId(loc)\ntags\n\n...
+    question/
+        1/
+            question.txt -> question (raw text to format?)
+            answers.txt -> list of answers
+        2/
+            ...
+        ...
+    
+
+
 '''

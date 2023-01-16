@@ -1,7 +1,7 @@
 import fileIO
 def create(account, password):
     exist=False
-    data = fileIO.common.load()
+    data = fileIO.login.load()
     for couple in data:
         if couple[0]==account:
             exist = True
@@ -10,12 +10,35 @@ def create(account, password):
         if data=='':
             data = []
         data.append([account, password])
-        fileIO.common.save(data)
+        fileIO.login.save(data)
 
 def check(account, password):
     out=False
-    data = fileIO.common.load()
+    data = fileIO.login.load()
     for couple in data:
         if couple==[account, password]:
             out = True
     return out
+
+def load():
+    with open('./static/login.txt', 'r') as file:
+        file = file.read()[:-1].split("\n\n\n")
+        if file != ['']:
+            for i in range(len(file)):
+                file[i] = file[i].split("\n\n")
+            file[-1][1] = file[-1][1].replace("\n", '')
+        else:
+            file = []
+        return file
+
+def save(data):
+    with open('./static/login.txt', 'w') as file:
+        out = ""
+        for couple in data:
+            for item in couple:
+                out+= item + "\n\n"
+            out=out[:-2]
+            out+="\n\n\n"
+        out = out[:-3]
+        print(out, file=file)
+
