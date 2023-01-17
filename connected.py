@@ -1,5 +1,7 @@
-from flask import Flask, redirect, url_for, request
+from flask import Flask, Blueprint, request
 
-@app.request('/connected/<login>')
+connect = Blueprint('connected',__name__)
+
+@connect.route('/connected/<login>')
 def connected(login):
-    return 'Bienvenue' + login
+    return 'Bienvenue ' + login

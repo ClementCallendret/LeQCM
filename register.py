@@ -1,11 +1,17 @@
-from flask import Flask, redirect, url_for, request
-import main
+from flask import Flask, redirect, url_for, request, Blueprint,render_template
 
-@app.route('register',methods = ['POST','GET'])
+regist = Blueprint('register',__name__)
+
+@regist.route('/register')
+def init():
+    return render_template('register.html')
+
+@regist.route('/register',methods = ['POST','GET'])
 def register():
-    if (methods.request == 'POST'):
+    if (request.method == 'POST'):
         login = request.form['name']
         password = request.form['password']
         #entrer name + password dans fichier txt
-        fileIO.login.add([login,password])
-        return redirect(url_for('connected',login = login))
+        #fileIO.login.add([login,password])
+        print("register marche")
+        return redirect(url_for('login',login = login))
