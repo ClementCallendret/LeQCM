@@ -2,7 +2,6 @@ import fileIO
 import os
 from pathlib import Path
 
-### edit both to manage tags
 def loadTable():
     with open('./static/question.txt', 'r') as file:
         file = file.read()[:-1].split("\n\n\n")
@@ -94,6 +93,20 @@ def listByTag(tag):
     for item in table:
         if tag in item[2]:
             out.append(item[1])
+    return out
+def listByTags(tags):
+    bundle = []
+    for tag in tags:
+        bundle.append(fileIO.question.listByTag(tag))
+    out = []
+    for list in bundle:
+        for item in list:
+            inAll=True
+            for oList in bundle:
+                if not(item in oList):
+                    inAll=False
+            if inAll and not(item in out):
+                out.append(item)
     return out
 def update(questionID, question, answer):
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:

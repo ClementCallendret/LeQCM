@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 
 import markdown
-import md_mermaid, latex
+import md_mermaid
 
 import base64     
 
@@ -21,7 +21,7 @@ def md(): # la variable text correspondra à ce que l'on récupérera de la mét
                   # OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite avec mermaid en l'occurence. 
   text = """ 
 
-  \n##CLEMENT LA SALOPETTE\n
+  \n##CLEMENT LE BEST\n
 
   \n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n
 

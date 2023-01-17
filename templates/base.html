@@ -23,23 +23,28 @@
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Le Cul C'est M</a>
+                <a class="navbar-brand">Le Cul C'est M</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="#">Accueil</a></li>
-                {% if isConnected %}
-                <li><a href="#">Profil</a></li>
-                <li><a href="#">Mes Questions</a></li>
-                {% endif %}
-                {% if not isConnected %}
-                <li><a href="#">Connexion</a></li>
-                <li><a href="#">Inscription</a></li>
+                <li><a href="{{ url_for('gestion_acc') }}">Accueil</a></li>
+                {% if login %}
+                Login : {{ session['username'] }}
+                <li><a href="{{ url_for('connected') }}">Profil</a></li>
+                <li><a href="{{ url_for('editeurGet') }}">Mes Questions</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login.init') }}">Connexion</a></li>
+                <li><a href="{{ url_for('register.init') }}">Inscription</a></li>
                 {% endif %}
             </ul>
         </div>
     </nav>
 
     <div>
+
+        {% for mesg in get_flashed_messages() %}
+        <h1>{{ mesg }}</h1>
+        {% endfor %}
+
         {% block content %}
 
 
