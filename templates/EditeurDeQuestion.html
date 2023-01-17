@@ -4,22 +4,20 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6">
-            <form method="GET" action="/editeur">
-                <div class="container-fluid">
-                    <div class="row">
-                        <label for="enonce">Enoncé</label>
-                    </div>
-                    <div class="row">
-                        <input type="text" name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}">
-                    </div>
+        <div class="col-6 mainBoxes">
+            <form method="POST" action="/editeur">
+                <div class="container-fluid" style="display: block;">
+                    <label for="enonce">Enoncé</label>
+                    <textarea name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}" cols="100" rows="20"></textarea>
+
                     <hr />
 
                     <input type="hidden" name="nbRep" id="nbRep" value="{{nbReponses}}">
+                    <input type="hidden" name="idEachReps" id="idEachReps" value="{{idReps}}">
 
                     <div id="repListe">
                     {%for i in range(0, nbReponses)%}
-                        <div class="row" id="divReponse{{i}}">
+                        <div id="divReponse{{i}}">
                             <input type="checkbox" name="checkReponse{{i}}" id="checkReponse{{i}}">
                             <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}">
                             <input type="button" onclick="supprimerReponse({{i}})" value="Supprimer">
@@ -32,18 +30,22 @@
 
                     {%endfor%}
                     </div>
+
                     <hr />
-                    <div class="row">
-                        <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
-                    </div>
+
+                    <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
                     <input type="submit" value="apercu">
                 </div>
             </form>
 
         </div>
-        <div class="col-6">
-
+        <div class="col-6 mainBoxes">
+            {{enonceFormate|safe}}
         </div>
+
+        <script>
+            mermaid.initialize({startOnLoad:true});
+        </script>
     </div>
 </div>
 
