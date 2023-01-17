@@ -5,7 +5,7 @@ from login import logi
 from logout import logo
 from register import regist
 from connected import connect
-
+from interpreteur import interpreteur
 
 
 app = Flask(__name__)
@@ -13,6 +13,7 @@ app.register_blueprint(logi)
 app.register_blueprint(logo)
 app.register_blueprint(regist)
 app.register_blueprint(connect)
+app.register_blueprint(interpreteur)
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 #initialisation du login a vide
 
