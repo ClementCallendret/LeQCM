@@ -5,10 +5,41 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-6">
-            <form method="POST" action="/onVerra">
-                <label for="enonce">Enoncé</label>
-                <input type="text" name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici">
+            <form method="GET" action="/editeur">
+                <div class="container-fluid">
+                    <div class="row">
+                        <label for="enonce">Enoncé</label>
+                    </div>
+                    <div class="row">
+                        <input type="text" name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}">
+                    </div>
+                    <hr />
+
+                    <input type="hidden" name="nbRep" id="nbRep" value="{{nbReponses}}">
+
+                    <div id="repListe">
+                    {%for i in range(0, nbReponses)%}
+                        <div class="row" id="divReponse{{i}}">
+                            <input type="checkbox" name="checkReponse{{i}}" id="checkReponse{{i}}">
+                            <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}">
+                            <input type="button" onclick="supprimerReponse({{i}})" value="Supprimer">
+                            
+                        </div>
+
+                        {%if reponses[i]['val'] == 'on' %}
+                            <script>checkTheBox("checkReponse{{i}}")</script>
+                        {%endif%}
+
+                    {%endfor%}
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
+                    </div>
+                    <input type="submit" value="apercu">
+                </div>
             </form>
+
         </div>
         <div class="col-6">
 
