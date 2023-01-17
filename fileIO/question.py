@@ -2,7 +2,6 @@ import fileIO
 import os
 from pathlib import Path
 
-### edit both to manage tags
 def loadTable():
     with open('./static/question.txt', 'r') as file:
         file = file.read()[:-1].split("\n\n\n")
