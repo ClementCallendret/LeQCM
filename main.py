@@ -1,5 +1,4 @@
 from flask import render_template, Flask, request,Blueprint, session
-from flask_login import LoginManager
 
 from login import logi
 from logout import logo
