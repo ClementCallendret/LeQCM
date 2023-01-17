@@ -1,4 +1,6 @@
 from flask import render_template, Flask, redirect, url_for, request,Blueprint
+from flask_login import LoginManager
+
 
 from login import log
 from register import regist
@@ -7,11 +9,12 @@ from connected import connect
 
 
 app = Flask(__name__)
+login_manager = LoginManager()
 
 app.register_blueprint(log)
 app.register_blueprint(regist)
 app.register_blueprint(connect)
-app.config['SECRET_KEY'] = "RonaldoLeGoat"
+app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 
 
 @app.route('/')
