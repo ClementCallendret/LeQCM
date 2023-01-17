@@ -8,34 +8,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js"></script>
     <script src="{{ url_for('static', filename = 'scriptEditeur.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'scriptEditeur.js') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
 
 </head>
 
 <body>
-
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand">Le Cul C'est M</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('gestion_acc') }}">Accueil</a></li>
-                {% if login %}
+          <a class="navbar-brand" href="{{ url_for('accueil') }}">Le Cul C'est M</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                {% if isLoged %}
                 Login : {{ session['username'] }}
-                <li><a href="{{ url_for('connected') }}">Profil</a></li>
-                <li><a href="{{ url_for('editeurGet') }}">Mes Questions</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mesQuestions') }}">Mes Questions</a></li>
                 {% else %}
-                <li><a href="{{ url_for('login.init') }}">Connexion</a></li>
-                <li><a href="{{ url_for('register.init') }}">Inscription</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('login.init') }}">Connexion</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('register.init') }}">Inscription</a></li>
                 {% endif %}
             </ul>
+          </div>
         </div>
     </nav>
 
@@ -50,14 +50,6 @@
 
         {% endblock %}
     </div>
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-
 </body>
 
 </html>

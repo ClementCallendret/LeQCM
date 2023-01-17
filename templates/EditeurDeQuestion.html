@@ -4,11 +4,11 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6 mainBoxes">
+        <div class="col-sm-6 mainBoxes">
             <form method="POST" action="/editeur">
-                <div class="container-fluid" style="display: block;">
+                <div class="container-fluid semi-container" style="display: block;">
                     <label for="enonce">Enoncé</label>
-                    <textarea name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}" cols="100" rows="20"></textarea>
+                    <textarea name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}"></textarea>
 
                     <hr />
 
@@ -19,7 +19,7 @@
                     {%for i in range(0, nbReponses)%}
                         <div id="divReponse{{i}}">
                             <input type="checkbox" name="checkReponse{{i}}" id="checkReponse{{i}}">
-                            <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}">
+                            <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}" placeholder="Réponse">
                             <input type="button" onclick="supprimerReponse({{i}})" value="Supprimer">
                             
                         </div>
@@ -34,13 +34,13 @@
                     <hr />
 
                     <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
-                    <input type="submit" value="apercu">
+                    <input type="submit" value="Apercu">
                 </div>
             </form>
 
         </div>
-        <div class="col-6 mainBoxes">
-            {{enonceFormate|safe}}
+        <div class="col-sm-6 mainBoxes">
+            <div id="enoncePreview">{{enonceFormate|safe}}</div>
         </div>
 
         <script>

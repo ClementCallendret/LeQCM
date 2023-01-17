@@ -21,9 +21,9 @@ function ajouterReponse(){
     let container = $("#repListe");
     let nbRep = parseInt($("#nbRep").val());
 
-    let newRep = "<div class=\"row\" id=\"divReponse" + nbRep + "\">"
+    let newRep = "<div id=\"divReponse" + nbRep + "\">"
     newRep += "<input type=\"checkbox\" name=\"checkReponse" + nbRep + "\" id=\"checkReponse" + nbRep + "\">";
-    newRep += "<input type=\"text\" name=\"textReponse" + nbRep + "\" id=\"textReponse"+ nbRep +"\" value=\"\">";
+    newRep += "<input type=\"text\" name=\"textReponse" + nbRep + "\" id=\"textReponse"+ nbRep +"\" value=\"\" placeholder=\"Réponse\">";
     newRep += "<input type=\"button\" onclick=\"supprimerReponse("+ nbRep + ")\" value=\"Supprimer\"></div>";
 
     ids = $("#idEachReps");
