@@ -11,7 +11,6 @@ def create(account, password):
             data = []
         data.append([account, password])
         fileIO.login.save(data)
-
 def check(account, password):
     out=False
     data = fileIO.login.load()
@@ -38,7 +37,6 @@ def load():
         else:
             file = []
         return file
-
 def save(data):
     with open('./static/login.txt', 'w') as file:
         out = ""
@@ -49,4 +47,3 @@ def save(data):
             out+="\n\n\n"
         out = out[:-3]
         print(out, file=file)
-
