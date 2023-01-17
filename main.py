@@ -1,25 +1,27 @@
-from flask import render_template, Flask, redirect, url_for, request,Blueprint
+from flask import render_template, Flask, request,Blueprint, session
 from flask_login import LoginManager
 
-
-from login import log
+from login import logi
+from logout import logo
 from register import regist
 from connected import connect
 
 
 
 app = Flask(__name__)
-login_manager = LoginManager()
-
-app.register_blueprint(log)
+app.register_blueprint(logi)
+app.register_blueprint(logo)
 app.register_blueprint(regist)
 app.register_blueprint(connect)
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
-
+#initialisation du login a vide
 
 @app.route('/')
 def gestion_acc():
-    return render_template('Accueil.html')
+    login=False
+    if 'username' in session:
+        login=True
+    return render_template('Accueil.html',login=login)
 
 @app.route('/editeur', methods=['GET', 'POST'])
 def editeurGet():

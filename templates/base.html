@@ -24,11 +24,11 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="#">Accueil</a></li>
-                {% if isConnected %}
+                {% if login %}
+                Login : {{ session['username'] }}
                 <li><a href="#">Profil</a></li>
                 <li><a href="#">Mes Questions</a></li>
-                {% endif %}
-                {% if not isConnected %}
+                {% else %}
                 <li><a href="#">Connexion</a></li>
                 <li><a href="#">Inscription</a></li>
                 {% endif %}
