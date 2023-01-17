@@ -7,14 +7,14 @@ regist = Blueprint('register',__name__)
 def init():
     return render_template('register.html')
 
-@regist.route('/register',methods = ['POST','GET'])
+@regist.route('/register',methods = ['POST'])
 def register():
     if (request.method == 'POST'):
-        login = request.form['name']
-        password = request.form['password']
+        login = request.form.get('login')
+        password = request.form.get('password')
         if (not (fileIO.login.check(login,register))):
             fileIO.login.create(login,password)
-            return redirect(url_for('login'))
+            return redirect(url_for('login.init'))
         else :
             flash('Utilisateur inconnu')
-        return render_template('register.html')
+    return render_template('register.html')
