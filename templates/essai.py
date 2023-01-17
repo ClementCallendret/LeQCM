@@ -44,7 +44,7 @@ def md(): # la variable text correspondra à ce que l'on récupérera de la mét
   ~~~
   """
 
-  html = text.markdown(extensions=['md_mermaid'])
+  html = markdown.markdown(text, extensions=['md_mermaid'])
 
   
 

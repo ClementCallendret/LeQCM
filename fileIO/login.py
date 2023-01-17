@@ -19,7 +19,15 @@ def check(account, password):
         if couple==[account, password]:
             out = True
     return out
-
+def remove(account):
+    data = fileIO.login.load()
+    newData=[]
+    for couple in data:
+        if couple[0]!=account:
+            newData.append(couple)
+    fileIO.login.save(newData)
+    for item in fileIO.question.listByAccount("e"):
+        fileIO.question.remove(item)
 def load():
     with open('./static/login.txt', 'r') as file:
         file = file.read()[:-1].split("\n\n\n")

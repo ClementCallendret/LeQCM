@@ -53,9 +53,12 @@ def newQuestion(account, question, answer, tag):
     listOfId = os.listdir("./static/questions")
     listOfId.sort()
     tableId = fileIO.question.loadTable()
-    if listOfId == ['']:
+    if listOfId == []:
         tableId.append([account, str(len(listOfId)), tag])
         fileIO.question.saveQuestion(len(listOfId), question, answer)
+    elif listOfId[0] != '0':
+        tableId.append([account, '0', tag])
+        fileIO.question.saveQuestion('0', question, answer)
     else:
         written = False
         for i in range(1, len(listOfId)):
@@ -71,4 +74,17 @@ def newQuestion(account, question, answer, tag):
 def remove(questionID):
     for file in os.listdir('./static/questions/'+str(questionID)):
         os.remove('./static/questions/'+str(questionID)+'/'+(file))
-    os.removedirs('./static/questions/'+str(questionID))
+    os.rmdir('./static/questions/'+str(questionID)+'/')
+    tableID = fileIO.question.loadTable()
+    newTable = []
+    for item in tableID:
+        if item[1] != questionID:
+            newTable.append(item)
+    fileIO.question.saveTable(newTable)
+def listByAccount(account):
+    table = fileIO.question.loadTable()
+    out = []
+    for item in table:
+        if item[0] == account:
+            out.append(item[1])
+    return out
