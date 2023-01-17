@@ -37,6 +37,11 @@
     </nav>
 
     <div>
+
+        {% for mesg in get_flashed_messages() %}
+        <h1>{{ mesg }}</h1>
+        {% endfor %}
+
         {% block content %}
 
 

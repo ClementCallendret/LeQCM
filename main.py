@@ -11,6 +11,8 @@ app = Flask(__name__)
 app.register_blueprint(log)
 app.register_blueprint(regist)
 app.register_blueprint(connect)
+app.config['SECRET_KEY'] = "RonaldoLeGoat"
+
 
 @app.route('/')
 def gestion_acc():
