@@ -18,18 +18,6 @@ def loadTable():
         else:
             file = []
         return file
-
-
-def saveQuestion(questionID, question, answer):
-    os.mkdir('./static/questions/'+str(questionID))
-    with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
-        out.write(question)
-    for i in range(len(answer)):
-        with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
-            out.write(answer[i])
-
-
-
 def saveTable(data):
     with open('./static/question.txt', 'w') as file:
         out = ""
@@ -43,13 +31,27 @@ def saveTable(data):
             out+="\n\n\n"
         out = out[:-3]
         print(out, file=file)
-
-
-
-
-
+def saveQuestion(questionID, question, answer):
+    os.mkdir('./static/questions/'+str(questionID))
+    with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
+        out.write(question)
+    for i in range(len(answer)):
+        with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
+            out.write(answer[i])
+def read(questionID):
+    out = []
+    if (Path('./static/questions/'+str(questionID)).is_dir()):
+        numRep = len(os.listdir('./static/questions/'+str(questionID)+'/'))-1
+        ans = []
+        for i in range(numRep):
+            with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'r') as file:
+                ans.append(file.read())
+        with open('./static/questions/'+str(questionID)+'/question.txt', 'r') as file:
+            out = [file.read(), ans]
+    return out
 def newQuestion(account, question, answer, tag):
     listOfId = os.listdir("./static/questions")
+    listOfId.sort()
     tableId = fileIO.question.loadTable()
     if listOfId == ['']:
         tableId.append([account, str(len(listOfId)), tag])
@@ -57,12 +59,16 @@ def newQuestion(account, question, answer, tag):
     else:
         written = False
         for i in range(1, len(listOfId)):
-            if listOfId[i] != int(listOfId[i-1])-1:
-                tableId.append([account, str(i-1), tag])
-                fileIO.question.saveQuestion(i-1, question, answer)
+            if int(listOfId[i]) != int(listOfId[i-1])+1:
+                tableId.append([account, str(i), tag])
+                fileIO.question.saveQuestion(i, question, answer)
                 written = True
         if not(written):
             tableId.append([account, str(len(listOfId)), tag])
             fileIO.question.saveQuestion(len(listOfId), question, answer)
             written = True
     fileIO.question.saveTable(tableId)
+def remove(questionID):
+    for file in os.listdir('./static/questions/'+str(questionID)):
+        os.remove('./static/questions/'+str(questionID)+'/'+(file))
+    os.removedirs('./static/questions/'+str(questionID))
