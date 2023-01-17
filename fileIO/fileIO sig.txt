@@ -11,13 +11,17 @@
 
 #to-do
 .question : 
-    fileIO.question.add("email", "question", ["answers"]) -> add the question to the question table
+    #done
+    fileIO.question.newQuestion("email", "question", ["answers"]) -> add the question to the question table
+    #to-do
     fileIO.question.remove("email", "questionID") -> remove the question from the question table
     fileIO.question.update("email", "password", "question", ["answers"]) -> update the question in the question table
     fileIO.question.listByAccount("email") -> return all questions created by the account
     fileIO.question.listByTag("tag(s)") -> return all questions with the given tags
     fileIO.question.getById("questionID") -> return the question with the given ID
 
+
+#done
 struct question(table):
     [[account, questionID, tag],[....]]
 
