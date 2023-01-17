@@ -88,3 +88,16 @@ def listByAccount(account):
         if item[0] == account:
             out.append(item[1])
     return out
+def listByTag(tag):
+    table = fileIO.question.loadTable()
+    out = []
+    for item in table:
+        if tag in item[2]:
+            out.append(item[1])
+    return out
+def update(questionID, question, answer):
+    with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
+        out.write(question)
+    for i in range(len(answer)):
+        with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
+            out.write(answer[i])

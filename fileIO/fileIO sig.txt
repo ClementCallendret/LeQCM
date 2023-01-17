@@ -15,9 +15,10 @@
     fileIO.question.read("questionId") -> return ['question', ['answer1','answer2',...]]
     fileIO.question.remove("questionID") -> remove the question from the question table
     fileIO.question.listByAccount("email") -> return all questionIDs created by the account
+    fileIO.question.listByTag("tag(s)") -> return all questionIDs with the given tags
     #to-do
     fileIO.question.update("email", "password", "question", ["answers"]) -> update the question in the question table
-    fileIO.question.listByTag("tag(s)") -> return all questionIDs with the given tags
+
 
 
 #done
