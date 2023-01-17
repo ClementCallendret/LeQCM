@@ -95,6 +95,20 @@ def listByTag(tag):
         if tag in item[2]:
             out.append(item[1])
     return out
+def listByTags(tags):
+    bundle = []
+    for tag in tags:
+        bundle.append(fileIO.question.listByTag(tag))
+    out = []
+    for list in bundle:
+        for item in list:
+            inAll=True
+            for oList in bundle:
+                if not(item in oList):
+                    inAll=False
+            if inAll and not(item in out):
+                out.append(item)
+    return out
 def update(questionID, question, answer):
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
