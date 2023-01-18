@@ -30,44 +30,53 @@ def saveTable(data):
             out+="\n\n\n"
         out = out[:-3]
         print(out, file=file)
-def saveQuestion(questionID, question, answer):
+def saveQuestion(questionID, title, question, answer, correctAnswer):
     os.mkdir('./static/questions/'+str(questionID))
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
     for i in range(len(answer)):
         with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
             out.write(answer[i])
+    with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
+        formated = [title, correctAnswer]
+        strOut = ""
+        for item in formated:
+            strOut+=str(item)+"\n\n"
+        strOut=strOut[:-2]
+        out.write(strOut)
 def read(questionID):
     out = []
     if (Path('./static/questions/'+str(questionID)).is_dir()):
-        numRep = len(os.listdir('./static/questions/'+str(questionID)+'/'))-1
+        numRep = len(os.listdir('./static/questions/'+str(questionID)+'/'))-2
         ans = []
         for i in range(numRep):
             with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'r') as file:
                 ans.append(file.read())
         with open('./static/questions/'+str(questionID)+'/question.txt', 'r') as file:
-            out = [file.read(), ans]
+            with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'r') as tA:    
+                tittleAnswer = tA.read().split('\n\n')
+                out = [file.read(), tittleAnswer[0], ans, tittleAnswer[1:]]
     return out
-def newQuestion(account, question, answer, tag):
+def newQuestion(account, title, question, answer, tag, correctAnswer):
     listOfId = os.listdir("./static/questions")
     listOfId.sort()
     tableId = fileIO.question.loadTable()
     if listOfId == []:
         tableId.append([account, str(len(listOfId)), tag])
-        fileIO.question.saveQuestion(len(listOfId), question, answer)
+        fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
     elif listOfId[0] != '0':
         tableId.append([account, '0', tag])
-        fileIO.question.saveQuestion('0', question, answer)
+        fileIO.question.saveQuestion('0', title, question, answer, correctAnswer)
     else:
         written = False
         for i in range(1, len(listOfId)):
             if int(listOfId[i]) != int(listOfId[i-1])+1:
                 tableId.append([account, str(i), tag])
-                fileIO.question.saveQuestion(i, question, answer)
+                fileIO.question.saveQuestion(i, title, question, answer, correctAnswer)
                 written = True
         if not(written):
             tableId.append([account, str(len(listOfId)), tag])
-            fileIO.question.saveQuestion(len(listOfId), question, answer)
+            fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
             written = True
     fileIO.question.saveTable(tableId)
 def remove(questionID):
@@ -108,9 +117,39 @@ def listByTags(tags):
             if inAll and not(item in out):
                 out.append(item)
     return out
-def update(questionID, question, answer):
+def listByAccountAndTags(account, tags):
+    bundle = fileIO.question.listByTag(tags)
+    temp = fileIO.question.listByAccount(account)
+    for elem in temp:
+        bundle.append(elem)
+    out=[]
+    for list in bundle:
+        for item in list:
+            inAll=True
+            for oList in bundle:
+                if not(item in oList):
+                    inAll=False
+            if inAll and not(item in out):
+                out.append(item)
+    return out
+def update(questionID, title, question, answer, tags, correctAnswer):
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
     for i in range(len(answer)):
         with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
             out.write(answer[i])
+    with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
+        formated = [title, correctAnswer]
+        strOut = ""
+        for item in formated:
+            strOut+=str(item)+"\n\n"
+        strOut=strOut[:-2]
+        out.write(strOut)
+    table = fileIO.question.loadTable()
+    for line in table:
+        if line[1] == questionID:
+            line[2] == tags
+    fileIO.question.saveTable(table)
+def isCorrect(questionID, answersToCheck):
+    questionData = fileIO.question.read(questionID)
+    return answersToCheck.sort() == questionData[3].sort()

@@ -10,21 +10,17 @@
     fileIO.login.changePassword("email", "newPassword") -> change the password associated with the account
 
 .question : 
-    #done
-    fileIO.question.newQuestion("email", "question", ["answers"]) -> add the question to the question table
-    fileIO.question.read("questionId") -> return ['question', ['answer1','answer2',...]]
+    #done #update newQuestion and save
+    fileIO.question.newQuestion("email", title, "question", ["answers"], [tag], [correctAnswer]) -> add the question to the question table
+    fileIO.question.read("questionId") -> return ['question', 'title', ['answer1','answer2',...], [correctAnswer]]
     fileIO.question.remove("questionID") -> remove the question from the question table
     fileIO.question.listByAccount("email") -> return all questionIDs created by the account
     fileIO.question.listByTag("tag") -> return all questionIDs with the given tags
     fileIO.question.listByTags([tag])
-    fileIO.question.update("questionID", "question", ["answers"]) -> update the question in the question table
+    fileIO.question.update("questionID", title, "question", ["answers"], [correctAnswer]) -> update the question in the question table
+    fileIO.question.listByAccountAndTags("email","tag") -> return all questionIDs created by the account and with the given tags
+    fileIO.question.isCorrect("questionID", [answersInputed]) -> return
 
-.editor :
-    #to-do:
-    fileIO.editor.subdivide() -> cut the received string into parts labeled by type and return them as list.
-    fileIO.editor.mermaid() -> proccess mermaid string into html.
-    fileIO.editor.latex() -> proccesslatex string into html.
-    fileIO.editor.constructor() -> assemble a list of html strings into a single html string.
 
 #done
 struct question(table):
