@@ -7,7 +7,7 @@ edit = Blueprint('editeur',__name__)
 
 # la variable text correspondra à ce que l'on récupérera de la méthode POST provenant du cod html.
 # OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite avec mermaid en l'occurence. 
-def formatageMD(text): 
+def formatageMD(text):
   html = markdown.markdown(text, extensions=['md_mermaid'])
   return html
   
@@ -15,7 +15,7 @@ def formatageMD(text):
 @edit.route('/editeur', methods=['GET','POST'])
 def editeurGet():
   if request.method == 'POST' :
-    enonce = request.form["enonce"]
+    enonce = '\n'+request.form["enonce"].replace('\\n', '\n').replace('\r','')
     #enonceFormate = formatageMD(request.form["enonce"])
     #enonceFormate = formatageMD("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~")
     enonceFormate = formatageMD(enonce) # Calcul du rendu de l'énoncé
@@ -23,8 +23,10 @@ def editeurGet():
     if ("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n" == request.form["enonce"] ) :
       print("oui mec")
     
-    print("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n")
+    print("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n".__getattribute__)
+    print(dir("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n"))
     print(enonce)
+    print(dir(enonce))
     print(enonceFormate)
 
     oldIdReponses = request.form["idReponses"].split(",") # Recupération des ids dans un tableau
