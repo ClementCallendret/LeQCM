@@ -15,7 +15,7 @@ def mermaidTranslator(str):
 @app.route('/', methods=['POST', 'GET'])
 def md(): # la variable text correspondra à ce que l'on récupérera de la méthode POST provenant du code html.
                   # OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite avec mermaid en l'occurence. 
-  text = r""" 
+  text = r"""
 
   \n##CLEMENT porte des SALOPETTE C'est du markdownnnn\n
 
