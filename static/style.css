@@ -43,8 +43,8 @@ textarea {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: 40px;
-    max-height: 40px;
+    min-height: 28px;
+    max-height: 28px;
 }
 
 .card-body {
