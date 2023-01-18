@@ -23,7 +23,7 @@ def editeurGet():
     if ("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n" == request.form["enonce"] ) :
       print("oui mec")
     
-    print("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n".__getattribute__)
+    #print("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n".__getattribute__)
     print(dir("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n"))
     print(enonce)
     print(dir(enonce))
