@@ -2,61 +2,125 @@ import fileIO
 import os
 from pathlib import Path
 
+"""
+fonctions de chargements / sauvegardes de données
+"""
+
+
+
+# on charge le sommaire (qui contient des triplets de la forme(createur, idDeQuestion, [tag])), pour pas avoir a charger en ram tout les énoncés(+10000 ça plante)
+
 def loadTable():
+    # on ouvre le fichier sommaire
     with open('./static/question.txt', 'r') as file:
+        # on fait un premier split pour séparer les lignes(et on vire le \n de fin que python met toujours)
         file = file.read()[:-1].split("\n\n\n")
+        # si le fichier est pas vide
         if file != ['']:
+            # on parcourt chaque lignes
             for i in range(len(file)):
+                # on coupe la ou ya le séparateur pour avoir au final une liste de lignes(et chaque lignes et une liste de cases(qui sont des strings))
                 file[i] = file[i].split("\n\n")
+                # ici on va mettre tout les tag dans une liste(plus propre pour d'autres implémentations)
                 proccessed = []
+                # on parcourt toute les cases de chaques lignes(sauf les deux premieres(createur et id))
                 for j in range(len(file[i])-2):
+                    # on met toutes ces cases dans une liste
                     proccessed.append(file[i][j+2])
+                # on réécrit la ligne avec [createur, id , [nouvelle liste de tags]]
                 file[i] = [file[i][0], file[i][1], proccessed]
+            # on vire le \n a la fin (encore?)
             file[-1][1] = file[-1][1].replace("\n", '')
-            
+        # si la liste était vide
         else:
+            # on veut une liste vide pas une liste d'une string vide
             file = []
+        # on retourne les données
         return file
+
+# sauvegarde le sommaire dans un fichier en l'encodant
+
 def saveTable(data):
+    # on ouvre le fichier sommaire
     with open('./static/question.txt', 'w') as file:
+        # on initialise notre future sortie
         out = ""
-        for couple in data:
-            proccessed = [couple[0],couple[1]]
-            for item in couple[2]:
+        # on parcourt les triplets itérativement
+        for triplet in data:
+            # la on prepare au décompactage de nos tags, il faut que notre ligne sois une liste de strings, pas une liste [string, string, [string, ...]]
+            proccessed = [triplet[0],triplet[1]]
+            # on prend les listes de tags
+            for item in triplet[2]:
+                # qu'on ajoute a notre première liste, qui ne contient plus de tag
                 proccessed.append(item)
+            # on encode cette ligne en séparant chaque éléments par \n\n
             for item in proccessed:
                 out+= item + "\n\n"
+            # les deux derniers retours sont en trop
             out=out[:-2]
+            # on sépare les lignes entre elles par \n\n\n
             out+="\n\n\n"
+        # dernière séparation en trop
         out = out[:-3]
+        # on écrit le résultat encodé
         print(out, file=file)
+
+# on sauvegarde une question
+
 def saveQuestion(questionID, title, question, answer, correctAnswer):
+    # on crée un dossier avec l'identifiant fournit en nom
     os.mkdir('./static/questions/'+str(questionID))
+    # on crée un fichier dans ce dossier qui contiendra l'énoncé
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
+    # pour chaques réponses, on crée un fichier avec un numéro, qui contiendront chaques réponses séparément
     for i in range(len(answer)):
         with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
             out.write(answer[i])
+    # on crée un fichier contenant le titre et les réponses possibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
-        formated = [title, correctAnswer]
+        # faut décompacter les reponses correctes
+        formated = [correctAnswer]
         strOut = ""
         for item in formated:
             strOut+=str(item)+"\n\n"
         strOut=strOut[:-2]
-        out.write(strOut)
+        # ensuite on assemble le tout en une string qu'on ecrit
+        out.write(title+"\n\n"+strOut)
+
+"""
+
+manipulations :
+
+"""
+
+
+# pour charger une question
+
 def read(questionID):
+    # on crée une liste qui contient les tout de la question
     out = []
+    # si elle existe
     if (Path('./static/questions/'+str(questionID)).is_dir()):
+        # on compte le nombre de réponses
         numRep = len(os.listdir('./static/questions/'+str(questionID)+'/'))-2
         ans = []
+        # on les stocke dans une liste
         for i in range(numRep):
             with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'r') as file:
                 ans.append(file.read())
+        # on charge l'énoncé, le titre, et les réponses possibles
         with open('./static/questions/'+str(questionID)+'/question.txt', 'r') as file:
             with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'r') as tA:    
+                # si on split notre fichier titre + réponses, on sais que le premiers élément et le titre, le reste, une liste de réponses corrèctes
                 tittleAnswer = tA.read().split('\n\n')
+                # on assemble tout ce qu'on a récupéré
                 out = [file.read(), tittleAnswer[0], ans, tittleAnswer[1:]]
+    # on retourne le résultat
     return out
+
+# pour créer une question
+
 def newQuestion(account, title, question, answer, tag, correctAnswer):
     listOfId = os.listdir("./static/questions")
     listOfId.sort()
