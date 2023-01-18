@@ -11,7 +11,7 @@
       var pw2 = document.getElementById("mdp2");  
       if(pw1 != pw2)  
       {   
-        alert("Les mots de passe sont différents");  
+        document.getElementById("message").innerHTML = "Les mots de passe sont différents"; 
       } else {  
         alert("Parfait !");  
       }  
@@ -24,7 +24,7 @@
     </br>
     <p><input type = "password" name = "password" placeholder="Entrer votre mot de passe" required aria-required="true"/></p>
     </br>
-    <p><input type = "password" name = "cpassword" id="mdp2" placeholder="Confirmer votre mot de passe" required aria-required="true"/></p> 
+    <p><input type = "password" name = "cpassword" id="mdp2" placeholder="Confirmer votre mot de passe" required/></p> 
     <input type = "submit" value = "Inscription" onclick="PasswordVerif()"/>
     <span id = "message" style="color:red"> </span> <br><br> 
  </form>
