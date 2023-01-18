@@ -6,27 +6,30 @@
 
 
 <script>  
-    function PasswordVerif() {  
-      var pw1 = document.getElementById("mdp");  
-      var pw2 = document.getElementById("mdp2");  
+
+function PasswordVerif() {  
+      var pw1 = document.getElementById("password").value;  
+      var pw2 = document.getElementById("cpassword").value;
       if(pw1 != pw2)  
       {   
-        document.getElementById("message").innerHTML = "Les mots de passe sont différentssssssss"; 
+       // document.getElementById("message").innerHTML = "Les mots de passe sont différents"; // A SUPPRIMER SI AVEC BOOTSTRAP ON ARRIVE A FAIRE SA
+        alert("ERREUR, les mot de passe sont différents")
       } else {  
-        alert("Parfait !");  
+        alert("Parfait !");
       }  
     }  
+
 </script>
 
-<form onsubmit= "return Taillemdp()" action = "http://localhost:5000/register" method = "post">
+<form action = "http://localhost:5000/register" method = "post">
     <h2>INSCRIPTION</h2>
     <p><input type = "text" name = "login" placeholder="Entrer votre nom" required/></p>
     </br>
-    <p><input type = "password" name = "password" placeholder="Entrer votre mot de passe" required/></p>
+    <p><input type = "password" name = "password" id="password" placeholder="Entrer votre mot de passe" required/></p>
     </br>
-    <p><input type = "password" name = "cpassword" id="mdp2" placeholder="Confirmer votre mot de passe" required/></p> 
+    <p><input type = "password" name = "cpassword" id="cpassword" placeholder="Confirmer votre mot de passe" required/></p> 
     <input type = "submit" value = "Inscription" onclick="PasswordVerif()"/>
-    <span id = "message" style="color:red"> </span> <br><br> 
+   <!-- <span id = "message" style="color:red"> </span> <br><br>    messge a colorer en rouge et a afficher soit via la fonction PasswordVerif soit par bootstrap-->
  </form>
 
 {% endblock %}
