@@ -10,7 +10,7 @@ edit = Blueprint('editeur',__name__)
 # la variable text correspondra à ce que l'on récupérera de la méthode POST provenant du cod html.
 # OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite avec mermaid en l'occurence. 
 def formatageMD(text):
-  html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid'])
+  html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid']) #toutes les extensions ABSOLUMENTS INDISPENSABLES pour mermaid, le code coloré
   return html
   
 
