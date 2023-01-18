@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint
 import markdown
-import md_mermaid, latex
+import md_mermaid
 import base64 
 
 edit = Blueprint('editeur',__name__)

@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 
 import markdown
-import md_mermaid, pylatex
-
+import md_mermaid
 import base64     
 app = Flask(__name__)
 
