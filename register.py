@@ -12,9 +12,11 @@ def register():
     if (request.method == 'POST'):
         login = request.form.get('login')
         password = request.form.get('password')
-        if (not (fileIO.login.check(login,register))):
-            fileIO.login.create(login,password)
-            return redirect(url_for('login.init'))
-        else :
-            flash('Utilisateur inconnu')
+        cpassword = request.form.get('cpassword')
+        if (password == cpassword):
+            if (not (fileIO.login.check(login,register))):
+                fileIO.login.create(login,password)
+                return redirect(url_for('login.init'))
+            else :
+                flash('Utilisateur inconnu')
     return render_template('register.html')
