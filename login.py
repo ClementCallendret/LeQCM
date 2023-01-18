@@ -12,19 +12,22 @@ def login():
     if (request.method == 'POST'):
         login = request.form.get('login')
         password = request.form.get('password')
+        rememberMe = request.form.get('rememberMe')
+        #Pour la checkbox "Se souvenir de moi"
+        if (rememberMe == "on"):
+            rememberMe = True
+        else:
+            rememberMe = False
         #Rechercher si login dans base de données
         #rechercher si password correspond 
         if (fileIO.login.check(login, password)):
             session['login']=login
-            session.permanent = False
+            print(rememberMe)
+            session.permanent = rememberMe
             return redirect(url_for('accueil'))
         else :
             print("mauvais login ou mdp")
             flash("Erreur mauvais identifiant ou mot de passe")
             return render_template('login.html') 
 
-
-@logi.route('/log/<login>')
-def error(login):
-    return 'Bienvenue ' + login
 
