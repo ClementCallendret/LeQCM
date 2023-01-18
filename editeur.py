@@ -15,19 +15,9 @@ def formatageMD(text):
 @edit.route('/editeur', methods=['GET','POST'])
 def editeurGet():
   if request.method == 'POST' :
-    enonce = '\n'+request.form["enonce"].replace('\r','')
-    #enonceFormate = formatageMD(request.form["enonce"])
-    #enonceFormate = formatageMD("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~")
-    enonceFormate = formatageMD(enonce) # Calcul du rendu de l'énoncé
-    
-    if ("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n" == request.form["enonce"] ) :
-      print("oui mec")
-    
-    #print("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n".__getattribute__)
-    print(dir("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~\n"))
-    print(enonce)
-    print(dir(enonce))
-    print(enonceFormate)
+    enonce = request.form["enonce"]
+    enonceToFormate = '\n'+enonce.replace('\r','')
+    enonceFormate = formatageMD(enonceToFormate) # Calcul du rendu de l'énoncé
 
     oldIdReponses = request.form["idReponses"].split(",") # Recupération des ids dans un tableau
     reponses = []
