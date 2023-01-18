@@ -1,5 +1,7 @@
 from flask import render_template, request, Blueprint
 import markdown
+import pygments
+import fileIO
 #import md_mermaid, latex
 #import base64 
 
@@ -8,7 +10,7 @@ edit = Blueprint('editeur',__name__)
 # la variable text correspondra à ce que l'on récupérera de la méthode POST provenant du cod html.
 # OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite avec mermaid en l'occurence. 
 def formatageMD(text):
-  html = markdown.markdown(text, extensions=['md_mermaid'])
+  html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid'])
   return html
   
 
@@ -26,7 +28,7 @@ def editeurGet():
       newIdReponses += str(i) + ","
       n = oldIdReponses[i]
       reponses.append({"val" : request.form.get("checkReponse" + n), "text" : request.form["textReponse" + n]})
-        
+    
     # Renvoie de la template avec l'apercu
     return render_template('EditeurDeQuestion.html', reponses=reponses, enonce=enonce, enonceFormate=enonceFormate, idReponses=newIdReponses)
   
