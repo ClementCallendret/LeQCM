@@ -15,7 +15,7 @@ def formatageMD(text):
 @edit.route('/editeur', methods=['GET','POST'])
 def editeurGet():
   if request.method == 'POST' :
-    enonce = '\n'+request.form["enonce"].replace('\\n', '\n').replace('\r','')
+    enonce = '\n'+request.form["enonce"].replace('\r','')
     #enonceFormate = formatageMD(request.form["enonce"])
     #enonceFormate = formatageMD("\n~~~mermaid\ngraph TB\nA --> B\nB --> C\n~~~")
     enonceFormate = formatageMD(enonce) # Calcul du rendu de l'énoncé
