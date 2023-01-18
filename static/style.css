@@ -36,6 +36,9 @@ textarea {
 }
 
 .card-header {
+    background-color: rgb(105, 105, 105);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     word-wrap: break-word;
     white-space: nowrap;
     overflow: hidden;
