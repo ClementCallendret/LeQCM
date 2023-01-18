@@ -16,7 +16,8 @@ def login():
         #rechercher si password correspond 
         if (fileIO.login.check(login, password)):
             session['login']=login
-            return redirect(url_for('connected.connected',login = login))
+            session.permanent = False
+            return redirect(url_for('accueil'))
         else :
             print("mauvais login ou mdp")
             flash("Erreur mauvais identifiant ou mot de passe")

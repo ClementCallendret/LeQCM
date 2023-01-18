@@ -16,17 +16,27 @@ app.register_blueprint(edit)
 app.register_blueprint(mesQues)
 
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
-#initialisation du login a vide
-
 @app.route('/')
 def accueil():
-    login=False
-    if 'username' in session:
-        login=True
-    return render_template('Accueil.html',login=login)
+    login = ""
+    if 'login' in session:
+        connected=True
+        login = session['login']
+    return render_template('Accueil.html')
+
 
 @app.context_processor
 def isLoged():
     return dict(isLoged=session.get('login'))
+
+@app.context_processor
+def getLogin():
+    login = ""
+    if 'login' in session:
+        login = session['login']
+    return dict(login=login)
+    
+
+    
 
 app.run(host='0.0.0.0', port=5000, debug=True)
