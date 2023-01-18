@@ -39,11 +39,12 @@
                 <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
                 <input type="submit" value="Apercu">
                 <input type="submit" value="Enregistrer">
+                <input type="button" onclick="preview()" value="apercu via JS" />
             </form>    
         </div>
 
         <div class="col-sm-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
-            <div id="enoncePreview">{{enonceFormate|safe}}</div>
+            <div id="enoncePreview"></div>
         </div>
 
         <script>
