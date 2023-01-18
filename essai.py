@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-
+import pygments
 import markdown
+
 import md_mermaid
 import base64     
 app = Flask(__name__)
@@ -31,12 +32,12 @@ def md(): # la variable text correspondra à ce que l'on récupérera de la mét
   $$V_{sphere} = \frac{4}{3}\pi r^3$$
 
   $$V_{cube} = l w h $$
-
+  \n~~~\n\python\n# Code goes here ...\n\tprint('test')\n~~~\n
   """
   text = mermaidTranslator(text)
   print(text)
 
-  html = markdown.markdown(text, extensions=['md_mermaid'])
+  html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid'])
 
   return render_template('blabla.html', mark = html)
 
