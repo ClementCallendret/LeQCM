@@ -27,6 +27,12 @@ def remove(account):
     fileIO.login.save(newData)
     for item in fileIO.question.listByAccount("e"):
         fileIO.question.remove(item)
+def changePassword(account, newPassword):
+    data = fileIO.login.load()
+    for couple in data:
+        if couple[0]==account:
+            couple[1]=newPassword
+    fileIO.login.save(data)
 def load():
     with open('./static/login.txt', 'r') as file:
         file = file.read()[:-1].split("\n\n\n")

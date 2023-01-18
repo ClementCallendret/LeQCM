@@ -7,6 +7,7 @@
     fileIO.login.create("email", "password") -> add to the login table
     fileIO.login.check("email", "password") -> return true if the password is correct
     fileIO.login.remove("email", "password") -> remove from the login table and delete all question registered if the password is correct
+    fileIO.login.changePassword("email", "newPassword") -> change the password associated with the account
 
 .question : 
     #done
@@ -18,7 +19,12 @@
     fileIO.question.listByTags([tag])
     fileIO.question.update("questionID", "question", ["answers"]) -> update the question in the question table
 
-
+.editor :
+    #to-do:
+    fileIO.editor.subdivide() -> cut the received string into parts labeled by type and return them as list.
+    fileIO.editor.mermaid() -> proccess mermaid string into html.
+    fileIO.editor.latex() -> proccesslatex string into html.
+    fileIO.editor.constructor() -> assemble a list of html strings into a single html string.
 
 #done
 struct question(table):
