@@ -4,47 +4,50 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6 mainBoxes">
-            <form method="POST" action="/editeur">
-                <div class="container-fluid semi-container" style="display: block;">
-                    <label for="enonce">Enoncé</label>
-                    <textarea name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}"></textarea>
+        <div class="col-sm-6 mainBoxes"> <!-- Colonne de guauche : Editeur -->
+            <form method="POST" action="/editeur" id="questionForm">
+                <label for="enonce">Enoncé</label>
+                <textarea name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="{{enonce}}"></textarea>
 
-                    <hr />
+                <hr />
+                <!--
+                    nbRponses s'incrémente a chaque nouvelle réponse (sans décrémenter à la suppression) pour assurer des id toujours differents
+                    idReponses contient les ids des réponses présentent séparés par des ',' 
+                -->
+                <input type="hidden" name="nbReponses" id="nbReponses" value="{{reponses|length}}">
+                <input type="hidden" name="idReponses" id="idReponses" value="{{idReponses}}">
 
-                    <input type="hidden" name="nbRep" id="nbRep" value="{{nbReponses}}">
-                    <input type="hidden" name="idEachReps" id="idEachReps" value="{{idReps}}">
-
-                    <div id="repListe">
-                    {%for i in range(0, nbReponses)%}
-                        <div id="divReponse{{i}}">
-                            <input type="checkbox" name="checkReponse{{i}}" id="checkReponse{{i}}">
-                            <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}" placeholder="Réponse">
-                            <input type="button" onclick="supprimerReponse({{i}})" value="Supprimer">
-                            
-                        </div>
-
-                        {%if reponses[i]['val'] == 'on' %}
-                            <script>checkTheBox("checkReponse{{i}}")</script>
-                        {%endif%}
-
-                    {%endfor%}
+                <div id="repListe">
+                {%for i in range(0, reponses|length)%} <!--Replacement des réponses après un rechargement-->
+                    <div id="divReponse{{i}}">
+                        <input type="checkbox" name="checkReponse{{i}}" id="checkReponse{{i}}">
+                        <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}" placeholder="Réponse">
+                        <input type="button" onclick="supprimerReponse({{i}})" value="Supprimer">
                     </div>
+                    
+                    {%if reponses[i]['val'] == 'on' %} <!--Recheck des checkboxes si necessaires-->
+                    <script>
+                        document.getElementById("checkReponse{{i}}").checked = true;
+                    </script>
+                    {%endif%}
 
-                    <hr />
-
-                    <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
-                    <input type="submit" value="Apercu">
+                {%endfor%}
                 </div>
-            </form>
 
+                <hr />
+
+                <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
+                <input type="submit" value="Apercu">
+                <input type="submit" value="Enregistrer">
+            </form>    
         </div>
-        <div class="col-sm-6 mainBoxes">
+
+        <div class="col-sm-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
             <div id="enoncePreview">{{enonceFormate|safe}}</div>
         </div>
 
         <script>
-            mermaid.initialize({startOnLoad:true});
+            mermaid.initialize({startOnLoad:true}); // Lancement de mermaid
         </script>
     </div>
 </div>

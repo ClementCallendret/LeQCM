@@ -18,38 +18,40 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="{{ url_for('accueil') }}">Le Cul C'est M</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-                {% if isLoged %}
-                Login : {{ session['username'] }}
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mesQuestions') }}">Mes Questions</a></li>
-                {% else %}
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('login.init') }}">Connexion</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('register.init') }}">Inscription</a></li>
-                {% endif %}
-            </ul>
-          </div>
+  <!-- Barre de navigation Boostrap -->
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('accueil') }}">Le Cul C'est M</a>
+        <!-- Boutton menu dépliant pour les plus petits écrans -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <!--On affiche un menu different si l'utilisateur est connecté ou non -->
+            {% if isLoged %} 
+            Login : {{ session['username'] }}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mesQuestions') }}">Mes Questions</a></li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('login.init') }}">Connexion</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('register.init') }}">Inscription</a></li>
+            {% endif %}
+          </ul>
         </div>
-    </nav>
+      </div>
+  </nav>
 
-    <div>
+  <div>
 
-        {% for mesg in get_flashed_messages() %}
-        <h1>{{ mesg }}</h1>
-        {% endfor %}
+    {% for mesg in get_flashed_messages() %}
+    <h1>{{ mesg }}</h1>
+    {% endfor %}
 
-        {% block content %}
-
-
-        {% endblock %}
-    </div>
+    <!-- Utilisation du block content afin de replacer cette partie sur les autres pages-->
+    {% block content %}
+    {% endblock %}
+  </div>
 </body>
 
 </html>

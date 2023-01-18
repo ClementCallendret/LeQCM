@@ -3,12 +3,12 @@
     max-width: 100%;
 }
 
-.semi-container > * {
+#questionForm > * {
     display:block;
     position: relative;
     width : 100%;
-
 }
+
 
 textarea {
     position: relative;
@@ -17,7 +17,12 @@ textarea {
     resize: vertical;
 }
 
-.questionLink {
+#navQuestions > * {
+    position : relative;
+    margin : auto;
+}
+
+.questionCard {
     position : relative;
     border-style: solid;
     border-color: black;
@@ -42,8 +47,8 @@ textarea {
     word-wrap: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 115px;
-    min-height: 119px;
+    max-height: 120px;
+    min-height: 120px;
 }
 
 .card-footer {
@@ -51,6 +56,8 @@ textarea {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-height: 40px;
+    min-height: 40px;
 }
 
 

@@ -1,38 +1,33 @@
 function supprimerReponse(numR){
-    let element = document.getElementById("divReponse" + numR);
+    // Suppresion de l'id de la réponse
+    let idReponses = $("#idReponses");
+    let idRepTab = idReponses.val().split(",");
+    let indexToRemove = idRepTab.indexOf(numR.toString())
+    idRepTab.splice( indexToRemove, 1);
+    idReponses.val(idRepTab.join());
 
-    let idsElement = $("#idEachReps");
-    let ids = idsElement.val().split(",");
-
-    console.log(ids);
-
-    let indexToRemove = ids.indexOf(numR.toString())
-    console.log("pos : " + indexToRemove + " val : " + ids[indexToRemove] );
-    ids.splice( indexToRemove, 1);
-
-    console.log(ids);
-
-    idsElement.val(ids.join());
-
-    return element.parentNode.removeChild(element);
+    // Suppression de la réponse
+    let divToRemove = document.getElementById("divReponse" + numR);
+    return divToRemove.parentNode.removeChild(divToRemove);
 }
 
 function ajouterReponse(){
-    let container = $("#repListe");
-    let nbRep = parseInt($("#nbRep").val());
+    let repContainer = $("#repListe");
+    let nbRep = parseInt($("#nbReponses").val());
 
-    let newRep = "<div id=\"divReponse" + nbRep + "\">"
-    newRep += "<input type=\"checkbox\" name=\"checkReponse" + nbRep + "\" id=\"checkReponse" + nbRep + "\">";
-    newRep += "<input type=\"text\" name=\"textReponse" + nbRep + "\" id=\"textReponse"+ nbRep +"\" value=\"\" placeholder=\"Réponse\">";
-    newRep += "<input type=\"button\" onclick=\"supprimerReponse("+ nbRep + ")\" value=\"Supprimer\"></div>";
+    // Ajout de la nouvelle réponse au HTML avec le bon id
+    let html = "<div id=\"divReponse" + nbRep + "\">"
+    html += "<input type=\"checkbox\" name=\"checkReponse" + nbRep + "\" id=\"checkReponse" + nbRep + "\">";
+    html += "<input type=\"text\" name=\"textReponse" + nbRep + "\" id=\"textReponse"+ nbRep +"\" value=\"\" placeholder=\"Réponse\">";
+    html += "<input type=\"button\" onclick=\"supprimerReponse("+ nbRep + ")\" value=\"Supprimer\"></div>";
+    repContainer.append(html);  
 
-    ids = $("#idEachReps");
-    ids.val(ids.val() + nbRep + ",");
+    // Ajout du nouvel id à l'input caché idRéponses
+    idRep = $("#idReponses");
+    debut = idRep.val();
+    idRep.val(debut + nbRep.toString() + ",");
 
-    container.append(newRep);   
-    $("#nbRep").val(nbRep+1);
+    // Incrémentation du nombre de réponses pour la réponse suivante
+    $("#nbReponses").val(nbRep+1);
 }
 
-function checkTheBox(checkID){
-    document.getElementById(checkID).checked = true;
-}
