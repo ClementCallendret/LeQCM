@@ -1,10 +1,10 @@
-from flask import Flask, Blueprint, request,session
+from flask import Flask, Blueprint, request,session, render_template
 
 connect = Blueprint('connected',__name__)
 
 @connect.route('/connected/<login>')
 def connected(login):
-    return 'Bienvenue ' + login
+    return render_template("connected.html", login=login)
 
 def isConnected():
     if (session['login']==""):

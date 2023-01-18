@@ -1,0 +1,63 @@
+.mainBoxes > * {
+    position: relative;
+    max-width: 100%;
+}
+
+#questionForm > * {
+    display:block;
+    position: relative;
+    width : 100%;
+}
+
+
+textarea {
+    position: relative;
+    width : 100%;
+    height : 100px;
+    resize: vertical;
+}
+
+#navQuestions > * {
+    position : relative;
+    margin : auto;
+}
+
+.questionCard {
+    position : relative;
+    border-style: solid;
+    border-color: black;
+    max-width : 400px;
+    min-width : 200px;
+    height: 200px;
+    margin : auto;
+    margin-bottom: 10px;
+}
+
+.card-header {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 40px;
+    max-height: 40px;
+}
+
+.card-body {
+    padding-top: 5px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 120px;
+    min-height: 120px;
+}
+
+.card-footer {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 40px;
+    min-height: 40px;
+}
+
+
