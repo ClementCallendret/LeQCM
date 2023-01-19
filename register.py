@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request, Blueprint,render_template, flash
+from flask import redirect, url_for, request, Blueprint,render_template, flash
 import fileIO
 
 regist = Blueprint('register',__name__)
