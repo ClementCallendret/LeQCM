@@ -33,7 +33,7 @@
 
 #done
 struct question(table):
-    [[account, questionID, tag],[....]]
+    [[account, questionID, [tags]],[....]]
 
 static(file):
     question.txt -> account\nquestionId(loc)\ntags\n\n...
