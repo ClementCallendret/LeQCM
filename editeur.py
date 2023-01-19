@@ -7,8 +7,8 @@ import fileIO
 
 edit = Blueprint('editeur',__name__)
 
-# la variable text correspondra à ce que l'on récupérera de la méthode POST provenant du cod html.
-# OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite avec mermaid en l'occurence. 
+# la variable text correspondra à ce que l'on récupérera de la méthode POST provenant du code html.
+# OBJECTIF : renvoyer le contenu de cette variable au code html une fois bien traduite (dans la variable html )
 def formatageMD(text):
   html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid']) #toutes les extensions ABSOLUMENTS INDISPENSABLES pour mermaid, le code coloré
   return html
@@ -18,8 +18,8 @@ def formatageMD(text):
 def editeurGet():
   if request.method == 'POST' :
     enonce = request.form["enonce"]
-    enonceToFormate = '\n'+enonce.replace('\r','')
-    enonceFormate = formatageMD(enonceToFormate) # Calcul du rendu de l'énoncé
+    enonceToFormate = '\n'+enonce.replace('\r','') #On rajoute un \n au début + on remplace tous les \r générés à chaque retour chariot par "".
+    enonceFormate = formatageMD(enonceToFormate) # Calcul du rendu de l'énoncé qui est passé par le formatage
 
     oldIdReponses = request.form["idReponses"].split(",") # Recupération des ids dans un tableau
     reponses = []
