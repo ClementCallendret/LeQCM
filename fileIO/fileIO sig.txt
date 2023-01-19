@@ -22,6 +22,10 @@
     fileIO.question.isCorrect("questionID", [answersInputed]) -> return
 
 
+!!!! pour avoir l'email du compte actuellement connecté a voir ou clement le range!
+
+
+
 #done
 struct question(table):
     [[account, questionID, tag],[....]]
