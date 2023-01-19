@@ -109,13 +109,19 @@ def read(questionID):
         for i in range(numRep):
             with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'r') as file:
                 ans.append(file.read())
+        # on recupère ses tags:
+        tableID = fileIO.question.loadTable()
+        tags = []
+        for item in tableID:
+            if item[1] == questionID:
+                tags = item[2]
         # on charge l'énoncé, le titre, et les réponses possibles
         with open('./static/questions/'+str(questionID)+'/question.txt', 'r') as file:
             with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'r') as tA:    
                 # si on split notre fichier titre + réponses, on sais que le premiers élément et le titre, le reste, une liste de réponses corrèctes
                 tittleAnswer = tA.read().split('\n\n')
                 # on assemble tout ce qu'on a récupéré
-                out = [file.read(), tittleAnswer[0], ans, tittleAnswer[1:]]
+                out = [file.read(), tittleAnswer[0], tags, ans, tittleAnswer[1:]]
     # on retourne le résultat
     return out
 
@@ -277,3 +283,12 @@ def isCorrect(questionID, answersToCheck):
     questionData = fileIO.question.read(questionID)
     # si les reponses fournies sont les mêmes que celles sauvergardées alors True sinon False
     return answersToCheck.sort() == questionData[3].sort()
+
+def getAllTags():
+    table = fileIO.question.loadTable()
+    out = []
+    for item in table:
+        for tag in item[2]:
+            if not(tag in out):
+                out.append(tag)
+    return out
