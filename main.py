@@ -6,7 +6,6 @@ from register import regist
 from connected import connect
 from editeur import edit
 from mesQuestions import mesQues
-from creation import crea
 
 app = Flask(__name__)
 app.register_blueprint(logi)
@@ -15,7 +14,6 @@ app.register_blueprint(regist)
 app.register_blueprint(connect)
 app.register_blueprint(edit)
 app.register_blueprint(mesQues)
-app.register_blueprint(crea)
 
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 @app.route('/')

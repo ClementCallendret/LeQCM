@@ -1,12 +1,12 @@
 import fileIO
 
 def dicToQuestion(dic):
-    reponses = fileIO.format.listOfDicToreponse(dic['reponses'])
-    return [dic['id'], dic['owner'],dic['title'], dic['enonce'], dic['tag'], reponses[0], reponses[1]]
+    reponses = fileIO.format.listOfDicToreponse(dic['answers'])
+    return [dic['id'], dic['owner'],dic['title'], dic['state'], dic['tags'], reponses[0], reponses[1]]
 
 
 def questionToDic(list):
-    return {'id' : list[0], 'owner': list[1], 'title': list[3], 'enonce': list[2], 'tag': list[4], 'reponses' : fileIO.format.reponsesTolistOfDic(list[5], list[6])}
+    return {'id' : list[0], 'owner': list[1], 'title': list[3], 'state': list[2], 'tag': list[4], 'answers' : fileIO.format.reponsesTolistOfDic(list[5], list[6])}
 
 def reponsesTolistOfDic(reponses, correctReponse):
     out = []
