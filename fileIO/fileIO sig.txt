@@ -11,13 +11,13 @@
 
 .question : 
     #done #update newQuestion and save
-    fileIO.question.newQuestion("email", title, "question", ["answers"], [tag], [correctAnswer]) -> add the question to the question table
-    fileIO.question.read("questionId") -> return ['question', 'title', ['tag1','tag2',...], ['answer1','answer2',...], [correctAnswer]]
+    fileIO.question.newQuestion("email", title, "question", [tag], ["answers"], [correctAnswer]) -> add the question to the question table
+    fileIO.question.read("questionId") -> return ['id', owner, 'enonce', 'title', ['tag1','tag2',...], ['answer1','answer2',...], [correctAnswer]]
     fileIO.question.remove("questionID") -> remove the question from the question table
     fileIO.question.listByAccount("email") -> return all questionIDs created by the account
     fileIO.question.listByTag("tag") -> return all questionIDs with the given tags
     fileIO.question.listByTags([tag])
-    fileIO.question.update("questionID", title, "question", ["answers"], [correctAnswer]) -> update the question in the question table
+    fileIO.question.update(questionID, title, "question", [tag], ["answers"], [correctAnswer]) -> update the question in the question table
     fileIO.question.listByAccountAndTags("email","tag") -> return all questionIDs created by the account and with the given tags
     fileIO.question.isCorrect("questionID", [answersInputed]) -> return
     fileIO.question.getAllTags() -> return a list of all tags used in question

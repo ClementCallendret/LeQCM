@@ -129,7 +129,7 @@ def read(questionID):
 
 # pour créer une question
 
-def newQuestion(account, title, question, answer, tag, correctAnswer):
+def newQuestion(account, title, question, tag, answer, correctAnswer):
     # on liste les questions existantes
     listOfId = os.listdir("./static/questions")
     # on trie cettee liste par ordre croissant
@@ -254,7 +254,7 @@ def listByAccountAndTags(account, tags):
 
 # pour mettre a jour une question
 
-def update(questionID, title, question, answer, tags, correctAnswer):
+def update(questionID, title, question, tags, answer, correctAnswer):
     # on met a jour l'enoncé
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
