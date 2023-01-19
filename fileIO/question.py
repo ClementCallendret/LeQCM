@@ -80,7 +80,7 @@ def saveQuestion(questionID, title, question, answer, correctAnswer):
     # on crée un fichier contenant le titre et les réponses possibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
         # faut décompacter les reponses correctes
-        formated = [correctAnswer]
+        formated = correctAnswer
         strOut = ""
         for item in formated:
             strOut+=str(item)+"\n\n"
@@ -109,19 +109,21 @@ def read(questionID):
         for i in range(numRep):
             with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'r') as file:
                 ans.append(file.read())
-        # on recupère ses tags:
+        # on recupère ses tags et le créateur:
         tableID = fileIO.question.loadTable()
         tags = []
+        owner = ""
         for item in tableID:
             if item[1] == questionID:
                 tags = item[2]
+                owner = item[0]
         # on charge l'énoncé, le titre, et les réponses possibles
         with open('./static/questions/'+str(questionID)+'/question.txt', 'r') as file:
             with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'r') as tA:    
                 # si on split notre fichier titre + réponses, on sais que le premiers élément et le titre, le reste, une liste de réponses corrèctes
                 tittleAnswer = tA.read().split('\n\n')
                 # on assemble tout ce qu'on a récupéré
-                out = [file.read(), tittleAnswer[0], tags, ans, tittleAnswer[1:]]
+                out = [questionID, owner, file.read(), tittleAnswer[0], tags, ans, tittleAnswer[1:]]
     # on retourne le résultat
     return out
 
@@ -282,7 +284,7 @@ def isCorrect(questionID, answersToCheck):
     # on charge les données d'une question
     questionData = fileIO.question.read(questionID)
     # si les reponses fournies sont les mêmes que celles sauvergardées alors True sinon False
-    return answersToCheck.sort() == questionData[3].sort()
+    return answersToCheck.sort() == questionData[6].sort()
 
 def getAllTags():
     table = fileIO.question.loadTable()
