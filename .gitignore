@@ -1,3 +1,8 @@
+#fichier perso
+/static/questions
+/static/login.txt
+/static/questions.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 fileIO/__pycache__/*

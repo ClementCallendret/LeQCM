@@ -61,8 +61,11 @@ textarea {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 40px;
-    min-height: 40px;
+    max-height: 45px;
+    min-height: 45px;
+    background-color: rgba(221, 185, 132, 0.822);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 /* maxi code css pour pygments pour Markdown fonctionne avec le code coloré il est généré par Pygmentize */

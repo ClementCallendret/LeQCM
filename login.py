@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
+from flask import Blueprint, request, redirect, url_for,render_template, flash, session
 import fileIO
 
 logi = Blueprint('login',__name__)
@@ -13,6 +13,9 @@ def login():
         login = request.form.get('login')
         password = request.form.get('password')
         rememberMe = request.form.get('rememberMe')
+        test = request.form.get('test')
+        print(test)
+
         #Pour la checkbox "Se souvenir de moi"
         if (rememberMe == "on"):
             rememberMe = True
@@ -26,7 +29,6 @@ def login():
             session.permanent = rememberMe
             return redirect(url_for('accueil'))
         else :
-            print("mauvais login ou mdp")
             flash("Erreur mauvais identifiant ou mot de passe")
             return render_template('login.html') 
 
