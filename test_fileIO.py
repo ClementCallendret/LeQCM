@@ -12,6 +12,7 @@ for item in fileIO.question.listByTag("a"):
     print(fileIO.question.read(item))
 for item in fileIO.question.listByTags(['a','b']):
     print(fileIO.question.read(item))
+print(fileIO.question.getAllTags())
 print(fileIO.question.read(fileIO.question.listByAccountAndTags("e", ['d','e','f'])))
 print(fileIO.question.isCorrect("1", ["1"]))
 fileIO.login.remove("e")
