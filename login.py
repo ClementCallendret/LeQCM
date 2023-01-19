@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
+from flask import Blueprint, request, redirect, url_for,render_template, flash, session
 import fileIO
 
 logi = Blueprint('login',__name__)

@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, request, redirect, url_for,render_template
+from flask import Blueprint, request,render_template
 import fileIO
 
 crea = Blueprint('creation',__name__)

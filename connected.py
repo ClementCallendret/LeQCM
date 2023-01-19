@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request,session, render_template
+from flask import Blueprint, session, render_template
 
 connect = Blueprint('connected',__name__)
 
