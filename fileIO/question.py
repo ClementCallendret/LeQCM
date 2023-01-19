@@ -122,55 +122,95 @@ def read(questionID):
 # pour créer une question
 
 def newQuestion(account, title, question, answer, tag, correctAnswer):
+    # on liste les questions existantes
     listOfId = os.listdir("./static/questions")
+    # on trie cettee liste par ordre croissant
     listOfId.sort()
+    # on charge le sommaire
     tableId = fileIO.question.loadTable()
+    # si il n'y a aucunes questions deja enregistrée
     if listOfId == []:
+        # on crée la question '0'(màj du sommaire puis sauvegarde)
         tableId.append([account, str(len(listOfId)), tag])
         fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
+    # si il n'y a pas de question '0' (si elle a été supprimée mais qu'il y en a d'autres)
     elif listOfId[0] != '0':
+        # on crée la question '0'(màj du sommaire puis sauvegarde)
         tableId.append([account, '0', tag])
         fileIO.question.saveQuestion('0', title, question, answer, correctAnswer)
     else:
+        # dans tout les autres cas:
+        # on initialise un bool
         written = False
+        # on parcourt la liste des questions existantes(fichier)
         for i in range(1, len(listOfId)):
+            # si lid de deux question succéssive a un écart de plus de 1 (un trou):
             if int(listOfId[i]) != int(listOfId[i-1])+1:
+                # on crée la question dans le trou et on dit qu'on la écrit (le bool)
                 tableId.append([account, str(i), tag])
                 fileIO.question.saveQuestion(i, title, question, answer, correctAnswer)
                 written = True
+        # si on a pas écrit la question(pas de trou)
         if not(written):
+            # on crée la question avec pour id celui du plus grand+1
             tableId.append([account, str(len(listOfId)), tag])
             fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
-            written = True
+    # on sauvergarde le sommaire mis a jour
     fileIO.question.saveTable(tableId)
+
+# pour supprimer une question
+
 def remove(questionID):
+    # on parcourt tout les fichiers dans le dossier pourtant l'id de ce qu'on supprime
     for file in os.listdir('./static/questions/'+str(questionID)):
+        # on supprime ce qu'on trouve
         os.remove('./static/questions/'+str(questionID)+'/'+(file))
+    # on supprime le dossier avec l'id de la question(vide maintenant)
     os.rmdir('./static/questions/'+str(questionID)+'/')
+    # on charge le sommaire
     tableID = fileIO.question.loadTable()
+    # on le met a jour en gardant toute les lignes qui n'ont pas l'id de la question a supprimer
     newTable = []
     for item in tableID:
         if item[1] != questionID:
             newTable.append(item)
+    # on ecrit le sommaire màj dans son fichier
     fileIO.question.saveTable(newTable)
+
+# recherche de l'ensemble des ID de questions avec comme créateur un compte
+
 def listByAccount(account):
+    # on charge le sommaire
     table = fileIO.question.loadTable()
     out = []
+    # on ecrit dans out tout les id dans les lignes avec le login qu'on veut
     for item in table:
         if item[0] == account:
             out.append(item[1])
+    # on retourne la liste
     return out
+
+# pour chercher l'ensemble des ID de questions avec comme tag celui qu'on a
+
 def listByTag(tag):
+    # on charge le sommaire
     table = fileIO.question.loadTable()
+    # on note dans une liste l'id de question de chaque ligne contenant le tag
     out = []
     for item in table:
         if tag in item[2]:
             out.append(item[1])
+    # on retourne cette liste
     return out
+
+# pour rechercher avec plusieurs tags 
+
 def listByTags(tags):
+    # on fait une liste avec les listes de resultats de recherche pour chaque tag
     bundle = []
     for tag in tags:
         bundle.append(fileIO.question.listByTag(tag))
+    # on fait l'intersection de chaque listes( en gardant que les id qui sont dans chaques listes)
     out = []
     for list in bundle:
         for item in list:
@@ -180,12 +220,18 @@ def listByTags(tags):
                     inAll=False
             if inAll and not(item in out):
                 out.append(item)
+    # on retourne le resultat
     return out
+
+# pour chercher avec plusieurs tags et un compte
+
 def listByAccountAndTags(account, tags):
+    # on fait pareil que pour plusieurs tags, mais on ajoute dans notre liste de listes de resultat le resultat d'une recherche par compte
     bundle = fileIO.question.listByTag(tags)
     temp = fileIO.question.listByAccount(account)
     for elem in temp:
         bundle.append(elem)
+    # on fait l'intersections
     out=[]
     for list in bundle:
         for item in list:
@@ -195,13 +241,20 @@ def listByAccountAndTags(account, tags):
                     inAll=False
             if inAll and not(item in out):
                 out.append(item)
+    # on retourne le resultat
     return out
+
+# pour mettre a jour une question
+
 def update(questionID, title, question, answer, tags, correctAnswer):
+    # on met a jour l'enoncé
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
+    # on met a jour les réponses 
     for i in range(len(answer)):
         with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
             out.write(answer[i])
+    # on met a jour le titre et les reponses posibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
         formated = [title, correctAnswer]
         strOut = ""
@@ -209,11 +262,18 @@ def update(questionID, title, question, answer, tags, correctAnswer):
             strOut+=str(item)+"\n\n"
         strOut=strOut[:-2]
         out.write(strOut)
+    # on met a jour le sommaire(le créateur ne peut pas etre changé !)
     table = fileIO.question.loadTable()
     for line in table:
         if line[1] == questionID:
             line[2] == tags
+    # on sauvegarde la table màj
     fileIO.question.saveTable(table)
+
+# pour regarder si les réponses correspondent a ce qui est attendu
+
 def isCorrect(questionID, answersToCheck):
+    # on charge les données d'une question
     questionData = fileIO.question.read(questionID)
+    # si les reponses fournies sont les mêmes que celles sauvergardées alors True sinon False
     return answersToCheck.sort() == questionData[3].sort()
