@@ -3,11 +3,7 @@ import fileIO
 
 crea = Blueprint('creation',__name__)
 
-@crea.route('/MesQuestions')
-def init():
-    return render_template('MesQuestions.html')
-
-@crea.route('/MesQuestions',methods = ['POST'])
+@crea.route('/MesQuestions/creerQCM',methods = ['POST'])
 def creation():
     listeQ = []
     print("let's gooooo")
