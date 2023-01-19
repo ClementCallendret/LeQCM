@@ -23,8 +23,10 @@
     fileIO.question.getAllTags() -> return a list of all tags used in question
 
 .format :
-    fileIO.format.dicToQuestion(dic) -> {'id':... , 'owner' : ... , 'title':... , 'tags' : [...] , 'reponses' : [{'val': ... , 'text' : ...}]} => [id, owner, title, tags, reponses, correctReponses]
-    fileIO.format.questionToDic(list) -> [id, owner, title, tags, reponses, correctReponses] => {'id':... , 'owner': ... ,'title':... , 'tags' : [...] , 'reponses' : [{'val': ... , 'text' : ...}]}
+    fileIO.format.dicToQuestion(dic) -> {'id':... , 'owner': ..., 'title':..., 'enonce' : ..., 'tags' : [...] , 'reponses' : [{'val': ... , 'text' : ...}]}
+                                        => [id, owner, enonce, title, tags, reponses, correctReponses]
+    fileIO.format.questionToDic(list) -> [id, owner, enonce, title, tags, reponses, correctReponses] 
+                                        => {'id':... , 'owner': ..., 'title':..., 'enonce' : ..., 'tags' : [...] , 'reponses' : [{'val': ... , 'text' : ...}]}
 
 
 
