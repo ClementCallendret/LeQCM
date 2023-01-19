@@ -28,7 +28,18 @@ def editeurGet():
       newIdReponses += str(i) + ","
       n = oldIdReponses[i]
       reponses.append({"val" : request.form.get("checkReponse" + n), "text" : request.form["textReponse" + n]})
-    
+    # si on l'enregistre, on crée une nouvelle question
+    # attention, mettre un bool, si la question a déja été enregistrée, on passe par la metode update!!!!
+    if request.form['sendType']=='Enregistrer':
+      # on formate les données pour l'enristrement
+      reponsesASave = []
+      reponsesCorrectes = []
+      for item in reponses:
+        reponsesASave.append(item['text'])
+        if item['val'] == 'On':
+          reponsesCorrectes.append(request.form["textReponse" + n])
+      # enregistrement sur le stockage
+      fileIO.question.newQuestion('login?', 'titre?', enonceFormate, reponsesASave, [], reponsesCorrectes)
     # Renvoie de la template avec l'apercu
     return render_template('EditeurDeQuestion.html', reponses=reponses, enonce=enonce, enonceFormate=enonceFormate, idReponses=newIdReponses)
   
