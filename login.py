@@ -13,8 +13,6 @@ def login():
         login = request.form.get('login')
         password = request.form.get('password')
         rememberMe = request.form.get('rememberMe')
-        test = request.form.get('test')
-        print(test)
 
         #Pour la checkbox "Se souvenir de moi"
         if (rememberMe == "on"):
