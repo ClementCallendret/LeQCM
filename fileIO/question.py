@@ -269,11 +269,11 @@ def update(questionID, title, question, tags, answer, correctAnswer):
             out.write(answer[i])
     # on met a jour le titre et les reponses posibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
-        formated = [title, correctAnswer]
+        formated = correctAnswer
         strOut = ""
         for item in formated:
             strOut+=str(item)+"\n\n"
-        strOut=strOut[:-2]
+        strOut=title+'\n\n'+strOut[:-2]
         out.write(strOut)
     # on met a jour le sommaire(le créateur ne peut pas etre changé !)
     table = fileIO.question.loadTable()
@@ -298,4 +298,5 @@ def getAllTags():
         for tag in item[2]:
             if not(tag in out):
                 out.append(tag)
+    out.sort()
     return out

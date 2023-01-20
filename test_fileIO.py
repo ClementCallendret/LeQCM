@@ -14,7 +14,6 @@ for item in fileIO.question.listByTags(['a','b']):
     print(fileIO.question.read(item))
 print(fileIO.question.listByTags(['d','e','f']))
 print(fileIO.question.listByAccountAndTags('e', ['d','e','f']))
-print(fileIO.question.read(fileIO.question.listByAccount("e")))
 print(fileIO.question.isCorrect("1", ["1"]))
 fileIO.login.remove("e")
 fileIO.login.changePassword("test", "test1")

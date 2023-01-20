@@ -11,7 +11,7 @@ def questionToDic(list):
 def reponsesTolistOfDic(reponses, correctReponse):
     out = []
     for item in reponses:
-        if reponses in correctReponse:
+        if item in correctReponse:
             out.append({'val': True, 'text' : item})
         else :
             out.append({'val': False, 'text' : item})
