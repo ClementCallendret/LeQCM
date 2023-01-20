@@ -5,21 +5,7 @@
 {% block content %}
 
 
-<script>  
 
-function PasswordVerif() {  
-      var pw1 = document.getElementById("password").value;  
-      var pw2 = document.getElementById("cpassword").value;
-      if(pw1 != pw2)  
-      {   
-       // document.getElementById("message").innerHTML = "Les mots de passe sont différents"; // A SUPPRIMER SI AVEC BOOTSTRAP ON ARRIVE A FAIRE SA
-        alert("ERREUR, les mot de passe sont différents")
-      } else {  
-        alert("Parfait !");
-      }  
-    }  
-
-</script>
 
 <form action = "http://localhost:5000/register" method = "post">
     <h2>INSCRIPTION</h2>
@@ -30,7 +16,7 @@ function PasswordVerif() {
     <p><input type = "password" name = "cpassword" id="cpassword" placeholder="Confirmer votre mot de passe" required/></p> 
   </br>
     <input type="reset" value="Reset">
-    <input type = "submit" value = "Inscription" onclick="PasswordVerif()"/>
+    <input type = "submit" value = "Inscription"/>
    <!-- <span id = "message" style="color:red"> </span> <br><br>    messge a colorer en rouge et a afficher soit via la fonction PasswordVerif soit par bootstrap-->
  </form>
 

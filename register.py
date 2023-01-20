@@ -17,6 +17,8 @@ def register():
             if (fileIO.login.create(login,password)):
                 return redirect(url_for('login.init'))
             else :
-                flash('Login déjà utilisé')
+                flash('Utilisateur déjà enregistré')
+        else:
+            flash('Les deux mots de passes sont différent')
 
     return render_template('register.html')
