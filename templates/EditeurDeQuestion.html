@@ -54,7 +54,7 @@
                             <li><label for="{{tags[i]}}"><input type="checkbox" name="{{tags[i]}}" id="{{tags[i]}}" class="checkBoxTag">{{tags[i]}}</label></li>
                                 {%if tags[i] in selectedTags%}
                                 <script>
-                                    document.getElementById("#{{tags[i]}}").checked = true;
+                                    document.getElementById("{{tags[i]}}").checked = true;
                                 </script>
                                 {%endif%}
                             {%endfor%}
