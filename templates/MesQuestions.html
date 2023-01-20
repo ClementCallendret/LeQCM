@@ -21,7 +21,7 @@
               
               <ul class="dropdown-menu" id="tagList">
               {%for t in tags%}
-              <li><label for="{{t}}"><input type="checkbox" name="{{t}}">{{t}}</label></li>
+              <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck">{{t}}</label></li>
               {%endfor%}
               </ul>
                 
@@ -37,7 +37,7 @@
           <a class="btn btn-primary" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une question</a>
         </li>
         <li class="nav-item" style="padding: 5px;">
-          <button type="button" class="btn btn-primary">Creer une page de question</button>
+          <button type="submit" form="questionsForm" class="btn btn-primary">Creer une page de question</button>
         </li>
       </ul>
     </div>
@@ -46,8 +46,8 @@
 
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
-<form action="/MesQuestions/creerQCM" method="POST" >
-  <div class="d-flex flex-wrap" style="margin-top: 20px;">
+<form id="questionsForm" action="/MesQuestions/creerQCM" method="POST" >
+  <div class="d-flex flex-wrap" style="margin-top: 20px;" id="questionCards">
     <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
     <!-- Je laisse la première en dur pour que les commentaires soit plus claires -->
     <div class="card questionCard">
@@ -64,19 +64,21 @@
 
     </div>
 
-    {%for q in questions%}
-
-    <div class="card questionCard">
-      <div class="card-header"><a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a></div>
-      <div class="card-body">{{q['state']}}</div>
-      <div class="card-footer" style="color:blue">
-        {%for t in q['tags']%}
-          {{t}};
-        {%endfor%}
+      {%for q in questions%}
+      <div class="card questionCard">
+        <div class="card-header">
+          <input type="checkbox" name="{{q['id']}}" class="checkBoxQuestion">
+          <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
+        </div>
+        <div class="card-body">{{q['state']}}</div>
+        <div class="card-footer" style="color:blue">
+          {%for t in q['tags']%}
+            {{t}};
+          {%endfor%}
+        </div>
       </div>
-    </div>
 
-    {%endfor%}
+      {%endfor%}
   </div>
 </form>
 

@@ -31,14 +31,6 @@ function addAnswer() {
     $("#nbAnswers").val(nbAnswer + 1);
 }
 
-function openFormPopup() {
-    document.getElementById("popupForm").style.display = "block";
-}
-
-function closeFormPopup() {
-    document.getElementById("popupForm").style.display = "none";
-}
-
 function addTag() {
     let tagInput = $("#newTagName");
     let tagName = tagInput.val().trim();
@@ -48,17 +40,51 @@ function addTag() {
         let newTag = true;
         let nbTag = otherTags.length;
 
-        otherTags.each(function(index, element){
-            if($(element).attr("name") == tagName)
+        otherTags.each(function (index, element) {
+            if ($(element).attr("name") == tagName)
                 newTag = false;
         });
 
-        if(newTag){
-            html = "<li><label for=\""+tagName+"\"><input type=\"checkbox\" name=\""+tagName+"\" class=\"checkBoxTag\">"+ tagName +"</label></li>"
+        if (newTag) {
+            html = "<li><label for=\"" + tagName + "\"><input type=\"checkbox\" name=\"" + tagName + "\" class=\"checkBoxTag\">" + tagName + "</label></li>"
             $("#newTagPlace").append(html);
-            $("#newTags").val($("#newTags").val() + tagName +",");
+            $("#newTags").val($("#newTags").val() + tagName + ",");
         }
     }
 
 
+}
+
+function filterByTags() {
+    questions = $("#questionCards").find(".questionCard");
+    allTags = $("#tagList").find(".tagCheck");
+    selectedTags = [];
+    if (selectedTags == []) {
+        question.each(function() {
+            $(this).css("display:flex;")
+        return;})
+    }
+    console.log(selectedTags)
+    allTags.each(function () {
+        if (this.value) {
+            console.tim
+            selectedTags.push(this.name);
+        }
+    });
+
+    questions.each(function () {
+        q = $(this)
+        tags = q.find(".card-footer").text().split(";");
+        hasTag = false;
+        console.log(tags)
+        for(t in tags) {
+            if (t in selectedTags) {
+                hasTag = true
+                
+            }
+        }
+        if (!hasTag) {
+            q.css("display","none")
+        }
+    })
 }
