@@ -80,7 +80,7 @@ def saveQuestion(questionID, title, question, answer, correctAnswer):
     # on crée un fichier contenant le titre et les réponses possibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
         # faut décompacter les reponses correctes
-        formated = [correctAnswer]
+        formated = correctAnswer
         strOut = ""
         for item in formated:
             strOut+=str(item)+"\n\n"
@@ -109,39 +109,44 @@ def read(questionID):
         for i in range(numRep):
             with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'r') as file:
                 ans.append(file.read())
-        # on recupère ses tags:
+        # on recupère ses tags et le créateur:
         tableID = fileIO.question.loadTable()
         tags = []
+        owner = ""
         for item in tableID:
             if item[1] == questionID:
                 tags = item[2]
+                owner = item[0]
         # on charge l'énoncé, le titre, et les réponses possibles
         with open('./static/questions/'+str(questionID)+'/question.txt', 'r') as file:
             with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'r') as tA:    
                 # si on split notre fichier titre + réponses, on sais que le premiers élément et le titre, le reste, une liste de réponses corrèctes
                 tittleAnswer = tA.read().split('\n\n')
                 # on assemble tout ce qu'on a récupéré
-                out = [file.read(), tittleAnswer[0], tags, ans, tittleAnswer[1:]]
+                out = [questionID, owner, file.read(), tittleAnswer[0], tags, ans, tittleAnswer[1:]]
     # on retourne le résultat
     return out
 
 # pour créer une question
 
-def newQuestion(account, title, question, answer, tag, correctAnswer):
+def newQuestion(account, title, question, tag, answer, correctAnswer):
     # on liste les questions existantes
     listOfId = os.listdir("./static/questions")
     # on trie cettee liste par ordre croissant
     listOfId.sort()
+    questionID = '0'
     # on charge le sommaire
     tableId = fileIO.question.loadTable()
     # si il n'y a aucunes questions deja enregistrée
     if listOfId == []:
+        questionID = '0'
         # on crée la question '0'(màj du sommaire puis sauvegarde)
         tableId.append([account, str(len(listOfId)), tag])
         fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
     # si il n'y a pas de question '0' (si elle a été supprimée mais qu'il y en a d'autres)
     elif listOfId[0] != '0':
         # on crée la question '0'(màj du sommaire puis sauvegarde)
+        questionID = '0'
         tableId.append([account, '0', tag])
         fileIO.question.saveQuestion('0', title, question, answer, correctAnswer)
     else:
@@ -154,15 +159,18 @@ def newQuestion(account, title, question, answer, tag, correctAnswer):
             if int(listOfId[i]) != int(listOfId[i-1])+1:
                 # on crée la question dans le trou et on dit qu'on la écrit (le bool)
                 tableId.append([account, str(i), tag])
+                questionID = str(i)
                 fileIO.question.saveQuestion(i, title, question, answer, correctAnswer)
                 written = True
         # si on a pas écrit la question(pas de trou)
         if not(written):
+            questionID = str(len(listOfId))
             # on crée la question avec pour id celui du plus grand+1
             tableId.append([account, str(len(listOfId)), tag])
             fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
     # on sauvergarde le sommaire mis a jour
     fileIO.question.saveTable(tableId)
+    return questionID
 
 # pour supprimer une question
 
@@ -233,10 +241,9 @@ def listByTags(tags):
 
 def listByAccountAndTags(account, tags):
     # on fait pareil que pour plusieurs tags, mais on ajoute dans notre liste de listes de resultat le resultat d'une recherche par compte
-    bundle = fileIO.question.listByTag(tags)
+    bundle = fileIO.question.listByTags(tags)
     temp = fileIO.question.listByAccount(account)
-    for elem in temp:
-        bundle.append(elem)
+    bundle = [bundle, temp]
     # on fait l'intersections
     out=[]
     for list in bundle:
@@ -252,7 +259,7 @@ def listByAccountAndTags(account, tags):
 
 # pour mettre a jour une question
 
-def update(questionID, title, question, answer, tags, correctAnswer):
+def update(questionID, title, question, tags, answer, correctAnswer):
     # on met a jour l'enoncé
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
@@ -262,17 +269,17 @@ def update(questionID, title, question, answer, tags, correctAnswer):
             out.write(answer[i])
     # on met a jour le titre et les reponses posibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
-        formated = [title, correctAnswer]
+        formated = correctAnswer
         strOut = ""
         for item in formated:
             strOut+=str(item)+"\n\n"
-        strOut=strOut[:-2]
+        strOut=title+'\n\n'+strOut[:-2]
         out.write(strOut)
     # on met a jour le sommaire(le créateur ne peut pas etre changé !)
     table = fileIO.question.loadTable()
     for line in table:
         if line[1] == questionID:
-            line[2] == tags
+            line[2] = tags
     # on sauvegarde la table màj
     fileIO.question.saveTable(table)
 
@@ -282,7 +289,7 @@ def isCorrect(questionID, answersToCheck):
     # on charge les données d'une question
     questionData = fileIO.question.read(questionID)
     # si les reponses fournies sont les mêmes que celles sauvergardées alors True sinon False
-    return answersToCheck.sort() == questionData[3].sort()
+    return answersToCheck.sort() == questionData[6].sort()
 
 def getAllTags():
     table = fileIO.question.loadTable()
@@ -291,4 +298,5 @@ def getAllTags():
         for tag in item[2]:
             if not(tag in out):
                 out.append(tag)
+    out.sort()
     return out

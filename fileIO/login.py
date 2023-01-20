@@ -63,6 +63,11 @@ def remove(account):
             newData.append(couple)
     # on sauvergarde la nouvelle liste
     fileIO.login.save(newData)
+    #on supprime les questions que le compte a créé
+    table = fileIO.question.loadTable()
+    for item in table:
+        if item[0] == account:
+            fileIO.question.remove(item[1])
 
 
 # change un mot de passe d'un compte dans le stockage 

@@ -5,29 +5,29 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6 mainBoxes"> <!-- Colonne de guauche : Editeur -->
-            <form method="POST" action="/editeur" id="questionForm">
-                <label for="enonce">Enoncé</label>
-                <textarea name="enonce" id="inputEnonce" placeholder="Ecrivez votre énoncé ici" value="">{{enonce}}</textarea>
+            <form method="POST" action="" id="questionForm">
+                <label for="state">Enoncé</label>
+                <textarea name="state" id="inputState" placeholder="Ecrivez votre énoncé ici" value="">{{state}}</textarea>
 
                 <hr />
                 <!--
                     nbRponses s'incrémente a chaque nouvelle réponse (sans décrémenter à la suppression) pour assurer des id toujours differents
                     idReponses contient les ids des réponses présentent séparés par des ',' 
                 -->
-                <input type="hidden" name="nbReponses" id="nbReponses" value="{{reponses|length}}">
-                <input type="hidden" name="idReponses" id="idReponses" value="{{idReponses}}">
+                <input type="hidden" name="nbAnswers" id="nbAnswers" value="{{answers|length}}">
+                <input type="hidden" name="idAnswers" id="idAnswers" value="{{idAnswers}}">
 
-                <div id="repListe">
-                {%for i in range(0, reponses|length)%} <!--Replacement des réponses après un rechargement-->
-                    <div id="divReponse{{i}}">
-                        <input type="checkbox" name="checkReponse{{i}}" id="checkReponse{{i}}">
-                        <input type="text" name="textReponse{{i}}" id="textReponse{{i}}" value="{{reponses[i]['text']}}" placeholder="Réponse">
-                        <input type="button" onclick="supprimerReponse({{i}})" value="Supprimer">
+                <div id="answerList">
+                {%for i in range(0, answers|length)%} <!--Replacement des réponses après un rechargement-->
+                    <div id="divAnswer{{i}}">
+                        <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
+                        <input type="text" name="textAnswer{{i}}" id="textAnswer{{i}}" value="{{answers[i]['text']}}" placeholder="Réponse">
+                        <input type="button" onclick="deleteAnswer({{i}})" value="Supprimer">
                     </div>
                     
-                    {%if reponses[i]['val'] == 'on' %} <!--Recheck des checkboxes si necessaires-->
+                    {%if answers[i]['val'] %} <!--Recheck des checkboxes si necessaires-->
                     <script>
-                        document.getElementById("checkReponse{{i}}").checked = true;
+                        document.getElementById("checkAnswer{{i}}").checked = true;
                     </script>
                     {%endif%}
 
@@ -36,15 +36,51 @@
 
                 <hr />
 
-                <input type="button" onclick="ajouterReponse()" value="Ajouter une réponse" />
-                <input type="submit" name= "sendType" value="Apercu">
-                <input type="submit" name= "sendType" value="Enregistrer">
+                <input type="button" onclick="addAnswer()" value="Ajouter une réponse" />
+                <input type="submit" name="action" value="Apercu">
+                <input type="button" name="action" onclick="openFormPopup()" value="Enregistrer" />
+
+                <div id="popupForm">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                          Tags
+                        </button>
+                        <ul class="dropdown-menu" id="tagList">
+                            <input type="text" id="newTagName" placeHolder="Nouveau tag" style="display: inline;"/>
+                            <input type="button" onclick="addTag()" value="+" style="display: inline;">
+                            <input type="hidden" name="newTags" id="newTags" value="">
+                            <div id="newTagPlace"></div>
+                            {%for i in range(0, tags|length)%}
+                            <li><label for="{{tags[i]}}"><input type="checkbox" name="{{tags[i]}}" id="{{tags[i]}}" class="checkBoxTag">{{tags[i]}}</label></li>
+                                {%if tags[i] in selectedTags%}
+                                <script>
+                                    document.getElementById("{{tags[i]}}").checked = true;
+                                </script>
+                                {%endif%}
+                            {%endfor%}
+                        </ul>
+                    </div> 
+                    <input type="text" id="titleText" name="title" placeHolder="Titre" value="{{title}}">
+                    <input type="submit" name="action" value="Enregistrer">
+                    <input type="button" onclick="closeFormPopup()" value="Annuler" />
+                </div>
             </form>    
         </div>
 
         <div class="col-sm-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
-            <div id="enoncePreview">{{enonceFormate|safe}}</div>
-        </div>
+            <div id="previewState">{{stateFormated|safe}}</div> <!--Affichage de l'énoncé formatés -->
+
+
+
+            <div id="previewAnswerList">
+                {%for i in range(0, answersFormated|length)%} <!--Affichage des réponses formatés -->
+                    <div class="previewDivAnswer">
+                        <input type="checkbox" name="PreviewCheckAnswer{{i}}" id="PreviewCheckAnswer{{i}}" style="display: inline;">
+                        {{answersFormated[i]['text']|safe}}
+                    </div>
+                {%endfor%}
+                </div>
+            </div>
 
         <script>
             mermaid.initialize({startOnLoad:true}); // Lancement de mermaid

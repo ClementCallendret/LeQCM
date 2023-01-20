@@ -48,7 +48,9 @@
   <div>
     
     {% for mesg in get_flashed_messages() %}
-    <h1>{{ mesg }}</h1>
+    <div class="alert alert-danger" style="width: fit-content; margin : auto">
+      <strong>Attention ! </strong> {{ mesg }}
+    </div>
     {% endfor %}
     {% if isLoged %} 
 
