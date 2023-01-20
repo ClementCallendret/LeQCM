@@ -8,8 +8,8 @@ def mesQuestions():
   if "login" in session:
     tags = fileIO.question.getAllTags()
     questions = fileIO.question.listByAccount(session["login"])
-    for q in questions:
-      q = fileIO.format.dicToQuestion(q)
+    for i in range(len(questions)):
+      questions[i] = fileIO.format.questionToDic(fileIO.question.read(questions[i]))
     return render_template("MesQuestions.html", questions=questions, tags=tags)
   else:
     flash("Vous devez être connecté pour acceder à cette page")

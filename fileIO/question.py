@@ -241,10 +241,9 @@ def listByTags(tags):
 
 def listByAccountAndTags(account, tags):
     # on fait pareil que pour plusieurs tags, mais on ajoute dans notre liste de listes de resultat le resultat d'une recherche par compte
-    bundle = fileIO.question.listByTag(tags)
+    bundle = fileIO.question.listByTags(tags)
     temp = fileIO.question.listByAccount(account)
-    for elem in temp:
-        bundle.append(elem)
+    bundle = [bundle, temp]
     # on fait l'intersections
     out=[]
     for list in bundle:
@@ -280,7 +279,7 @@ def update(questionID, title, question, tags, answer, correctAnswer):
     table = fileIO.question.loadTable()
     for line in table:
         if line[1] == questionID:
-            line[2] == tags
+            line[2] = tags
     # on sauvegarde la table màj
     fileIO.question.saveTable(table)
 

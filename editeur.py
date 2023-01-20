@@ -98,7 +98,7 @@ def editeurPOST(questionId):
       if questionId == 'createNew' :
         # sauvegarde de la question et renvoie vers la page avec le bon identifiant pour savoir que la question est déjà dans un fichier
         questionId = fileIO.question.newQuestion(session["login"], title, state, tags, answersSaveFormat[0], answersSaveFormat[1])
-        return redirect(url_for('edit.editeurPOST', questionId=questionId))
+        return redirect(url_for('editeur.editeurPOST', questionId=questionId))
       
       else:
         # update de la question déjà existente
