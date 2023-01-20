@@ -7,12 +7,17 @@
 {% for question in res %}
 
 <h1>{{ question.title }}</h1>
-<h1>{{ question.state }}</h1>
+<h1>{{ question.state|safe }}</h1>
 
 {% for answer in question.answers %}
-    <h1>{{ answer.text }}</h1>
+    <h1>{{ answer.text|safe}}</h1>
     {% endfor %}
 
 {% endfor %}
 <h1>FIN DE LA PAGE</h1>
+
+<script>
+    mermaid.initialize({startOnLoad:true}); // Lancement de mermaid
+</script>
+
 {% endblock %}

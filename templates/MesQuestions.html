@@ -46,7 +46,7 @@
 
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
-<form action="/" method="POST" >
+<form action="/MesQuestions/creerQCM" method="POST" >
   <div class="d-flex flex-wrap" style="margin-top: 20px;">
     <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
     <!-- Je laisse la première en dur pour que les commentaires soit plus claires -->
@@ -57,6 +57,11 @@
       <div class="card-footer" style="color: blue;">Système, nature, découverte, ect plein de taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagA</div>
       <!--CheckBox pour la page de qcm-->
       <input type="checkbox" name="checkQuestion" class="checkBoxQuestion">
+      
+
+      <input type="checkbox" name="test1">
+      <input type="submit" name="button">
+
     </div>
 
     {%for q in questions%}
