@@ -23,6 +23,8 @@
 }
 
 .questionCard {
+    border-radius: 8px;
+    box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.5);
     position : relative;
     border-style: solid;
     border-color: black;
@@ -34,6 +36,9 @@
 }
 
 .card-header {
+    background-color: rgb(139, 139, 139);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     word-wrap: break-word;
     white-space: nowrap;
     overflow: hidden;
@@ -58,6 +63,9 @@
     text-overflow: ellipsis;
     max-height: 50px;
     min-height: 50px;
+    background-color: rgba(221, 185, 132, 0.822);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .popupForm {
