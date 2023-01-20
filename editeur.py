@@ -15,7 +15,7 @@ def init(questionId):
 
     # Renvoie d'un template vide pour une nouvelle question
       allTag = fileIO.question.getAllTags()
-      return render_template('EditeurDeQuestion.html', nbanswers= 0, answers=[], state="", stateFormated="", idAnswers="",answersFormated=[],  tags=allTag)
+      return render_template('EditeurDeQuestion.html', nbanswers= 0, answers=[], state="", stateFormated="", idAnswers="",answersFormated=[],  tags=allTag, selectedTag=[], title="")
 
     else:
       allTag = fileIO.question.getAllTags()
@@ -24,19 +24,17 @@ def init(questionId):
       # On accède a la page seulement si la question appartient bien au Professeur
       if question["owner"] == session["login"] :
 
-        print(question)
-
         # Calcule des id des réponses pour les conserver dans la page
         idAnswers = ""
         for i in range(0, len(question["answers"])):
           idAnswers += str(i) + ","
 
-        return render_template('EditeurDeQuestion.html', nbAnswers= len(question["answers"]), answers=question["answers"], state=question["state"], stateFormated="",answersFormated=[], idAnswers=idAnswers, tags=allTag)
+        return render_template('EditeurDeQuestion.html', nbAnswers= len(question["answers"]), answers=question["answers"], state=question["state"], stateFormated="",answersFormated=[], idAnswers=idAnswers, tags=allTag, selectedTag=question["tags"], title=question["title"])
 
       # Cas ou l'on veut charger une question déjà créé
       else:
         flash("La question d'id " + questionId + " ne vous appartient pas !\nCréation d'une nouvelle question")
-        return render_template('EditeurDeQuestion.html', nbAnswers= 0, answers=[], state="", stateFormated="", idAnswers="",answersFormated=[],  tags=allTag)
+        return render_template('EditeurDeQuestion.html', nbAnswers= 0, answers=[], state="", stateFormated="", idAnswers="",answersFormated=[],  tags=allTag, selectedTag=[], title="")
   else:
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.init'))
@@ -71,27 +69,28 @@ def editeurPOST(questionId):
     # Récupération de tous les tags
     allTag = fileIO.question.getAllTags()
 
-    # Enregistrement si demandé
-    if request.form['action'] == "Enregistrer":
-
-      # Récupération des nouveaux tags ajoutés par l'utilisateurs
-      newTags = request.form.get("newTags").split(',')[0:-1]
+    # Récupération des nouveaux tags ajoutés par l'utilisateurs
+    newTags = request.form.get("newTags").split(',')[0:-1]
 
       # Recherche des tags qui sont cochés
-      tags=[]
-      for t in newTags:
-        if not (request.form.get(t) == None) :
-          tags.append(t)
-      for t in allTag:
-        if not (request.form.get(t) == None) :
-          tags.append(t)
+    tags=[]
+    for t in newTags:
+      if not (request.form.get(t) == None) :
+        tags.append(t)
+    for t in allTag:
+      if not (request.form.get(t) == None) :
+        tags.append(t)
 
-      # Récupération du titre ou ajout du titre par defaut
-      title = request.form.get("title")
-      if not title == None:
-        title.strip()
-      if title==None or title=="":
-        title = "Sans Titre"
+    # Récupération du titre ou ajout du titre par defaut
+    title = ""
+    title = request.form.get("title")
+    if not title == None:
+      title.strip()
+    if title==None or title=="":
+      title = "Sans Titre"
+
+    # Enregistrement si demandé
+    if request.form['action'] == "Enregistrer":
 
       answersSaveFormat = fileIO.format.listOfDicToreponse(answers)
 
@@ -105,7 +104,7 @@ def editeurPOST(questionId):
         fileIO.question.update(questionId, title, state, tags, answersSaveFormat[0], answersSaveFormat[1])
 
     # Renvoie de la template avec l'apercu
-    return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=allTag)
+    return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=fileIO.question.getAllTags(), selectedTag=tags, title=title)
   else:
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.init'))

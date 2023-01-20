@@ -51,11 +51,16 @@
                             <input type="hidden" name="newTags" id="newTags" value="">
                             <div id="newTagPlace"></div>
                             {%for i in range(0, tags|length)%}
-                            <li><label for="{{tags[i]}}"><input type="checkbox" name="{{tags[i]}}" class="checkBoxTag">{{tags[i]}}</label></li>
+                            <li><label for="{{tags[i]}}"><input type="checkbox" name="{{tags[i]}}" id="{{tags[i]}}" class="checkBoxTag">{{tags[i]}}</label></li>
+                                {%if tags[i] in selectedTags%}
+                                <script>
+                                    document.getElementById("#{{tags[i]}}").checked = true;
+                                </script>
+                                {%endif%}
                             {%endfor%}
                         </ul>
                     </div> 
-                    <input type="text" id="titleText" name="title" placeHolder="Titre">
+                    <input type="text" id="titleText" name="title" placeHolder="Titre" value="{{title}}">
                     <input type="submit" name="action" value="Enregistrer">
                     <input type="button" onclick="closeFormPopup()" value="Annuler" />
                 </div>

@@ -6,7 +6,7 @@ def dicToQuestion(dic):
 
 
 def questionToDic(list):
-    return {'id' : list[0], 'owner': list[1], 'title': list[3], 'state': list[2], 'tag': list[4], 'answers' : fileIO.format.reponsesTolistOfDic(list[5], list[6])}
+    return {'id' : list[0], 'owner': list[1], 'title': list[3], 'state': list[2], 'tags': list[4], 'answers' : fileIO.format.reponsesTolistOfDic(list[5], list[6])}
 
 def reponsesTolistOfDic(reponses, correctReponse):
     out = []
