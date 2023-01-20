@@ -17,6 +17,6 @@ def register():
             if (fileIO.login.create(login,password)):
                 return redirect(url_for('login.init'))
             else :
-                flash('Utilisateur inconnu')
+                flash('Login déjà utilisé')
 
     return render_template('register.html')
