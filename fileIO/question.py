@@ -134,16 +134,19 @@ def newQuestion(account, title, question, tag, answer, correctAnswer):
     listOfId = os.listdir("./static/questions")
     # on trie cettee liste par ordre croissant
     listOfId.sort()
+    questionID = '0'
     # on charge le sommaire
     tableId = fileIO.question.loadTable()
     # si il n'y a aucunes questions deja enregistrée
     if listOfId == []:
+        questionID = '0'
         # on crée la question '0'(màj du sommaire puis sauvegarde)
         tableId.append([account, str(len(listOfId)), tag])
         fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
     # si il n'y a pas de question '0' (si elle a été supprimée mais qu'il y en a d'autres)
     elif listOfId[0] != '0':
         # on crée la question '0'(màj du sommaire puis sauvegarde)
+        questionID = '0'
         tableId.append([account, '0', tag])
         fileIO.question.saveQuestion('0', title, question, answer, correctAnswer)
     else:
@@ -156,15 +159,18 @@ def newQuestion(account, title, question, tag, answer, correctAnswer):
             if int(listOfId[i]) != int(listOfId[i-1])+1:
                 # on crée la question dans le trou et on dit qu'on la écrit (le bool)
                 tableId.append([account, str(i), tag])
+                questionID = str(i)
                 fileIO.question.saveQuestion(i, title, question, answer, correctAnswer)
                 written = True
         # si on a pas écrit la question(pas de trou)
         if not(written):
+            questionID = str(len(listOfId))
             # on crée la question avec pour id celui du plus grand+1
             tableId.append([account, str(len(listOfId)), tag])
             fileIO.question.saveQuestion(len(listOfId), title, question, answer, correctAnswer)
     # on sauvergarde le sommaire mis a jour
     fileIO.question.saveTable(tableId)
+    return questionID
 
 # pour supprimer une question
 
