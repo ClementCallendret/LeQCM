@@ -29,7 +29,7 @@ def init(questionId):
         for i in range(0, len(question["answers"])):
           idAnswers += str(i) + ","
 
-        return render_template('EditeurDeQuestion.html', nbAnswers= len(question["answers"]), answers=question["answers"], state=question["state"], stateFormated="",answersFormated=[], idAnswers=idAnswers, tags=allTag, selectedTag=question["tags"], title=question["title"])
+        return render_template('EditeurDeQuestion.html', nbAnswers= len(question["answers"]), answers=question["answers"], state=question["state"], stateFormated="",answersFormated=[], idAnswers=idAnswers, tags=allTag, selectedTags=question["tags"], title=question["title"])
 
       # Cas ou l'on veut charger une question déjà créé
       else:
