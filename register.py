@@ -14,7 +14,7 @@ def register():
         password = request.form.get('password')
         cpassword = request.form.get('cpassword')
         if (password == cpassword):
-            if (not (fileIO.login.check(login,register))):
+            if (not (fileIO.login.check(login, password))):
                 fileIO.login.create(login,password)
                 return redirect(url_for('login.init'))
             else :
