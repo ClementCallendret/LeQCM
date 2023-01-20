@@ -20,8 +20,6 @@ def create(account, password):
         if couple[0]==account:
             # on le met dans notre bool
             exist = True
-            # retour sur console(dans un return pourrait servir)
-            print('account already exists')
     # si il a pas été trouvé, sont va l'ajouté:
     if not(exist):
         # si ya personne qui a encore crée de compte
@@ -32,6 +30,7 @@ def create(account, password):
         data.append([account, password])
         # on enregistre tout ça sur fichier
         fileIO.login.save(data)
+    return not(exist)
 
 # verifie si un mot de passe est le bon
 
