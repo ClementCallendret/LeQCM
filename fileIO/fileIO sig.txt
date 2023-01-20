@@ -27,7 +27,7 @@
                                         => [id, owner, enonce, title, tags, reponses, correctReponses]
     fileIO.format.questionToDic(list) -> [id, owner, enonce, title, tags, reponses, correctReponses] 
                                         => {'id':... , 'owner': ..., 'title':..., 'enonce' : ..., 'tags' : [...] , 'reponses' : [{'val': ... , 'text' : ...}]}
-
+ 
 
 
 !!!! pour avoir l'email du compte actuellement connecté a voir où clement le range!

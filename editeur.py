@@ -99,7 +99,7 @@ def editeurPOST(questionId):
         fileIO.question.update(questionId, title, state, tags, answersSaveFormat[0], answersSaveFormat[1])
 
     # Renvoie de la template avec l'apercu
-    return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=fileIO.question.getAllTags(), questionId=questionId)
+    return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=fileIO.question.getAllTags(), selectedTag=tags, title=title)
   else:
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.init'))
