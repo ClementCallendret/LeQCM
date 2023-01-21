@@ -95,6 +95,11 @@
     text-align: center;
 
 }
+.hello{
+    font-size: 30px;
+    text-align: center;
+}
+
 @media print {
 @page { margin: 0; }
 body { margin: 1.6cm; }
