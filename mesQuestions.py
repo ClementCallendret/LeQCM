@@ -8,6 +8,7 @@ def mesQuestions():
   if "login" in session:
     tags = fileIO.question.getAllTags()
     questions = fileIO.question.listByAccount(session["login"])
+    print(tags)
     for i in range(len(questions)):
       questions[i] = fileIO.format.questionToDic(fileIO.question.read(questions[i]))
     return render_template("MesQuestions.html", questions=questions, tags=tags)

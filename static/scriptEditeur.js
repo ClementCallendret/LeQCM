@@ -59,32 +59,35 @@ function filterByTags() {
     questions = $("#questionCards").find(".questionCard");
     allTags = $("#tagList").find(".tagCheck");
     selectedTags = [];
-    if (selectedTags == []) {
-        question.each(function() {
-            $(this).css("display:flex;")
-        return;})
-    }
-    console.log(selectedTags)
+
     allTags.each(function () {
-        if (this.value) {
-            console.tim
+        if (this.checked) {
             selectedTags.push(this.name);
         }
     });
 
+    if (selectedTags.length == 0) {
+        questions.each(function() {
+            this.setAttribute("style","");
+        });
+    }
+    else{
+        console.log(selectedTags)
     questions.each(function () {
         q = $(this)
         tags = q.find(".card-footer").text().split(";");
-        hasTag = false;
-        console.log(tags)
-        for(t in tags) {
-            if (t in selectedTags) {
-                hasTag = true
-                
+        hasTag=false
+        for(let i=0; i < tags.length-1; i++) {
+            if (selectedTags.includes(tags[i])) {
+                hasTag = true;
             }
         }
-        if (!hasTag) {
-            q.css("display","none")
+        if(!hasTag){
+            this.setAttribute("style","display : none");
+        }
+        else{
+            this.setAttribute("style","");
         }
     })
+    }
 }

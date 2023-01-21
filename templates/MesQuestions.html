@@ -52,16 +52,10 @@
     <!-- Je laisse la première en dur pour que les commentaires soit plus claires -->
     <div class="card questionCard">
       <!-- Lien pour aller voir ou modifier la question -->
-      <div class="card-header"><a href="" class="link-dark">Le titre de la Question qui est tres longue en vrai deraiment</a></div>
+      <div class="card-header"><input type="checkbox" name="checkQuestion" class="checkBoxQuestion"><a href="" class="link-dark">Question Demo</a></div>
       <div class="card-body">Le début de l'énoncé qui est vraiment tres tres long tres tres longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres long gtres tres longtres tres longtres tres longtres tres longtres tres long zizi blablabal</div>
-      <div class="card-footer" style="color: blue;">Système, nature, découverte, ect plein de taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagA</div>
+      <div class="card-footer" style="color: blue;">tag1;tag2;tag3</div>
       <!--CheckBox pour la page de qcm-->
-      <input type="checkbox" name="checkQuestion" class="checkBoxQuestion">
-      
-
-      <input type="checkbox" name="test1">
-      <input type="submit" name="button">
-
     </div>
 
       {%for q in questions%}
@@ -71,11 +65,7 @@
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
         </div>
         <div class="card-body">{{q['state']}}</div>
-        <div class="card-footer" style="color:blue">
-          {%for t in q['tags']%}
-            {{t}};
-          {%endfor%}
-        </div>
+        <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
       </div>
 
       {%endfor%}
