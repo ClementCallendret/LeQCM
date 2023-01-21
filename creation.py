@@ -1,6 +1,6 @@
 from flask import Blueprint, request,render_template, url_for
 import fileIO
-import dictTodictFormated
+import formatage
 
 crea = Blueprint('creation',__name__)
 
@@ -19,7 +19,7 @@ def creation():
         for i in range (len(res)):
             res[i]['state'] = str(i+1)+". "+res[i]['state']
         #Formatage
-        res = dictTodictFormated.dictTodictFormated(res)
+        res = formatage.dictTodictFormated(res)
         if (listeQ != []):
             return render_template("creation.html",res = res) 
     return render_template('MesQuestions.html') 

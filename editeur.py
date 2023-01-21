@@ -99,9 +99,6 @@ def editeurPOST(questionId):
         fileIO.question.update(questionId, title, state, tags, answersSaveFormat[0], answersSaveFormat[1])
 
     # Renvoie de la template avec l'apercu
-    for t in allTag:
-      print(str(t in tags))
-      
     return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=fileIO.question.getAllTags(), selectedTag=tags, title=title)
   else:
     flash("Vous devez être connecté pour acceder à cette page")
