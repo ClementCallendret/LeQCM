@@ -68,8 +68,8 @@
     border-bottom-right-radius: 8px;
 }
 
-.popupForm {
-    display:none
+.previewDivAnswer > * {
+    display: inline;
 }
 
 

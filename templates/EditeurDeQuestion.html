@@ -39,7 +39,7 @@
                 <input type="button" onclick="addAnswer()" value="Ajouter une réponse" />
                 <input type="submit" name="action" value="Apercu">
 
-                <div id="popupForm">
+                <div>
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                           Tags
@@ -51,10 +51,9 @@
                             <div id="newTagPlace"></div>
                             {%for i in range(0, tags|length)%}
                             <li><label for="{{tags[i]}}"><input type="checkbox" name="{{tags[i]}}" id="{{tags[i]}}" class="checkBoxTag">{{tags[i]}}</label></li>
-                                {% if is in(tags['i'], selectedTag)%}
+                                {% if tags[i] is in(selectedTag) %}
                                 <script>
                                     document.getElementById("{{tags[i]}}").checked = true;
-                                    console.log("oui")
                                 </script>
                                 {%endif%}
                             {%endfor%}
@@ -74,7 +73,7 @@
             <div id="previewAnswerList">
                 {%for i in range(0, answersFormated|length)%} <!--Affichage des réponses formatés -->
                     <div class="previewDivAnswer">
-                        <input type="checkbox" name="PreviewCheckAnswer{{i}}" id="PreviewCheckAnswer{{i}}" style="display: inline;">
+                        <input type="checkbox" name="PreviewCheckAnswer{{i}}" id="PreviewCheckAnswer{{i}}" >
                         {{answersFormated[i]['text']|safe}}
                     </div>
                 {%endfor%}
