@@ -7,3 +7,10 @@ def formatageMD(text):
     text = '\n'+text.replace('\r', '')
     html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid'])
     return html
+
+def dictTodictFormated(dico):
+    for question in dico:
+        question['state']=formatageMD(question['state'])
+        for answer in question['answers']:
+            answer['text']=formatageMD(answer['text'])
+    return dico
