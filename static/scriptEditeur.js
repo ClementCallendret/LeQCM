@@ -31,6 +31,7 @@ function addAnswer() {
     $("#nbAnswers").val(nbAnswer + 1);
 }
 
+//ajout d'un tag non existant
 function addTag() {
     let tagInput = $("#newTagName");
     let tagName = tagInput.val().trim();
@@ -40,6 +41,7 @@ function addTag() {
         let newTag = true;
         let nbTag = otherTags.length;
 
+        // verification de la non existence
         otherTags.each(function (index, element) {
             if ($(element).attr("name") == tagName)
                 newTag = false;
@@ -56,24 +58,28 @@ function addTag() {
 }
 
 function filterByTags() {
+
     questions = $("#questionCards").find(".questionCard");
     allTags = $("#tagList").find(".tagCheck");
     selectedTags = [];
 
+    // récupération des tags cochés
     allTags.each(function () {
         if (this.checked) {
             selectedTags.push(this.name);
         }
     });
 
+    // si aucun montrer toutes les questions
     if (selectedTags.length == 0) {
         questions.each(function() {
             this.setAttribute("style","");
         });
     }
+    // sinon on verifie si le tag appartient à la question grace à la chaine de charactères
     else{
         console.log(selectedTags)
-    questions.each(function () {
+        questions.each(function () {
         q = $(this)
         tags = q.find(".card-footer").text().split(";");
         hasTag=false
