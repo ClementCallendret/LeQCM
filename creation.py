@@ -15,11 +15,11 @@ def creation():
         res = []
         for ID in listeQ:
             res.append(fileIO.format.questionToDic(fileIO.question.read(ID)))
+        res = formatage.dictTodictFormated(res)
         #Pour numéroter les questions 
         for i in range (len(res)):
             res[i]['state'] = str(i+1)+". "+res[i]['state']
         #Formatage
-        res = formatage.dictTodictFormated(res)
         if (listeQ != []):
             return render_template("creation.html",res = res) 
     return render_template('MesQuestions.html') 
