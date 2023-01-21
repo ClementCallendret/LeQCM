@@ -3,21 +3,40 @@
 {% block title %}Creation{% endblock %}
 
 {% block content %}
-<h1>Debut de la page</h1>
-{% for question in res %}
 
-<h1>{{ question.title }}</h1>
-<h1>{{ question.state|safe }}</h1>
+<div class="container-fluid">
+
+<div class="printButton">
+    <button onclick="window.print();" class="printButton">Imprimer le QCM</button>
+</div>
+
+
+{% for question in res %}
+<div class="state">
+    <state>{{ question.state|safe }}</state>
+</div>
 
 {% for answer in question.answers %}
-    <h1>{{ answer.text|safe}}</h1>
-    {% endfor %}
+<div id="totalAnswer">
 
+    <div class="caseacocher">
+        <img src="{{url_for('static', filename='caseacocher.png')}}" width="50" height="25" align="left"/>
+    </div>
+
+    <div class="answers"> 
+        <answer>{{ answer.text|safe}}</answer>
+    </div>
+
+</div>
+
+    {% endfor %}
 {% endfor %}
-<h1>FIN DE LA PAGE</h1>
+
+</div>
 
 <script>
     mermaid.initialize({startOnLoad:true}); // Lancement de mermaid
 </script>
 
 {% endblock %}
+

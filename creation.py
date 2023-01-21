@@ -1,4 +1,4 @@
-from flask import Blueprint, request,render_template
+from flask import Blueprint, request,render_template, url_for
 import fileIO
 import dictTodictFormated
 
@@ -13,14 +13,13 @@ def creation():
         for key,value in request.form.items():
             listeQ.append(key)
         res = []
-        #for ID in listeQ:
-         #   res.append(fileIO.format.questionToDic(fileIO.question.read(ID)))
-        print(res)
-        res = [{'id' : 1, 'title' : 'titre', 'state' : 'Si A = B Samy est bg', 'answers':[{'val' : True, 'text' : 'je pense que A = B'},{'val' : False, 'text' : 'je pense que A != B'}], 'tags' : ['beau', 'moche sa mère']},
-            {'id' : 2, 'title' : 'titre2', 'state' : '\n~~~mermaid\n graph LR\nA-->B\nB-->C\n~~~', 'answers':[{'val' : False, 'text' : 'je pense que A != B2'},{'val' : True, 'text' : 'je pense que A = B2'}],'tags' : ['moche sa mère', 'moche de fou']}
-            ]
+        for ID in listeQ:
+            res.append(fileIO.format.questionToDic(fileIO.question.read(ID)))
+        #Pour numéroter les questions 
+        for i in range (len(res)):
+            res[i]['state'] = str(i+1)+"."+res[i]['state']
+        #Formatage
         res = dictTodictFormated.dictTodictFormated(res)
-        print(res)
         if (listeQ != []):
             return render_template("creation.html",res = res) 
     return render_template('MesQuestions.html') 

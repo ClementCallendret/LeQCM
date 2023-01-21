@@ -73,6 +73,42 @@
 }
 
 
+
+.state{
+    font-size: 20px;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.caseacocher{
+    display:inline;
+}
+.answers{
+    display:inline;
+    padding : 0;
+    margin : 0;
+    line-height : 25px;
+    font-size: 17px;
+}
+
+.printButton{
+    font-size: 30px;
+    text-align: center;
+
+}
+@media print {
+@page { margin: 0; }
+body { margin: 1.6cm; }
+.navbar {
+    display: none;
+    visibility: hidden;
+}
+.printButton{
+    display: none;
+    visibility: hidden;
+}
+}
+
+
 /* maxi code css pour pygments pour Markdown fonctionne avec le code coloré il est généré par Pygmentize  utilisé et recupéré sur internet */
 pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
