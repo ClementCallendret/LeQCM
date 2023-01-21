@@ -17,7 +17,7 @@ def creation():
             res.append(fileIO.format.questionToDic(fileIO.question.read(ID)))
         #Pour numéroter les questions 
         for i in range (len(res)):
-            res[i]['state'] = str(i+1)+"."+res[i]['state']
+            res[i]['state'] = str(i+1)+". "+res[i]['state']
         #Formatage
         res = dictTodictFormated.dictTodictFormated(res)
         if (listeQ != []):
