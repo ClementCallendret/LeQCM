@@ -1,5 +1,4 @@
 # LeQCM
-<<<<<<< HEAD
 Installation  :
 -télécharger Python 3.8.10,Flask 2.2.2, pygments 2.10.0, markdown 3.2, md-mermaid 0.1.1
 
@@ -7,7 +6,6 @@ Lancement :
 -Être dans le répertoire du projet
 -executer dans le terminal : python3 main.py
 
-=======
 Un QCM
 
 
@@ -33,6 +31,5 @@ les identifiants sont attribuées celon ces règles:
 cette méthode permet de minimiser le nombre d'identifiant, tout en évitant de devoir reatribué les identifiants suivant a chaque fois qu'une question est supprimée.
 
 lors de la recherche de questions, on interroge simplement la base (question.txt), lors de la recupperation des données complete d'une question, on les reccuppèrent directement dans le fichier portant son identifiant, et après un rapide formatage, elles sont transmisent plus haut pour êtres affichées et/ou traitées.
->>>>>>> a94ce9f (read me mis a jour avec la description de fileIO)
 
 lors de la recherche de questions, on interroge simplement la base (question.txt), lors de la recupperation des données complete d'une question, on les reccuppèrent directement dans le fichier portant son identifiant, et après un rapide formatage, elles sont transmisent plus haut pour êtres affichées et/ou traitées.
