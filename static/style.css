@@ -4,13 +4,10 @@
     margin: 10px
 }
 
-#questionForm > * {
-    display:block;
+.middleButton{
     position: relative;
-    width : 100%;
-}
-
-.submitBut{
+    width:50%;
+    display: block;
     margin:15px;
 }
 
