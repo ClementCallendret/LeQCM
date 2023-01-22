@@ -16,9 +16,9 @@ les questions sont enregistrées dans le stockage séparement.
 Des identifiants leurs sont attribuées ainsi qu'un dossier d'istinct portant l'identifiant comme nom.
 
 Chaque dossier est composé: 
--d'un fichier question.txt, contenant l'énoncé.
--d'un fichier title+answer.txt, contenant le titre est les questions justes.
--de fichier ayant pour nom un entier, contenant les réponses dans l'odre, à raison d'une réponse par fichier.
+ - d'un fichier question.txt, contenant l'énoncé.
+ - d'un fichier title+answer.txt, contenant le titre est les questions justes.
+ - de fichier ayant pour nom un entier, contenant les réponses dans l'odre, à raison d'une réponse par fichier.
 
 Pour garder une trace des tags, créateurs et identifiants de chaques questions, il y a aussi un fichier question.txt hors du repertoire questions.
 ce fichier est une table de ces valeurs. Il s'est avéré plus judicieux de procédé avec ce systeme, en raison de l'objectif même de cette application. En effet, cette application doit être conçue pour pouvoir contenir un très grand nombre de questions, ainsi il est impératif d'épargner la quantitée de mémoire utilisée(l'autre alternative étant de charger les données de chaque questions de la mémoire en tout temps).
