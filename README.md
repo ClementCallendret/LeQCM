@@ -10,8 +10,6 @@ Lancement :
  - Être dans le répertoire du projet
  - executer dans le terminal : python3 main.py
 
-Un QCM
-
 
 
 Format et méthode de sauvegarde:
