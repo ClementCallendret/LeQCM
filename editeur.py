@@ -6,6 +6,7 @@ import formatage
 
 edit = Blueprint('editeur',__name__)
 
+# Ouverture sans requête POST
 @edit.route('/editeur/<questionId>')
 def init(questionId):
   if 'login' in session:
@@ -17,6 +18,7 @@ def init(questionId):
       allTag = fileIO.question.getAllTags()
       return render_template('EditeurDeQuestion.html', nbanswers= 0, answers=[], state="", stateFormated="", idAnswers="",answersFormated=[],  tags=allTag, selectedTag=[], title="")
 
+    # Cas ou l'on charge une question
     else:
       allTag = fileIO.question.getAllTags()
       # Chargement de la question depuis la BD
@@ -49,7 +51,7 @@ def editeurPOST(questionId):
     state = request.form["state"]
     stateFormated = formatage.formatageMD(state) 
 
-    # Recupération des ids dans un tableau 
+    # Recupération des ids des réponses dans un tableau 
     oldIdAnswers = request.form["idAnswers"].split(",")
     answers = []
     newIdAnswers = ""
@@ -58,31 +60,31 @@ def editeurPOST(questionId):
     for i in range(0, len(oldIdAnswers) - 1) :
       newIdAnswers += str(i) + ","
       n = oldIdAnswers[i]
-      answers.append({"val" : request.form.get("checkAnswer" + n)=="on" , "text" : request.form["textAnswer" + n]})
+      answers.append({"val" : request.form.get("checkAnswer" + n)=="on" , "text" : request.form.get("textAnswer" + n)})
     
     # Formatage de chaque réponse
-    answersFormated = []
-    for rep in answers :
-      textAnswerFormated = formatage.formatageMD(rep["text"])
-      answersFormated.append({"val" : rep["val"], "text" : textAnswerFormated})
+    answersFormated = formatage.formatAnswers(answers)
+
     # Récupération des nouveaux tags ajoutés par l'utilisateurs
     # Récupération de tous les tags
     allTag = fileIO.question.getAllTags()
     newTags = request.form.get("newTags").split(',')[0:-1]
+    selectedTags=[]
+    
+    # Ajout des nouveaux tags à la liste
+    for t in newTags:
+      allTag.append(t)
 
     # Recherche des tags qui sont cochés
-    tags=[]
-    for t in newTags:
-      if not (request.form.get(t) == None) :
-        tags.append(t)
     for t in allTag:
-      if not (request.form.get(t) == None) :
-        tags.append(t)
+      if request.form.get(t) is not None :
+        selectedTags.append(t)
+
     # Récupération du titre ou ajout du titre par defaut
     title = request.form.get("title")
-    if not title == None:
+    if title is not None:
       title.strip()
-    if title==None or title=="":
+    if title is None or title=="":
       title = "Sans Titre"
 
     # Enregistrement si demandé
@@ -91,15 +93,15 @@ def editeurPOST(questionId):
 
       if questionId == 'createNew' :
         # sauvegarde de la question et renvoie vers la page avec le bon identifiant pour savoir que la question est déjà dans un fichier
-        questionId = fileIO.question.newQuestion(session["login"], title, state, tags, answersSaveFormat[0], answersSaveFormat[1])
+        questionId = fileIO.question.newQuestion(session["login"], title, state, selectedTags, answersSaveFormat[0], answersSaveFormat[1])
         return redirect(url_for('editeur.editeurPOST', questionId=questionId))
       
       else:
         # update de la question déjà existente
-        fileIO.question.update(questionId, title, state, tags, answersSaveFormat[0], answersSaveFormat[1])
+        fileIO.question.update(questionId, title, state, selectedTags, answersSaveFormat[0], answersSaveFormat[1])
 
     # Renvoie de la template avec l'apercu
-    return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=fileIO.question.getAllTags(), selectedTag=tags, title=title)
+    return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=allTag, selectedTag=selectedTags, title=title)
   else:
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.init'))

@@ -18,8 +18,8 @@ function addAnswer() {
     // Ajout de la nouvelle réponse au HTML avec le bon id
     let html = "<div id=\"divAnswer" + nbAnswer + "\">"
     html += "<input type=\"checkbox\" name=\"checkAnswer" + nbAnswer + "\" id=\"checkAnswer" + nbAnswer + "\">";
-    html += "<input type=\"text\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\">";
-    html += "<input type=\"button\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"></div>";
+    html += "<textarea class=\"inputAnswer\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\"></textarea>";
+    html += "<input type=\"button\" class=\"btn btn-danger\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"></div>";
     answerContainer.append(html);
 
     // Ajout du nouvel id à l'input caché idRéponses
@@ -48,7 +48,7 @@ function addTag() {
         });
 
         if (newTag) {
-            html = "<li><label for=\"" + tagName + "\"><input type=\"checkbox\" name=\"" + tagName + "\" class=\"checkBoxTag\">" + tagName + "</label></li>"
+            html = "<li><label for=\"" + tagName + "\"><input type=\"checkbox\" name=\"" + tagName + "\" class=\"checkBoxTag\" checked>" + tagName + "</label></li>"
             $("#newTagPlace").append(html);
             $("#newTags").val($("#newTags").val() + tagName + ",");
         }
