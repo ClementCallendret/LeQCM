@@ -85,7 +85,7 @@ def saveQuestion(questionID, title, question, answer, correctAnswer):
         for item in formated:
             strOut+=str(item)+"\n\n"
         strOut=strOut[:-2]
-        # ensuite on assemble le tout en une string qu'on ecrit
+        # ensuite on assemble le tout en une string qu'on écrit
         out.write(title+"\n\n"+strOut)
 
 """
@@ -132,12 +132,12 @@ def read(questionID):
 def newQuestion(account, title, question, tag, answer, correctAnswer):
     # on liste les questions existantes
     listOfId = os.listdir("./static/questions")
-    # on trie cettee liste par ordre croissant
+    # on trie cette liste par ordre croissant
     listOfId.sort()
     questionID = '0'
     # on charge le sommaire
     tableId = fileIO.question.loadTable()
-    # si il n'y a aucunes questions deja enregistrée
+    # si il n'y a aucune questions deja enregistrée
     if listOfId == []:
         questionID = '0'
         # on crée la question '0'(màj du sommaire puis sauvegarde)
@@ -155,14 +155,14 @@ def newQuestion(account, title, question, tag, answer, correctAnswer):
         written = False
         # on parcourt la liste des questions existantes(fichier)
         for i in range(1, len(listOfId)):
-            # si lid de deux question succéssive a un écart de plus de 1 (un trou):
+            # si l'id de deux questions successives a un écart de plus de 1 (un trou):
             if int(listOfId[i]) != int(listOfId[i-1])+1:
-                # on crée la question dans le trou et on dit qu'on la écrit (le bool)
+                # on crée la question dans le trou et on dit qu'on l'a écrit (le bool)
                 tableId.append([account, str(i), tag])
                 questionID = str(i)
                 fileIO.question.saveQuestion(i, title, question, answer, correctAnswer)
                 written = True
-        # si on a pas écrit la question(pas de trou)
+        # si on a pas écrit la question (pas de trou)
         if not(written):
             questionID = str(len(listOfId))
             # on crée la question avec pour id celui du plus grand+1
@@ -220,7 +220,7 @@ def listByTag(tag):
 # pour rechercher avec plusieurs tags 
 
 def listByTags(tags):
-    # on fait une liste avec les listes de resultats de recherche pour chaque tag
+    # on fait une liste avec les listes de résultats de recherche pour chaque tag
     bundle = []
     for tag in tags:
         bundle.append(fileIO.question.listByTag(tag))
@@ -260,14 +260,14 @@ def listByAccountAndTags(account, tags):
 # pour mettre a jour une question
 
 def update(questionID, title, question, tags, answer, correctAnswer):
-    # on met a jour l'enoncé
+    # on met a jour l'énoncé
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
     # on met a jour les réponses 
     for i in range(len(answer)):
         with open('./static/questions/'+str(questionID)+'/'+str(i)+'.txt', 'w') as out:
             out.write(answer[i])
-    # on met a jour le titre et les reponses posibles
+    # on met a jour le titre et les réponses possibles
     with open('./static/questions/'+str(questionID)+'/tittle+answer.txt', 'w') as out:
         formated = correctAnswer
         strOut = ""
