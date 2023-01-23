@@ -6,13 +6,13 @@
 
 <div class="container-fluid" style="padding:10px; margin-top:10px;">
     <div class="row">
-        <div class="col-sm-6 mainBoxes"> <!-- Colonne de guauche : Editeur -->
+        <div class="col-md-6 mainBoxes"> <!-- Colonne de guauche : Editeur -->
             <form method="POST" action="" id="questionForm">
                 <label for="state">
                     <h1 style="font-size: large;">Enoncé :</h1>
                 </label>
                 <textarea name="state" id="inputState" placeholder="Ecrivez votre énoncé ici"
-                    value="">{{state}}</textarea>
+                    value="" class="form-control">{{state}}</textarea>
 
                 <hr />
                 <!--
@@ -31,11 +31,11 @@
                             <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}" >
                         </div>
                         <div class="col-sm-9">
-                            <textarea class="inputAnswer" name="textAnswer{{i}}" id="textAnswer{{i}}" value=""
+                            <textarea class="inputAnswer form-control" name="textAnswer{{i}}" id="textAnswer{{i}}" value=""
                             placeholder="Réponse">{{answers[i]['text']}}</textarea>
                         </div>
                         <div class="col-sm-2">
-                            <input type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger" value="Supprimer">
+                            <button type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger deleteButton" value="Supprimer"><img src="{{ url_for('static', filename = 'trash.png') }}"></button>
                         </div>
                     </div>
 
@@ -52,15 +52,16 @@
 
                 <hr />
 
-                <h1 style="font-size: large; display:inline">Tags :</h1>
-
-                <div class="dropend" style="display: inline; margin-left: 20px;">
+                <h1 style="font-size: large; display:inline">Titre :</h1>
+                <input type="text" id="titleText" name="title" placeHolder="Titre" value="{{title}}" style="display:inline; margin-left : 20px; width:190px">
+                
+                <div class="dropend" style="display: inline; margin-left: 20px;" id="tagDropdown">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                         Tags
                     </button>
-                    <ul class="dropdown-menu" id="tagList">
-                        <input type="text" id="newTagName" placeHolder="Nouveau tag" style="display: inline;" />
-                        <input type="button" onclick="addTag()" value="+" style="display: inline;" class="btn btn-success">
+                    <ul class="dropdown-menu overflow-auto" id="tagList">
+                        <input type="text" id="newTagName" placeHolder="Nouveau tag" style="display: inline;" class="form-control"/>
+                        <input type="button" onclick="addTag()" value="+" class="btn btn-success" id="newTagButton">
                         <input type="hidden" name="newTags" id="newTags" value="">
                         <div id="newTagPlace"></div>
                         {%for i in range(0, tags|length)%}
@@ -77,17 +78,12 @@
 
                 <hr />
 
-                <h1 style="font-size: large; display:inline">Titre :</h1>
-                <input type="text" id="titleText" name="title" placeHolder="Titre" value="{{title}}" style="display:inline; margin-left : 20px; width:auto">
-
-                <hr />
-
                 <input type="submit" name="action" class="btn btn-primary middleButton mx-auto" value="Apercu">
                 <input type="submit" name="action" class="btn btn-success middleButton mx-auto" value="Enregistrer">
             </form>
         </div>
 
-        <div class="col-sm-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
+        <div class="col-md-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
             <h1 style="font-size: large;">Enoncé :</h1>
 
             <div id="previewState">{{stateFormated|safe}}</div> <!--Affichage de l'énoncé formatés -->
