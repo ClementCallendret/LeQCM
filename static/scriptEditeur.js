@@ -16,10 +16,10 @@ function addAnswer() {
     let nbAnswer = parseInt($("#nbAnswers").val());
 
     // Ajout de la nouvelle réponse au HTML avec le bon id
-    let html = "<div id=\"divAnswer" + nbAnswer + "\">"
-    html += "<input type=\"checkbox\" name=\"checkAnswer" + nbAnswer + "\" id=\"checkAnswer" + nbAnswer + "\">";
-    html += "<textarea class=\"inputAnswer\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\"></textarea>";
-    html += "<input type=\"button\" class=\"btn btn-danger\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"></div>";
+    let html = "<div id=\"divAnswer" + nbAnswer + "\" class=\"divAnswer row align-items-center\">"
+    html += "<div class=\"col-sm-1\"><input type=\"checkbox\" name=\"checkAnswer" + nbAnswer + "\" id=\"checkAnswer" + nbAnswer + "\"></div>";
+    html += "<div class=\"col-sm-9\"><textarea class=\"inputAnswer\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\"></textarea></div>";
+    html += "<div class=\"col-sm-2\"><input type=\"button\" class=\"btn btn-danger\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"></div></div>";
     answerContainer.append(html);
 
     // Ajout du nouvel id à l'input caché idRéponses
