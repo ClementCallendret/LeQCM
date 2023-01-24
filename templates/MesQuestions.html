@@ -8,7 +8,7 @@
 <nav class="navbar navbar-expand-sm navbar-dark" id="navQuestions" style="background-color:rgb(169, 177, 177)">
   <div class="container-fluid">
     <!-- Boutton menu dépliant pour les plus petits écrans -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar2">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar2" style="background-color : #212529;">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar2">
@@ -21,7 +21,7 @@
               Tags
               </button>
               
-              <ul class="dropdown-menu" id="tagList">
+              <ul class="dropdown-menu overflow-auto" id="tagListMesQuestions">
               {%for t in tags%}
               <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck">{{t}}</label></li>
               {%endfor%}
@@ -49,7 +49,7 @@
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
 <form id="questionsForm" action="/MesQuestions/creerQCM" method="POST" >
-  <div class="d-flex flex-wrap" style="margin-top: 20px;" id="questionCards">
+  <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
     <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
     <!-- Je laisse la première en dur pour que les commentaires soit plus claires -->
     <div class="card questionCard">

@@ -13,7 +13,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js"></script> <!--INDISPENSABLE pour pouvoir utiliser mermaid et afficher correctement les graphes en html-->
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> <!--INDISPENSABLE pour pouvoir utiliser LateX et bien afficher la variable provenant du code Python-->
-    <script src="{{ url_for('static', filename = 'scriptEditeur.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'editorStyle.css') }}">
 
@@ -59,6 +58,7 @@
     {% endblock %}
 
   </div>
+  <script src="{{ url_for('static', filename = 'scriptEditeur.js') }}"></script>
 </body>
 
 </html>

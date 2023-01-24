@@ -54,6 +54,10 @@
     border-color:black;
 }
 
+#tagList > li > label> input{
+    margin-right: 5px;
+}
+
 #newTagButton{
     position:relative;
     display: inline;

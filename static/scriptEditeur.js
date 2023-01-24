@@ -60,7 +60,7 @@ function addTag() {
 function filterByTags() {
 
     questions = $("#questionCards").find(".questionCard");
-    allTags = $("#tagList").find(".tagCheck");
+    allTags = $("#tagListMesQuestions").find(".tagCheck");
     selectedTags = [];
 
     // récupération des tags cochés
@@ -97,3 +97,19 @@ function filterByTags() {
     })
     }
 }
+
+const inputTitre = document.getElementById("titleText");
+inputTitre.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+    }
+})
+
+const inputTag = document.getElementById("newTagName");
+inputTag.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        addTag();
+    }
+})
+
