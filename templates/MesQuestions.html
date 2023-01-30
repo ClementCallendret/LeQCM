@@ -16,8 +16,8 @@
         <li class="nav-item">
             <form action="" method="GET" id="tagForm">
             <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
-            <div class="dropdown" style="padding: 5px;">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+            <div class="dropdown" style="padding: 3px;">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-radius: 33px; border-width: 2px;">
               Tags
               </button>
               
@@ -30,16 +30,16 @@
             </div>
             </form>
         </li> 
-        <li class="nav-item" style="padding: 5px;">
-          <input type="button" class="btn btn-primary" onclick="filterByTags()" value="Filtrer par tag">
+        <li class="nav-item" style="padding: 3px;">
+          <input type="button" class="btn btn-primary" onclick="filterByTags()" value="Filtrer par tag" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">
         </li>
           
         
-        <li class="nav-item" style="padding: 5px;">
-          <a class="btn btn-primary" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une question</a>
+        <li class="nav-item" style="padding: 3px;">
+          <a class="btn btn-primary" href="{{url_for('editeur.init', questionId='createNew')}}" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une question</a>
         </li>
-        <li class="nav-item" style="padding: 5px;">
-          <button type="submit" form="questionsForm" class="btn btn-primary">Creer une page de question</button>
+        <li class="nav-item" style="padding: 3px;">
+          <button type="submit" form="questionsForm" class="btn btn-primary" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une page de question</button>
         </li>
       </ul>
     </div>
