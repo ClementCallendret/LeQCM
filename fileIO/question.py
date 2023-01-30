@@ -260,6 +260,9 @@ def listByAccountAndTags(account, tags):
 # pour mettre a jour une question
 
 def update(questionID, title, question, tags, answer, correctAnswer):
+    for file in os.listdir('./static/questions/'+str(questionID)):
+        # on supprime ce qu'on trouve
+        os.remove('./static/questions/'+str(questionID)+'/'+(file))
     # on met a jour l'énoncé
     with open('./static/questions/'+str(questionID)+'/question.txt', 'w') as out:
         out.write(question)
