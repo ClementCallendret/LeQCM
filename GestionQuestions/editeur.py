@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint, session, flash, redirect, url_for
-import fileIO
+import database
 import formatage
 
 #import base64 //
@@ -9,22 +9,22 @@ edit = Blueprint('editeur',__name__)
 # Ouverture sans requête POST
 @edit.route('/editeur/<questionId>')
 def init(questionId):
-  if 'loginP' in session:
+  if 'login' in session:
 
     # Cas ou l'on veut créer une nouvelle question
     if questionId == "createNew":
 
     # Renvoie d'un template vide pour une nouvelle question
-      allTag = fileIO.question.getAllTags()
+      allTag = database.allTags()
       return render_template('EditeurDeQuestion.html', nbanswers= 0, answers=[], state="", stateFormated="", idAnswers="",answersFormated=[],  tags=allTag, selectedTag=[], title="")
 
     # Cas ou l'on charge une question
     else:
-      allTag = fileIO.question.getAllTags()
+      allTag = database.allTags()
       # Chargement de la question depuis la BD
-      question = fileIO.format.questionToDic(fileIO.question.read(questionId))
+      question = database.loadQuestionById(questionId)
       # On accède a la page seulement si la question appartient bien au Professeur
-      if question["owner"] == session["loginP"] :
+      if question["owner"] == session["login"] :
 
         # Calcule des id des réponses pour les conserver dans la page
         idAnswers = ""
@@ -46,7 +46,7 @@ def init(questionId):
 def editeurPOST(questionId):
   
   # Cas ou l'on veut charger l'apercu
-  if 'loginP' in session:
+  if 'login' in session:
     # Récupération de l'énoncé et calcul du rendu
     state = request.form["state"]
     stateFormated = formatage.formatageMD(state) 
@@ -67,7 +67,7 @@ def editeurPOST(questionId):
 
     # Récupération des nouveaux tags ajoutés par l'utilisateurs
     # Récupération de tous les tags
-    allTag = fileIO.question.getAllTags()
+    allTag = database.allTags()
     newTags = request.form.get("newTags").split(',')[0:-1]
     selectedTags=[]
     
@@ -89,16 +89,15 @@ def editeurPOST(questionId):
 
     # Enregistrement si demandé
     if request.form['action'] == "Enregistrer":
-      answersSaveFormat = fileIO.format.listOfDicToreponse(answers)
 
       if questionId == 'createNew' :
         # sauvegarde de la question et renvoie vers la page avec le bon identifiant pour savoir que la question est déjà dans un fichier
-        questionId = fileIO.question.newQuestion(session["loginP"], title, state, selectedTags, answersSaveFormat[0], answersSaveFormat[1])
+        questionId = database.saveQuestion(session["login"], title, state, answers, selectedTags)
         return redirect(url_for('editeur.editeurPOST', questionId=questionId))
       
       else:
         # update de la question déjà existente
-        fileIO.question.update(questionId, title, state, selectedTags, answersSaveFormat[0], answersSaveFormat[1])
+        database.updateQuestion(questionId, session["login"], title, state, answers, selectedTags)
 
     # Renvoie de la template avec l'apercu
     return render_template('EditeurDeQuestion.html', state=state, stateFormated=stateFormated, answers=answers, answersFormated=answersFormated, idAnswers=newIdAnswers, tags=allTag, selectedTag=selectedTags, title=title)

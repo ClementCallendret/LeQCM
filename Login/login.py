@@ -1,5 +1,5 @@
 from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
-import fileIO
+import database
 
 logi = Blueprint('login',__name__)
 
@@ -22,7 +22,7 @@ def loginP():
             rememberMe = False
         #Rechercher si login dans base de données
         #rechercher si password correspond 
-        if (fileIO.login.check(login, password)):
+        if (database.matchProfessorPassword(login, password)):
         #if(compteExisteProf(login,password))
             session.pop('loginP',None)
             session.pop('loginE',None)
