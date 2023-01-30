@@ -9,7 +9,7 @@ edit = Blueprint('editeur',__name__)
 # Ouverture sans requête POST
 @edit.route('/editeur/<questionId>')
 def init(questionId):
-  if 'login' in session:
+  if 'loginP' in session:
 
     # Cas ou l'on veut créer une nouvelle question
     if questionId == "createNew":
@@ -24,7 +24,7 @@ def init(questionId):
       # Chargement de la question depuis la BD
       question = fileIO.format.questionToDic(fileIO.question.read(questionId))
       # On accède a la page seulement si la question appartient bien au Professeur
-      if question["owner"] == session["login"] :
+      if question["owner"] == session["loginP"] :
 
         # Calcule des id des réponses pour les conserver dans la page
         idAnswers = ""
@@ -46,7 +46,7 @@ def init(questionId):
 def editeurPOST(questionId):
   
   # Cas ou l'on veut charger l'apercu
-  if 'login' in session:
+  if 'loginP' in session:
     # Récupération de l'énoncé et calcul du rendu
     state = request.form["state"]
     stateFormated = formatage.formatageMD(state) 
@@ -93,7 +93,7 @@ def editeurPOST(questionId):
 
       if questionId == 'createNew' :
         # sauvegarde de la question et renvoie vers la page avec le bon identifiant pour savoir que la question est déjà dans un fichier
-        questionId = fileIO.question.newQuestion(session["login"], title, state, selectedTags, answersSaveFormat[0], answersSaveFormat[1])
+        questionId = fileIO.question.newQuestion(session["loginP"], title, state, selectedTags, answersSaveFormat[0], answersSaveFormat[1])
         return redirect(url_for('editeur.editeurPOST', questionId=questionId))
       
       else:

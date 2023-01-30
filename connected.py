@@ -4,11 +4,5 @@ connect = Blueprint('connected',__name__)
 
 @connect.route('/connected/')
 def connected():
-    login = session['login']
-    return render_template("connected.html", login=login)
+    return render_template("connected.html")
 
-def isConnected():
-    if (session['login']==""):
-        return False
-    else:
-        return True

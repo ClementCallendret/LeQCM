@@ -24,6 +24,8 @@ def loginP():
         #rechercher si password correspond 
         if (fileIO.login.check(login, password)):
         #if(compteExisteProf(login,password))
+            session.pop('loginP',None)
+            session.pop('loginE',None)
             session['loginP']=login
             session.permanent = rememberMe
             return redirect(url_for('accueil'))
@@ -49,6 +51,9 @@ def loginE():
         #rechercher si password correspond 
         if (fileIO.login.check(login, password)):
         #if(compteExisteEleve(login,password)):
+            #ON VIDE LA SESSION AU CAS OU Y A UN PTIT MALIN(mais en temps normal ça sert à rien)
+            session.pop('loginP',None)
+            session.pop('loginE',None)
             session['loginE']=login
             session.permanent = rememberMe
             return redirect(url_for('accueil'))

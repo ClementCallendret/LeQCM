@@ -5,10 +5,10 @@ mesQues = Blueprint('mesQuestions',__name__)
 
 @mesQues.route('/MesQuestions')
 def mesQuestions():
-  if "login" in session:
+  if "loginP" in session:
     #on charge les question de l'utilisateur et tous les tags pour le filtrage 
     tags = fileIO.question.getAllTags()
-    questions = fileIO.question.listByAccount(session["login"])
+    questions = fileIO.question.listByAccount(session["loginP"])
 
     #on met les question dans des dictionnaires pour plus de clareté
     for i in range(len(questions)):

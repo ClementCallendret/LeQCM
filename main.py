@@ -20,10 +20,6 @@ app.register_blueprint(crea)
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 @app.route('/')
 def accueil():
-    login = ""
-    if 'login' in session:
-        connected=True
-        login = session['login']
     return render_template('Accueil.html')
 
 
@@ -38,10 +34,10 @@ def isLogedE():
 @app.context_processor
 def getLogin():
     login = ""
-    if 'loginE' in session:
-        login = session['loginE']
-    elif 'loginP' in session:
+    if 'loginP' in session:
         login = session['loginP']
+    elif 'loginE' in session:
+        login = session['loginE']
     return dict(login=login)
     
 

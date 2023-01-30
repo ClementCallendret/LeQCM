@@ -1,0 +1,17 @@
+créer compte prof
+créer compte élève
+
+prof + eleve : verifier si login et password sont bons
+
+                changer mdp 
+
+                rajouter 2 bdd : une pour prof  : avec comme clé primaire idprof et une string avec une taille de 64 qui stockera le sel
+               et une pour élève : idem avec idEleve
+
+                pour ces 2 bdd accéder au sel en rentrant le login 
+
+
+eleve : vérifier si numéro étudiant existe déjà dans la bdd
+
+
+merci d'avance et bonne chance frérot =)
