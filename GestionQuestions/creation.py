@@ -1,5 +1,5 @@
 from flask import Blueprint, request,render_template, url_for
-import fileIO
+import database
 import formatage
 
 crea = Blueprint('creation',__name__)
@@ -12,7 +12,7 @@ def creation():
             listeQ.append(key)
         res = []
         for ID in listeQ:
-            res.append(fileIO.format.questionToDic(fileIO.question.read(ID)))
+            res.append(database.loadQuestionById(ID))
         res = formatage.dictTodictFormated(res)
         #Pour numéroter les questions 
         for i in range (len(res)):

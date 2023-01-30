@@ -1,12 +1,15 @@
 from flask import render_template, Flask, request,Blueprint, session
+from flask_sqlalchemy import SQLAlchemy
+import models
+from extension import db
 
-from login import logi
-from logout import logo
-from register import regist
-from connected import connect
-from editeur import edit
-from mesQuestions import mesQues
-from creation import crea
+from Login.login import logi
+from Login.logout import logo
+from Login.register import regist
+from Login.connected import connect
+from GestionQuestions.editeur import edit
+from GestionQuestions.mesQuestions import mesQues
+from GestionQuestions.creation import crea
 
 app = Flask(__name__)
 app.register_blueprint(logi)
@@ -18,6 +21,12 @@ app.register_blueprint(mesQues)
 app.register_blueprint(crea)
 
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///myQCM.db"
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+    
 @app.route('/')
 def accueil():
     login = ""
