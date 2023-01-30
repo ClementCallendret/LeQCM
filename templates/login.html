@@ -3,17 +3,69 @@
 {% block title %}Connexion{% endblock %}
 
 {% block content %}
-<form  method = "POST" action = "/login">
-    <p>Connexion</p>
-    <p>Entrer votre nom:</p>
-    <p><input type = "text" placeholder = "Login" name = "login" required aria-required = "true" /></p>
-    <p>Entrer votre mot de passe:</p>
-    <p><input type = "password" placeholder = "Mot de passe" name = "password" required aria-required=  "true" /></p>
-    <input type = "checkbox" id = "rememberMe" name = "rememberMe">
-    <label for = "rememberMe">Se souvenir de moi</label>
-    <input type="reset" value="Reset">
+<div class="container-fluid">
+<div class="centrerPage">
 
-    <p><input type = "submit" value = "submit" /></p>
-    <span></span>
- </form>
+    <div class="row">
+        <div class="col justify-content-md-center">
+            <form  method = "POST" action = "/loginP">
+                <div>
+                    <p>Connexion professeur</p>
+                    <p>Entrer votre nom:</p>
+                </div>
+                <div class="login">
+                    <p><input type = "text" placeholder = "Login" name = "loginP" required aria-required = "true" /></p>
+                </div>
+                <div>
+                    <p>Entrer votre mot de passe:</p>
+                </div>
+                <div class="passP">
+                    <p><input type = "password" placeholder = "Mot de passe" name = "passwordP" required aria-required=  "true" /></p>
+                </div>
+                <div class="checkboxP">
+                    <input type = "checkbox" id = "rememberMeP" name = "rememberMeP">
+                    <label for = "rememberMeP">Se souvenir de moi</label>
+                    <input type="reset" value="Reset">
+                </div>
+                <div class="submitP">
+                    <p><input type = "submit" value = "submit" /></p>
+                </div>
+                <span></span>
+             </form>        
+            </div>
+        <div class="col">
+            <form  method = "POST" action = "/loginE">
+                <div>
+                    <p>Connexion</p>
+                    <p>Entrer votre numéro étudiant:</p>
+                </div>
+                <div class="login">
+                    <p><input type = "text" placeholder = "Numéro etudiant" name = "loginE" required aria-required = "true" /></p>
+                </div>
+                <div>
+                    <p>Entrer votre mot de passe:</p>
+                </div>
+                <div class="passE">
+                    <p><input type = "password" placeholder = "Mot de passe" name = "passwordE" required aria-required=  "true" /></p>
+                </div>
+                <div class="checkboxE">
+                    <input type = "checkbox" id = "rememberMeE" name = "rememberMeE">
+                    <label for = "rememberMeE">Se souvenir de moi</label>
+                    <input type="reset" value="Reset">
+                </div>
+                <div class="submitE">
+                    <p><input type = "submit" value = "submit" /></p>
+                </div>
+                <span></span>
+             </form>        
+            </div>      
+          </div>
+    </div>
+
+
+
+</div>
+
+</div>
+
   {% endblock %}

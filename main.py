@@ -28,14 +28,20 @@ def accueil():
 
 
 @app.context_processor
-def isLoged():
-    return dict(isLoged=session.get('login'))
+def isLogedP():
+    return dict(isLogedP = session.get('loginP'))
+
+@app.context_processor
+def isLogedE():
+    return dict(isLogedE = session.get('loginE'))
 
 @app.context_processor
 def getLogin():
     login = ""
-    if 'login' in session:
-        login = session['login']
+    if 'loginE' in session:
+        login = session['loginE']
+    elif 'loginP' in session:
+        login = session['loginP']
     return dict(login=login)
     
 

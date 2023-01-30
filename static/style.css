@@ -100,6 +100,10 @@ body { margin: 1.6cm; }
 }
 }
 
+.centrerPage{
+    font-size: 15px;
+    text-align: center;  
+}
 
 /* maxi code css pour pygments pour Markdown fonctionne avec le code coloré il est généré par Pygmentize  utilisé et recupéré sur internet */
 pre { line-height: 125%; }

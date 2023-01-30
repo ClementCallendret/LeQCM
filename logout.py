@@ -4,5 +4,6 @@ logo = Blueprint('logout',__name__)
 
 @logo.route('/logout')
 def logout():
-    session.pop('login',None)
+    session.pop('loginP',None)
+    session.pop('loginE',None)
     return redirect(url_for('accueil'))
