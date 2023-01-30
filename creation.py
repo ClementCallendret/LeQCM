@@ -7,8 +7,6 @@ crea = Blueprint('creation',__name__)
 @crea.route('/MesQuestions/creerQCM',methods = ['POST'])
 def creation():
     listeQ = []
-    print("let's gooooo")
-    print(request.form)
     if (request.method == 'POST'):
         for key,value in request.form.items():
             listeQ.append(key)
