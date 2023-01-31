@@ -6,6 +6,7 @@ Installation  :
     - pygments 2.10.0
     - markdown 3.2
     - md-mermaid 0.1.1
+    - bcrypt 3.1.7
 
 Lancement :
  - Être dans le répertoire du projet
