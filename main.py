@@ -26,6 +26,9 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+
+#déclarer les sockets
+#import le main dans les blueprints qui les utilisent
     
 @app.route('/')
 def accueil():
@@ -51,5 +54,5 @@ def getLogin():
     
 
 
-
+#run les sockets
 app.run(host='0.0.0.0', port=5000, debug=True)
