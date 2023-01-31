@@ -4,7 +4,14 @@ class Professor(db.Model):
     __tablename__ = "professor"
     username = db.Column(db.String(50), primary_key=True)
     password = db.Column(db.String(50), nullable=False)
-    
+    sel = db.Column(db.String(64))
+
+class Student(db.Model):
+    __tablename__ = "student"
+    id = db.Column(db.Integer, primary_key=True)
+    password = db.Column(db.String(50), nullable=False)
+    sel = db.Column(db.String(64))
+
 class Question(db.Model):
     __tablename__ = "question"
     id = db.Column(db.Integer, primary_key=True)

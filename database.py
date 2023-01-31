@@ -26,11 +26,59 @@ def professorExist(username) :
     else :
         return False
 
-def addProfessor(username, password) :
-    prof = models.Professor(username=username, password=password)
+def addProfessor(username, password, sel) :
+    prof = models.Professor(username=username, password=password, sel=sel)
     db.session.add(prof)
-    dbCommit()
-    return prof.username
+    if dbCommit():
+        return prof.username
+    else:
+        return False
+
+def changeProfessorPassword(username, newPswd):
+    db.session.query(models.Professor).filter(models.Professor.username == username).update({"password" : newPswd})
+    return dbCommit()
+
+def getProfessorSel(username):
+    prof = models.Professor.query.filter_by(username=username).first()
+    if prof :
+        return prof.sel
+    else:
+        return False
+
+############### STUDENT LOGIN #######################
+
+def matchStudentPassword(idS, password) :
+    std = models.Student.query.filter_by(id=idS).first()
+    if not std or not (password == std.password) :
+        return False
+    else:
+        return True
+
+def studentExist(idS) :
+    std = models.Student.query.filter_by(id=idS).first()
+    if std:
+        return True
+    else :
+        return False
+
+def addStudent(idS, password, sel) :
+    if not studentExist(idS):
+        std = models.Student(id=idS, password=password, sel=sel)
+        db.session.add(std)
+        if dbCommit():
+            return std.id
+    return False
+
+def changeStudentPassword(idS, newPswd):
+    db.session.query(models.Student).filter(models.Student.id == idS).update({"password" : newPswd})
+    return dbCommit()
+
+def getStudentSel(idS):
+    std = models.Student.query.filter_by(id=idS).first()
+    if std :
+        return std.sel
+    else:
+        return False
 
 ####################### TAG ######################
 
@@ -44,13 +92,15 @@ def tagExist(name):
 def addTag(name):
     tag = models.Tag(name=name)
     db.session.add(tag)
-    dbCommit()
-    return tag.name
+    if dbCommit():
+        return tag.name
+    else:
+        return False
 
 def deleteTag(name):
     tag = models.Tag.query.filter_by(id = name)
     db.session.delete(tag)
-    db.commit()
+    return dbCommit()
 
 def allTags():
     tags = []
