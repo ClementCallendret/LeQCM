@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, request, Blueprint,render_template, flash
 import database
+import encryption
 
 regist = Blueprint('register',__name__)
 
@@ -14,7 +15,11 @@ def register():
         password = request.form.get('password')
         cpassword = request.form.get('cpassword')
         if (password == cpassword):
-            if (database.addProfessor(login,password)):
+            tab = encryption.encrypt(password)
+            password = tab[0]
+            sel = tab[1]
+            if (database.addProfessor(login,password,sel) != False):
+                print(login, password,sel)
                 return redirect(url_for('login.init'))
             else :
                 flash('Utilisateur déjà enregistré')
