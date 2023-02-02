@@ -1,6 +1,6 @@
 from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
 import database
-
+import encryption
 logi = Blueprint('login',__name__)
 
 
@@ -22,7 +22,7 @@ def loginP():
             rememberMe = False
         #Rechercher si login dans base de données
         #rechercher si password correspond 
-        if (database.matchProfessorPassword(login, password)):
+        if (encryption.decrypt(login, password, 'P')):
         #if(compteExisteProf(login,password))
             session.pop('loginP',None)
             session.pop('loginE',None)
@@ -49,7 +49,7 @@ def loginE():
         print("Etu :",login,password,rememberMe)
         #Rechercher si login dans base de données
         #rechercher si password correspond 
-        if (database.matchProfessorPassword(login, password)):
+        if (encryption.decrypt(login, password, 'E')):
         #if(compteExisteEleve(login,password)):
             #ON VIDE LA SESSION AU CAS OU Y A UN PTIT MALIN(mais en temps normal ça sert à rien)
             session.pop('loginP',None)
