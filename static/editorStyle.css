@@ -76,3 +76,9 @@
     display: block;
     margin:15px;
 }
+
+#numeralAnswer{
+    position:relative;
+    display:block;
+    margin : 10px;
+}

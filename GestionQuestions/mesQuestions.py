@@ -8,7 +8,7 @@ def mesQuestions():
   if "loginP" in session:
     #on charge les question de l'utilisateur et tous les tags pour le filtrage 
     tags = database.allTags()
-    questions = database.loadQuestionsByProf(session["login"])
+    questions = database.loadQuestionsByProf(session["loginP"])
 
     return render_template("MesQuestions.html", questions=questions, tags=tags)
   else:

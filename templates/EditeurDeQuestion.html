@@ -8,34 +8,54 @@
     <div class="row">
         <div class="col-md-6 mainBoxes"> <!-- Colonne de guauche : Editeur -->
             <form method="POST" action="" id="questionForm">
+
+                <div class="alert alert-danger" style="width: fit-content; margin : auto">
+                    <strong>Attention ! </strong> Ne pas rafraichire la page (si jamais trop tard quitter et revenir)
+                </div>
+<!---------------------------------------ENONCE---------------------------------------------->
+
+
                 <label for="state">
                     <h1 style="font-size: large;">Enoncé :</h1>
                 </label>
-                <textarea name="state" id="inputState" placeholder="Ecrivez votre énoncé ici"
-                    value="" class="form-control">{{state}}</textarea>
+                <textarea name="state" id="inputState" placeholder="Ecrivez votre énoncé ici" value=""
+                    class="form-control">{{state}}</textarea>
 
                 <hr />
-                <!--
-                    nbRponses s'incrémente a chaque nouvelle réponse (sans décrémenter à la suppression) pour assurer des id toujours differents
+
+<!---------------------------------------REPONSES---------------------------------------------->
+                
+                <!--nbRponses s'incrémente a chaque nouvelle réponse (sans décrémenter à la suppression) pour assurer des id toujours differents
                     idReponses contient les ids des réponses présentent séparés par des ',' 
                 -->
                 <input type="hidden" name="nbAnswers" id="nbAnswers" value="{{answers|length}}">
                 <input type="hidden" name="idAnswers" id="idAnswers" value="{{idAnswers}}">
 
                 <h1 style="font-size: large;">Réponses :</h1>
+                
+                Mode réponse numérique
+                <label class="switch">
+                    <input type="checkbox" name="isQcm" id="isQcmCheck" onchange="changeQuestionMode(this)">
+                    <span class="slider round"></span>
+                </label>
+                Mode choix multiples
 
                 <div id="answerList" class="container-fluid">
                     {%for i in range(0, answers|length)%} <!--Replacement des réponses après un rechargement-->
                     <div id="divAnswer{{i}}" class="divAnswer row align-items-center">
+                        <div class="col-sm-2 col-lg-1">
+                            <label class="switch">
+                                <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-9 col-lg-10">
+                            <textarea class="inputAnswer form-control" name="textAnswer{{i}}" id="textAnswer{{i}}"
+                                value="" placeholder="Réponse">{{answers[i]['text']}}</textarea>
+                        </div>
                         <div class="col-sm-1">
-                            <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}" >
-                        </div>
-                        <div class="col-sm-9">
-                            <textarea class="inputAnswer form-control" name="textAnswer{{i}}" id="textAnswer{{i}}" value=""
-                            placeholder="Réponse">{{answers[i]['text']}}</textarea>
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger deleteButton" value="Supprimer"><img src="{{ url_for('static', filename = 'trash.png') }}"></button>
+                            <button type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger deleteButton"
+                                value="Supprimer"><img src="{{ url_for('static', filename = 'trash.png') }}"></button>
                         </div>
                     </div>
 
@@ -47,26 +67,33 @@
 
                     {%endfor%}
                 </div>
+                <input type="button" class="btn btn-success middleButton mx-auto" id="addAnswerBut" onclick="addAnswer()"
+                    value="Ajouter une réponse" style="margin-top:20px;" />
 
-                <input type="button" class="btn btn-success middleButton mx-auto" onclick="addAnswer()" value="Ajouter une réponse" style="margin-top:20px;"/>
+                <input type="number" id="numeralAnswer" class="mx-auto" name="numeralAnswer" step="0.01" value="{{numeralAnswer}}">
+
+<!--------------------------------TITRE et TAGS--------------------------------------------->
 
                 <hr />
 
                 <h1 style="font-size: large; display:inline">Titre :</h1>
-                <input type="text" id="titleText" name="title" placeHolder="Titre" value="{{title}}" style="display:inline; margin-left : 20px; width:190px">
-                
+                <input type="text" id="titleText" name="title" placeHolder="Titre" value="{{title}}"
+                    style="display:inline; margin-left : 20px; width:190px">
+
                 <div class="dropdown" style="display: inline; margin-left: 20px;" id="tagDropdown">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
                         Tags
                     </button>
                     <ul class="dropdown-menu overflow-auto" id="tagList">
-                        <input type="text" id="newTagName" placeHolder="Nouveau tag" style="display: inline;" class="form-control"/>
+                        <input type="text" id="newTagName" placeHolder="Nouveau tag" style="display: inline;"
+                            class="form-control" />
                         <input type="button" onclick="addTag()" value="+" class="btn btn-success" id="newTagButton">
-                        <input type="hidden" name="newTags" id="newTags" value="">
+                        <input type="hidden" name="newTags" id="newTags" value="{{newTags}}">
                         <div id="newTagPlace"></div>
                         {%for i in range(0, tags|length)%}
                         <li><label for="{{tags[i]}}"><input type="checkbox" name="{{tags[i]}}" id="{{tags[i]}}"
-                                    class="checkBoxTag">{{tags[i]}}</label></li>
+                            class="checkBoxTag">{{tags[i]}}</label></li>
+
                         {% if tags[i] is in(selectedTag) %}
                         <script>
                             document.getElementById("{{tags[i]}}").checked = true;
@@ -76,12 +103,16 @@
                     </ul>
                 </div>
 
+<!--------------------------------ENREGISTREMENT------------------------------------------>
+
                 <hr />
 
                 <input type="submit" name="action" class="btn btn-primary middleButton mx-auto" value="Apercu">
                 <input type="submit" name="action" class="btn btn-success middleButton mx-auto" value="Enregistrer">
             </form>
         </div>
+
+<!--------------------------------APERCU--------------------------------------------->
 
         <div class="col-md-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
             <h1 style="font-size: large;">Enoncé :</h1>
@@ -90,8 +121,9 @@
 
             </br>
 
+            
+            {%if isQcm%}
             <h1 style="font-size: large;">Réponses :</h1>
-
             <div id="previewAnswerList" class="container-fluid">
                 {%for i in range(0, answersFormated|length)%} <!--Affichage des réponses formatés -->
                 <div class="previewDivAnswer row align-items-center">
@@ -104,10 +136,22 @@
                 </div>
                 {%endfor%}
             </div>
+            {%else%}
+                {{numeralAnswer}}
+            {%endif%}
         </div>
 
         <script>
             mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
+        </script>
+        <script src="{{ url_for('static', filename = 'scriptEditeur.js') }}"></script>
+        {% if isQcm %}
+        <script>
+            document.getElementById("isQcmCheck").checked = true;
+        </script>
+        {%endif%}
+        <script>
+            changeQuestionMode(document.getElementById("isQcmCheck"))
         </script>
     </div>
 </div>
