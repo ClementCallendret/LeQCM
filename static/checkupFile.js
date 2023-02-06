@@ -1,5 +1,5 @@
 function validation() {
-          var z = document.forms["myForm"]["fichier"].value;
+          var z = document.forms["FormAjout"]["fichier"].value;
 
           if (z == "" || z == null) {
             alert("Choisir un fichier !");
