@@ -2,7 +2,7 @@ import sqlalchemy as sa
 from extension import db
 import models
 
-def dbCommit():
+def dbCommit(): #(fct intermediaire)
     try:
         db.session.commit()
         return True
@@ -98,7 +98,7 @@ def addTag(name):
         return False
 
 def deleteTag(name):
-    tag = models.Tag.query.filter_by(id = name)
+    tag = models.Tag.query.filter_by(name = name).first()
     db.session.delete(tag)
     return dbCommit()
 
@@ -134,7 +134,11 @@ def addAnswer(answer, idQuestion):
 ###################### MODIFICATIONS QUESTIONS ####################
 
 def saveQuestion(idProf, title, state, answers, tags):
-    question = models.Question(title=title, state=state, idP=idProf)
+    if isinstance(answers, list):
+        question = models.Question(title=title, state=state, idP=idProf)
+    else:
+        question = models.Question(title=title, state=state, idP=idProf, numeralAnswer=answers)
+
     db.session.add(question)
     if not dbCommit():
         return "Could not add question " + title + " to database\n"
@@ -145,9 +149,10 @@ def saveQuestion(idProf, title, state, answers, tags):
     for t in tags:
         addHasTag(questionId, t)
     
-    for rep in answers:
-        if not addAnswer(rep, questionId):
-            returnMessage += "Could not add answer " + rep + " to database\n"
+    if isinstance(answers, list):
+        for rep in answers:
+            if not addAnswer(rep, questionId):
+                returnMessage += "Could not add answer " + rep + " to database\n"
 
     if returnMessage == "":
         return questionId
@@ -158,16 +163,30 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
     dataAnswers = models.Answer.query.filter_by(idQ=idQuestion)
     dataTags = models.HasTag.query.filter_by(idQ=idQuestion)
 
-    #Suppression des réponses qui ne sont plus présentes
-    for row in dataAnswers:
-        if {"val": row.solution, "text" : row.text} not in answers:
+    if isinstance(answers, list):
+        #Suppression des réponses qui ne sont plus présentes
+        for row in dataAnswers:
+            if {"val": row.solution, "text" : row.text} not in answers:
+                db.session.delete(row)
+                db.session.commit()
+
+        #Ajout des nouvelles réponses
+        for ans in answers:
+            if not models.Answer.query.filter_by(idQ=idQuestion, text=ans["text"], solution=ans["val"]).first() :
+                addAnswer(ans, idQuestion)
+
+        #On s'assure que la réponse numérique soit Null
+        db.session.query(models.Question).filter(models.Question.id == idQuestion).update({"numeralAnswer" : None})
+
+    else:
+        #Suppression des réponse QCM si jamais on a changé de mode
+        for row in dataAnswers:
             db.session.delete(row)
             db.session.commit()
-    
-    #Ajout des nouvelles réponses
-    for ans in answers:
-        if not models.Answer.query.filter_by(idQ=idQuestion, text=ans["text"], solution=ans["val"]).first() :
-            addAnswer(ans, idQuestion)
+        
+        #Maj de la réponse numérique
+        db.session.query(models.Question).filter(models.Question.id == idQuestion).update({"numeralAnswer" : answers})
+
 
     #suppression des tags qui ne sont plus présents
     for row in dataTags:
@@ -184,8 +203,8 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
 
 ###################### REQUETES QUESTIONS ############################
 
-def parseQuestionData(dataQuestion, dataAnswers, dataTags):
-    question = {"id":None, "owner" : "", "title" : "", "state":"", "answers" : [], "tags":[]}
+def parseQuestionData(dataQuestion, dataAnswers, dataTags): #(fct intermédiaire)
+    question = {"id":None, "owner" : "", "title" : "", "state":"", "tags":[]}
     
     if not question:
         return None
@@ -195,8 +214,12 @@ def parseQuestionData(dataQuestion, dataAnswers, dataTags):
     question["state"] = dataQuestion.state
     question["owner"] = dataQuestion.idP
 
-    for row in dataAnswers:
-        question["answers"].append({"val": row.solution, "text" : row.text})
+    if dataQuestion.numeralAnswer is None:
+        question["answers"] = []
+        for row in dataAnswers:
+            question["answers"].append({"val": row.solution, "text" : row.text})
+    else:
+        question["numeralAnswer"] = dataQuestion.numeralAnswer
     
     for row in dataTags:
         question["tags"].append(row.idT)

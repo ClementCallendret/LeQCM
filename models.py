@@ -17,6 +17,7 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
     state = db.Column(db.Text, nullable=False)
+    numeralAnswer = db.Column(db.Float, nullable=True)
     idP = db.Column(db.Integer, db.ForeignKey("professor.username"))
     
 class Answer(db.Model) :
@@ -24,7 +25,7 @@ class Answer(db.Model) :
     id = db.Column(db.Integer, primary_key=True)
     solution= db.Column(db.Boolean, nullable=False)
     text = db.Column(db.Text, nullable=False)
-    idQ = db.Column(db.Integer, db.ForeignKey("question.id"))    
+    idQ = db.Column(db.Integer, db.ForeignKey("question.id"))
 
 class Tag(db.Model):
     __tablename__ = "tag"

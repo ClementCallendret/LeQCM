@@ -1,3 +1,16 @@
+function changeQuestionMode(checkboxElem){
+    if(checkboxElem.checked){
+        document.getElementById("answerList").setAttribute("style", "");
+        document.getElementById("addAnswerBut").setAttribute("style", "");
+        document.getElementById("numeralAnswer").setAttribute("style", "display : None");
+    }
+    else{
+        document.getElementById("answerList").setAttribute("style", "display : None");
+        document.getElementById("addAnswerBut").setAttribute("style", "display : None");
+        document.getElementById("numeralAnswer").setAttribute("style", "");
+    }
+}
+
 function deleteAnswer(numR) {
     // Suppresion de l'id de la réponse
     let idAnswers = $("#idAnswers");
@@ -17,9 +30,9 @@ function addAnswer() {
 
     // Ajout de la nouvelle réponse au HTML avec le bon id
     let html = "<div id=\"divAnswer" + nbAnswer + "\" class=\"divAnswer row align-items-center\">"
-    html += "<div class=\"col-sm-1\"><input type=\"checkbox\" name=\"checkAnswer" + nbAnswer + "\" id=\"checkAnswer" + nbAnswer + "\"></div>";
-    html += "<div class=\"col-sm-9\"><textarea class=\"inputAnswer form-control\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\"></textarea></div>";
-    html += "<div class=\"col-sm-2\"><input type=\"button\" class=\"btn btn-danger\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"></div></div>";
+    html += "<div class=\"col-sm-1\"><label class=\"switch\"><input type=\"checkbox\" name=\"checkAnswer" + nbAnswer + "\" id=\"checkAnswer" + nbAnswer + "\"><span class=\"slider round\"></span></label></div>";
+    html += "<div class=\"col-sm-10\"><textarea class=\"inputAnswer form-control\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\"></textarea></div>";
+    html += "<div class=\"col-sm-1\"><button type=\"button\" class=\"btn btn-danger deleteButton\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"><img src=\"/static/trash.png\"></button></div></div>";
     answerContainer.append(html);
 
     // Ajout du nouvel id à l'input caché idRéponses
@@ -53,8 +66,6 @@ function addTag() {
             $("#newTags").val($("#newTags").val() + tagName + ",");
         }
     }
-
-
 }
 
 function filterByTags() {
