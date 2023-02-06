@@ -73,6 +73,8 @@ def decrypt(login,password,statut):
     elif (statut == 'S'):
         salt = database.getStudentSel(login)
 
+    if (salt == False):
+        return False
     listHashPotentiels = unpepper(password, salt)
 
     
@@ -80,7 +82,6 @@ def decrypt(login,password,statut):
     #si oui, c'est le bon mot de passe à l'origine
 
     #On va dans la base de donnée récupéré le hash du mdp avec son login
-    print("c long")
     if (statut == 'P'):
         for i in range(2):
             if (database.matchProfessorPassword(login, listHashPotentiels[i])):

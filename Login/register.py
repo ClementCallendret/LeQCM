@@ -18,10 +18,7 @@ def register():
             tab = encryption.encrypt(password)
             password = tab[0]
             sel = tab[1]
-            print(login, password,sel)
-            print(database.addProfessor(login,password,sel))
-            print(database.addProfessor(login,password,sel))
-            if (database.addProfessor(login,password,sel) == False):
+            if (database.addProfessor(login,password,sel) != False):
                 return redirect(url_for('login.init'))
             else :
                 flash('Utilisateur déjà enregistré')
