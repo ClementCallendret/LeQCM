@@ -8,14 +8,13 @@ import database
 #On encrypte
 def pepper(password):
     #conversion du password en bytes
-    password = bytes(password, encoding='utf-8')
-    #initialisation poivre avec b devant comme ça c'est en byte
-    pepper = b""
-    #on prend 2 en longueur car après ça risque d'être long
-    nbChiffre = 2
-    for i in range(nbChiffre):
-        #on prend des string digits comme ça 10 possibilités (a mutliplié par le nb de tour de boucle)
-        pepper = pepper + (bytes(secrets.choice(string.digits),encoding='utf-8'))
+    pepper = int(secrets.choice(string.digits))
+    #SINON CA PREND TROP LONGTEMPS :(
+    if (pepper>4):
+        pepper = "0"
+    else :
+        pepper= "1"
+    #on prend des string digits comme ça 10 possibilités, mais du coup plus que 2
     #on concatène le poivre avec notre password en clair
     passwordP = password + pepper
     return passwordP
@@ -23,11 +22,11 @@ def pepper(password):
     
 
 def salt(passwordP):
-    print("PASSWORDP: ", passwordP)
     #génération du sel
     salt = bcrypt.gensalt()
-
+    passwordP = (bytes(passwordP, encoding='utf-8'))
     #génération du hash
+    passHash = ''
     passHash = bcrypt.hashpw(passwordP, salt)
     tab = [passHash,salt]
     return tab
@@ -44,9 +43,7 @@ def encrypt(password):
 
 
 #on sel avec le sel correspondant
-def unsalt(passwword,salt):
-    passwordP = bytes(password, encoding='utf-8')
-
+def unsalt(passwordP,salt):
     #génération du hash
     passHash = bcrypt.hashpw(passwordP, salt)
     return passHash
@@ -56,17 +53,16 @@ def unsalt(passwword,salt):
 #On poivre avec toutes les possibilités
 def unpepper(password, salt):
     listHashPotentiels = []
-    hash = b""
-    #car 100 possibiltés de poivrage
-    for i in range(100):
+    passwordP = b""
+    #car 10 possibiltés de poivrage
+    for i in range(2):
         #On y passe en bytes avant d'enregistrer 
-        print("PASSWORDP: ", password)
-
-        passwordP = password + bytes(i)
+        passwordP = bytes(password + str(i), encoding='utf-8')
 
         #on sale les 100 potentiels hash
         passHash = unsalt(passwordP,salt)
-        listHashPotentiels.append(passHash, encoding='utf-8')
+        listHashPotentiels.append(passHash)
+    return listHashPotentiels
 
 #On décrypte (STATUT = S SI STUDENT OU P SI PROFESSOR)
 def decrypt(login,password,statut):
@@ -78,17 +74,19 @@ def decrypt(login,password,statut):
         salt = database.getStudentSel(login)
 
     listHashPotentiels = unpepper(password, salt)
+
     
     #on vérifie si le hash de la bdd correpond a un des hash potentiels
     #si oui, c'est le bon mot de passe à l'origine
 
     #On va dans la base de donnée récupéré le hash du mdp avec son login
-    if (statut == P):
-        for i in range(100):
-            if (databse.matchProfessorPassword(login, listHashPotentiels[i])):
+    print("c long")
+    if (statut == 'P'):
+        for i in range(2):
+            if (database.matchProfessorPassword(login, listHashPotentiels[i])):
                 return True
-    elif (statut == S):
-        for i in range(100):
+    elif (statut == 'S'):
+        for i in range(10):
             if (database.matchStudentPassword(login, listHashPotentiels[i])):
                 return True
     return False
