@@ -1,7 +1,8 @@
-from flask import render_template, Flask, request,Blueprint, session
+from flask import render_template, request, Blueprint, session
 from flask_sqlalchemy import SQLAlchemy
 import models
-from extension import db
+
+from extension import db, socketio, app # fichier a part pour éviter les circular imports
 
 from Login.login import logi
 from Login.logout import logo
@@ -10,8 +11,8 @@ from Login.connected import connect
 from GestionQuestions.editeur import edit
 from GestionQuestions.mesQuestions import mesQues
 from GestionQuestions.creation import crea
+from questionLive import questionLive
 
-app = Flask(__name__)
 app.register_blueprint(logi)
 app.register_blueprint(logo)
 app.register_blueprint(regist)
@@ -19,9 +20,12 @@ app.register_blueprint(connect)
 app.register_blueprint(edit)
 app.register_blueprint(mesQues)
 app.register_blueprint(crea)
+app.register_blueprint(questionLive)
 
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///myQCM.db"
+app.config["DEBUG"] = True
+
 db.init_app(app)
 
 with app.app_context():
@@ -51,8 +55,8 @@ def getLogin():
     elif 'loginE' in session:
         login = session['loginE']
     return dict(login=login)
-    
 
 
-#run les sockets
-app.run(host='0.0.0.0', port=5000, debug=True)
+# remplacé par les sockets
+# app.run(host='0.0.0.0', port=5000, debug=True)
+socketio.run(app)
