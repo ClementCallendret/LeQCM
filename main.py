@@ -12,6 +12,7 @@ from GestionQuestions.editeur import edit
 from GestionQuestions.mesQuestions import mesQues
 from GestionQuestions.creation import crea
 from questionLive import questionLive
+from AjoutStudents import ajt_Stu
 
 app.register_blueprint(logi)
 app.register_blueprint(logo)
