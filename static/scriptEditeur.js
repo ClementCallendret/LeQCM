@@ -1,10 +1,10 @@
-function changeQuestionMode(checkboxElem){
-    if(checkboxElem.checked){
+function changeQuestionMode(checkboxElem) {
+    if (checkboxElem.checked) {
         document.getElementById("answerList").setAttribute("style", "");
         document.getElementById("addAnswerBut").setAttribute("style", "");
         document.getElementById("numeralAnswer").setAttribute("style", "display : None");
     }
-    else{
+    else {
         document.getElementById("answerList").setAttribute("style", "display : None");
         document.getElementById("addAnswerBut").setAttribute("style", "display : None");
         document.getElementById("numeralAnswer").setAttribute("style", "");
@@ -65,47 +65,6 @@ function addTag() {
             $("#newTagPlace").append(html);
             $("#newTags").val($("#newTags").val() + tagName + ",");
         }
-    }
-}
-
-function filterByTags() {
-
-    questions = $("#questionCards").find(".questionCard");
-    allTags = $("#tagListMesQuestions").find(".tagCheck");
-    selectedTags = [];
-
-    // récupération des tags cochés
-    allTags.each(function () {
-        if (this.checked) {
-            selectedTags.push(this.name);
-        }
-    });
-
-    // si aucun montrer toutes les questions
-    if (selectedTags.length == 0) {
-        questions.each(function() {
-            this.setAttribute("style","");
-        });
-    }
-    // sinon on verifie si le tag appartient à la question grace à la chaine de charactères
-    else{
-        console.log(selectedTags)
-        questions.each(function () {
-        q = $(this)
-        tags = q.find(".card-footer").text().split(";");
-        hasTag=false
-        for(let i=0; i < tags.length-1; i++) {
-            if (selectedTags.includes(tags[i])) {
-                hasTag = true;
-            }
-        }
-        if(!hasTag){
-            this.setAttribute("style","display : none");
-        }
-        else{
-            this.setAttribute("style","");
-        }
-    })
     }
 }
 

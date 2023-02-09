@@ -1,23 +1,56 @@
 {% extends "base.html" %}
 
-{% block title %}Editeur{% endblock %}
+{% block title %}Live Questions{% endblock %}
 
 {% block content %}
 
-<div id="diviv">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'questionDisplay.css') }}">
 
+<div class="container-fluid" id="main">
+    <h2 class="">Code de session : <span id="codeQuestion"></span></h2>
+    {% if inSequence %}
+    <button onclick="">Suivante -></button>
+    {% endif %}
+
+    {% if isProf %}
+    <button data-bs-toggle="collapse" data-bs-target="#state" class="collapseBut"><h3>Enoncé</h3></button>
+    {% endif %}
+
+    <div id="state" class="collapse show borderedDiv">
+    {{state}}
+    </div>
+    <hr/>
+
+    {% if isProf %}
+    <button data-bs-toggle="collapse" data-bs-target="#answers" class="collapseBut"><h3>Réponses</h3></button>
+    {% endif %}
+
+    <div id="answers" class="collapse">
+        {%for i in range(0, answers|length)%} <!--Affichage des réponses formatés -->
+        <div class="divAnswer borderedDiv" id="divAnswer{{i}}">
+            <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
+            <div class="col-sm-11" id="textAnswer">
+                {{answers[i]['text']|safe}}
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+    <hr/>
+
+    {% if isProf %}
+        <p>Nombre d'étudiants connectés : <span id="nbStudents">100</span><br/>
+        Nombre de réponses : <span id="nbAnswers">40</span></p>
+    {% endif %}
+
+    <div class="d-flex flex-wrap justify-content-center">
+        <button type="button" class="bottomButton btn btn-primary" onclick="addLiveAnswersQCM()">Montrer éponses Live</button>
+        <button type="button" class="bottomButton btn btn-primary" onclick="">Stop réponses</button>
+        <button type="button" class="bottomButton btn btn-primary" onclick="showCorrection([1])">Correction</button>
+        <button type="button" class="bottomButton btn btn-primary" onclick="">Quitter</button>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-<script type="text/javascript" charset="utf-8">
-    var socket = io();
-    socket.on('connect', () => {
-        socket.emit('message', { m : 'I\'m connected!'});
-    });
-
-    socket.on("messageToClient", (data) => {
-        $("#diviv").append(data.m);
-    })
-</script>
+<script src="{{ url_for('static', filename = 'scriptLive.js') }}"></script>
 
 {% endblock %}

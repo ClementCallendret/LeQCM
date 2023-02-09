@@ -3,6 +3,7 @@
 {% block title %}Editeur{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'editorStyle.css') }}">
 
 <div class="container-fluid" style="padding:10px; margin-top:10px;">
     <div class="row">
@@ -130,7 +131,7 @@
                     <div class="col-sm-1">
                         <input type="checkbox" name="PreviewCheckAnswer{{i}}" id="PreviewCheckAnswer{{i}}">
                     </div>
-                    <div class="col-sm-11">
+                    <div class="col-sm-11" id="textPreviewAns">
                         {{answersFormated[i]['text']|safe}}
                     </div>
                 </div>

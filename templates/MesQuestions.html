@@ -8,38 +8,45 @@
 <nav class="navbar navbar-expand-sm navbar-dark" id="navQuestions" style="background-color:rgb(169, 177, 177)">
   <div class="container-fluid">
     <!-- Boutton menu dépliant pour les plus petits écrans -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar2" style="background-color : #212529;">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar2"
+      style="background-color : #212529;">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar2">
       <ul class="navbar-nav">
         <li class="nav-item">
-            <form action="" method="GET" id="tagForm">
+          <form action="" method="GET" id="tagForm">
             <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
             <div class="dropdown" style="padding: 3px;">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-radius: 33px; border-width: 2px;">
-              Tags
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-radius: 33px; border-width: 2px;">
+                Tags
               </button>
-              
+
               <ul class="dropdown-menu overflow-auto" id="tagListMesQuestions">
-              {%for t in tags%}
-              <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck">{{t}}</label></li>
-              {%endfor%}
+                {%for t in tags%}
+                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck">{{t}}</label></li>
+                {%endfor%}
               </ul>
-                
+
             </div>
-            </form>
-        </li> 
-        <li class="nav-item" style="padding: 3px;">
-          <input type="button" class="btn btn-primary" onclick="filterByTags()" value="Filtrer par tag" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">
-        </li>
-          
-        
-        <li class="nav-item" style="padding: 3px;">
-          <a class="btn btn-primary" href="{{url_for('editeur.init', questionId='createNew')}}" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une question</a>
+          </form>
         </li>
         <li class="nav-item" style="padding: 3px;">
-          <button type="submit" form="questionsForm" class="btn btn-primary" style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une page de question</button>
+          <input type="button" class="btn btn-primary" onclick="filterByTags()" value="Filtrer par tag"
+            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">
+        </li>
+
+
+        <li class="nav-item" style="padding: 3px;">
+          <a class="btn btn-primary" href="{{url_for('editeur.init', questionId='createNew')}}"
+            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une
+            question</a>
+        </li>
+        <li class="nav-item" style="padding: 3px;">
+          <button type="submit" form="questionsForm" class="btn btn-primary"
+            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une
+            page de question</button>
         </li>
       </ul>
     </div>
@@ -48,30 +55,76 @@
 
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
-<form id="questionsForm" action="/MesQuestions/creerQCM" method="POST" >
+<form id="questionsForm" action="/MesQuestions/creerQCM" method="POST">
   <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
     <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
     <!-- Je laisse la première en dur pour que les commentaires soit plus claires -->
     <div class="card questionCard">
       <!-- Lien pour aller voir ou modifier la question -->
       <div class="card-header">Question Demo</a></div>
-      <div class="card-body">Le début de l'énoncé qui est vraiment tres tres long tres tres longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres long gtres tres longtres tres longtres tres longtres tres longtres tres long zizi blablabal</div>
+      <div class="card-body">Le début de l'énoncé qui est vraiment tres tres long tres tres longtres tres longtres tres
+        longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres long gtres tres longtres
+        tres longtres tres longtres tres longtres tres long zizi blablabal</div>
       <div class="card-footer" style="color: blue;">tag1;tag2;tag3</div>
       <!--CheckBox pour la page de qcm-->
     </div>
 
-      {%for q in questions%}
-      <div class="card questionCard">
-        <div class="card-header">
-          <input type="checkbox" name="{{q['id']}}" class="checkBoxQuestion">
-          <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
-        </div>
-        <div class="card-body">{{q['state']}}</div>
-        <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
+    {%for q in questions%}
+    <div class="card questionCard">
+      <div class="card-header">
+        <input type="checkbox" name="{{q['id']}}" class="checkBoxQuestion">
+        <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
       </div>
+      <div class="card-body">{{q['state']}}</div>
+      <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
+    </div>
 
-      {%endfor%}
+    {%endfor%}
   </div>
 </form>
+
+<script>
+  function filterByTags() {
+
+    questions = $("#questionCards").find(".questionCard");
+    allTags = $("#tagListMesQuestions").find(".tagCheck");
+    selectedTags = [];
+
+    // récupération des tags cochés
+    allTags.each(function () {
+      if (this.checked) {
+        selectedTags.push(this.name);
+      }
+    });
+
+    // si aucun montrer toutes les questions
+    if (selectedTags.length == 0) {
+      questions.each(function () {
+        this.setAttribute("style", "");
+      });
+    }
+    // sinon on verifie si le tag appartient à la question grace à la chaine de charactères
+    else {
+      console.log(selectedTags)
+      questions.each(function () {
+        q = $(this)
+        tags = q.find(".card-footer").text().split(";");
+        hasTag = false
+        for (let i = 0; i < tags.length - 1; i++) {
+          if (selectedTags.includes(tags[i])) {
+            hasTag = true;
+          }
+        }
+        if (!hasTag) {
+          this.setAttribute("style", "display : none");
+        }
+        else {
+          this.setAttribute("style", "");
+        }
+      })
+    }
+  }
+
+</script>
 
 {% endblock %}
