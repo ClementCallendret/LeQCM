@@ -3,11 +3,13 @@
 {% block title %}Le QCM{% endblock %}
 
 {% block content %}
-
-<h1>Bienvenue sur le site du QCM</h1>
-
-<p>
-    Vous pouvez créer des QCM ici
-</p>
-
+<div class="container-fluid">
+    <div class="centrerPage">
+        <h1>Bienvenue sur le site du QCM</h1>
+    </br>
+        <h4>
+            Vous pouvez créer des QCM <a href="{{url_for('editeur.init', questionId='createNew')}}" style="color:black">ici</a>
+        </h4>
+    </div>
+</div>
 {% endblock %}
