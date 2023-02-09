@@ -14,6 +14,7 @@ from GestionQuestions.creation import crea
 from questionLive import questionLive
 from AjoutStudents import ajt_Stu
 
+#nom de la variable accueillant le BluePrint
 app.register_blueprint(logi)
 app.register_blueprint(logo)
 app.register_blueprint(regist)
@@ -22,6 +23,7 @@ app.register_blueprint(edit)
 app.register_blueprint(mesQues)
 app.register_blueprint(crea)
 app.register_blueprint(questionLive)
+app.register_blueprint(ajt_Stu)
 
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///myQCM.db"
