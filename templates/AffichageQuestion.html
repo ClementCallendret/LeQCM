@@ -14,6 +14,8 @@
 
     {% if isProf %}
     <button data-bs-toggle="collapse" data-bs-target="#state" class="collapseBut"><h3>Enoncé</h3></button>
+    {% else %}
+    <h3>Enoncé</h3>
     {% endif %}
 
     <div id="state" class="collapse show borderedDiv">
@@ -23,9 +25,15 @@
 
     {% if isProf %}
     <button data-bs-toggle="collapse" data-bs-target="#answers" class="collapseBut"><h3>Réponses</h3></button>
+    {% else %}
+    <h3>Réponses</h3>
     {% endif %}
 
+    {% if isProf %}
     <div id="answers" class="collapse">
+    {% else %}
+    <div id="answers" class="collapse show">
+    {% endif %}
         {%for i in range(0, answers|length)%} <!--Affichage des réponses formatés -->
         <div class="divAnswer borderedDiv" id="divAnswer{{i}}">
             <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
@@ -41,13 +49,18 @@
         <p>Nombre d'étudiants connectés : <span id="nbStudents">100</span><br/>
         Nombre de réponses : <span id="nbAnswers">40</span></p>
     {% endif %}
-
+    
     <div class="d-flex flex-wrap justify-content-center">
+    {% if isProf %}
         <button type="button" class="bottomButton btn btn-primary" onclick="addLiveAnswersQCM()">Montrer éponses Live</button>
         <button type="button" class="bottomButton btn btn-primary" onclick="">Stop réponses</button>
         <button type="button" class="bottomButton btn btn-primary" onclick="showCorrection([1])">Correction</button>
         <button type="button" class="bottomButton btn btn-primary" onclick="">Quitter</button>
+    {% else %}
+        <button type="button" class="bottomButton btn btn-primary" onclick="">Valider Réponse(s)</button>
+    {% endif %}
     </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>

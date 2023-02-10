@@ -14,3 +14,7 @@ def mesQuestions():
   else:
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.init'))
+
+@mesQues.route('/order')
+def order():
+  return render_template("QuestionOrder.html")

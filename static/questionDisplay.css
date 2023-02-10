@@ -9,7 +9,8 @@ h2 {
     border:none;
 }
 
-.collapseBut > h3 {
+h3 {
+    margin-left: 10px;
     text-decoration: underline;
 }
 

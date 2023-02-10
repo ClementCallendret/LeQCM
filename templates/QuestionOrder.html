@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Sorting{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'questionOrder.css') }}">
+
+<ul class="d-flex flex-wrap justify-content-around draggable-list" id="draggable-list">
+</ul>
+
+<script src="{{ url_for('static', filename = 'questionOrder.js') }}"></script>
+{% endblock %}

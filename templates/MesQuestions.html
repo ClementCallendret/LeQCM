@@ -58,17 +58,6 @@
 <form id="questionsForm" action="/MesQuestions/creerQCM" method="POST">
   <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
     <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
-    <!-- Je laisse la première en dur pour que les commentaires soit plus claires -->
-    <div class="card questionCard">
-      <!-- Lien pour aller voir ou modifier la question -->
-      <div class="card-header">Question Demo</a></div>
-      <div class="card-body">Le début de l'énoncé qui est vraiment tres tres long tres tres longtres tres longtres tres
-        longtres tres longtres tres longtres tres longtres tres longtres tres longtres tres long gtres tres longtres
-        tres longtres tres longtres tres longtres tres long zizi blablabal</div>
-      <div class="card-footer" style="color: blue;">tag1;tag2;tag3</div>
-      <!--CheckBox pour la page de qcm-->
-    </div>
-
     {%for q in questions%}
     <div class="card questionCard">
       <div class="card-header">
