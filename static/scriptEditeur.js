@@ -1,3 +1,7 @@
+const idAnswers = JSON.parse($("#idAnswers").val());
+const form = document.getElementById("questionForm");
+const newTags = JSON.parse($("#newTags").val());
+
 function changeQuestionMode(checkboxElem) {
     if (checkboxElem.checked) {
         document.getElementById("answerList").setAttribute("style", "");
@@ -11,13 +15,16 @@ function changeQuestionMode(checkboxElem) {
     }
 }
 
+function maxOfTab(tab) {
+    if(tab.length == 0)
+        return 0;
+    return Math.max.apply(null, tab);
+}
+
 function deleteAnswer(numR) {
     // Suppresion de l'id de la réponse
-    let idAnswers = $("#idAnswers");
-    let idRepTab = idAnswers.val().split(",");
-    let indexToRemove = idRepTab.indexOf(numR.toString())
-    idRepTab.splice(indexToRemove, 1);
-    idAnswers.val(idRepTab.join());
+    let indexToRemove = idAnswers.indexOf(numR)
+    idAnswers.splice(indexToRemove, 1);
 
     // Suppression de la réponse
     let divToRemove = document.getElementById("divAnswer" + numR);
@@ -26,22 +33,27 @@ function deleteAnswer(numR) {
 
 function addAnswer() {
     let answerContainer = $("#answerList");
-    let nbAnswer = parseInt($("#nbAnswers").val());
+    let newId = maxOfTab(idAnswers) + 1;
 
     // Ajout de la nouvelle réponse au HTML avec le bon id
-    let html = "<div id=\"divAnswer" + nbAnswer + "\" class=\"divAnswer row align-items-center\">"
-    html += "<div class=\"col-sm-1\"><label class=\"switch\"><input type=\"checkbox\" name=\"checkAnswer" + nbAnswer + "\" id=\"checkAnswer" + nbAnswer + "\"><span class=\"slider round\"></span></label></div>";
-    html += "<div class=\"col-sm-10\"><textarea class=\"inputAnswer form-control\" name=\"textAnswer" + nbAnswer + "\" id=\"textAnswer" + nbAnswer + "\" value=\"\" placeholder=\"Réponse\"></textarea></div>";
-    html += "<div class=\"col-sm-1\"><button type=\"button\" class=\"btn btn-danger deleteButton\" onclick=\"deleteAnswer(" + nbAnswer + ")\" value=\"Supprimer\"><img src=\"/static/trash.png\"></button></div></div>";
+    let html =`
+        <div id="divAnswer${newId}" class="divAnswer row align-items-center">
+            <div class="col-sm-1">
+                <label class="switch">
+                <input type="checkbox" name="checkAnswer${newId}" id="checkAnswer${newId}">
+                <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="col-sm-10">
+                <textarea class="inputAnswer form-control" name="textAnswer${newId}" id="textAnswer${newId}" value="" placeholder="Réponse"></textarea>
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-danger deleteButton" onclick="deleteAnswer(${newId})" value="Supprimer"><img src="/static/trash.png"></button>
+            </div>
+        </div>
+    `
     answerContainer.append(html);
-
-    // Ajout du nouvel id à l'input caché idRéponses
-    idRep = $("#idAnswers");
-    debut = idRep.val();
-    idRep.val(debut + nbAnswer.toString() + ",");
-
-    // Incrémentation du nombre de réponses pour la réponse suivante
-    $("#nbAnswers").val(nbAnswer + 1);
+    idAnswers.push(newId);
 }
 
 //ajout d'un tag non existant
@@ -63,7 +75,7 @@ function addTag() {
         if (newTag) {
             html = "<li><label for=\"" + tagName + "\"><input type=\"checkbox\" name=\"" + tagName + "\" class=\"checkBoxTag\" checked>" + tagName + "</label></li>"
             $("#newTagPlace").append(html);
-            $("#newTags").val($("#newTags").val() + tagName + ",");
+            newTags.push(tagName)
         }
     }
 }
@@ -83,3 +95,18 @@ inputTag.addEventListener("keypress", function (event) {
     }
 })
 
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+}); 
+
+function submitForm(mode){
+    $("#idAnswers").val(JSON.stringify(idAnswers))
+    $("#newTags").val(JSON.stringify(newTags))
+
+    $("<input />").attr("type", "hidden")
+        .attr("name", "action")
+        .attr("value", mode)
+        .appendTo("#questionForm");
+
+    form.submit()
+}

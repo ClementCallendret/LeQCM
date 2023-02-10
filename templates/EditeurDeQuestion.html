@@ -26,10 +26,7 @@
 
 <!---------------------------------------REPONSES---------------------------------------------->
                 
-                <!--nbRponses s'incrémente a chaque nouvelle réponse (sans décrémenter à la suppression) pour assurer des id toujours differents
-                    idReponses contient les ids des réponses présentent séparés par des ',' 
-                -->
-                <input type="hidden" name="nbAnswers" id="nbAnswers" value="{{answers|length}}">
+                <!-- idAnswers contient les ids des réponses présentent -->
                 <input type="hidden" name="idAnswers" id="idAnswers" value="{{idAnswers}}">
 
                 <h1 style="font-size: large;">Réponses :</h1>
@@ -108,8 +105,9 @@
 
                 <hr />
 
-                <input type="submit" name="action" class="btn btn-primary middleButton mx-auto" value="Apercu">
-                <input type="submit" name="action" class="btn btn-success middleButton mx-auto" value="Enregistrer">
+                <button type="button" class="btn btn-primary middleButton mx-auto" onclick="submitForm('Apercu')">Apercu</button>
+                <button type="button" class="btn btn-success middleButton mx-auto" onclick="submitForm('Enregistrer')">Enregistrer</button>
+
             </form>
         </div>
 

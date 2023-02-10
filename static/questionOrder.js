@@ -1,4 +1,4 @@
-// on va pas se mytho https://www.youtube.com/watch?v=wv7pvH1O5Ho
+// crédit :  https://www.youtube.com/watch?v=wv7pvH1O5Ho
 
 const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('check');
@@ -16,7 +16,6 @@ form.addEventListener("submit", (e) => {
     for(ele of listItems){
         orderedId.push(parseInt(ele.querySelector('div').getAttribute("id")));
     }
-    console.log(orderedId)
 
     $("<input />").attr("type", "hidden")
         .attr("name", "orderedId")
@@ -29,7 +28,6 @@ form.addEventListener("submit", (e) => {
 // Insert list items into DOM
 function createList() {
     jsonQuestions = $("#questionJson").val();
-    console.log(jsonQuestions);
     questions = JSON.parse(jsonQuestions);
     for (let index = 0; index < questions.length; index++) {
         const listItem = document.createElement('li');
@@ -116,7 +114,6 @@ function swapItems(fromIndex, toIndex) {
     }
 
     listItems[toIndex].appendChild(movedItem);
-    console.log(listItems)
 }
 
 function addEventListeners() {
