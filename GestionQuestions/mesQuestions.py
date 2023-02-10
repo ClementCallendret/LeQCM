@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for,flash
 import database
+import formatage
 
 mesQues = Blueprint('mesQuestions',__name__)
 
@@ -9,6 +10,8 @@ def mesQuestions():
     #on charge les question de l'utilisateur et tous les tags pour le filtrage 
     tags = database.allTags()
     questions = database.loadQuestionsByProf(session["loginP"])
+    for q in questions :
+      q["state"] = formatage.formatageMD(q["state"])
 
     return render_template("MesQuestions.html", questions=questions, tags=tags)
   else:
