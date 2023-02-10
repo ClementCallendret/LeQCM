@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="{{ url_for('static', filename = 'mesQuestions.css') }}">
+
 <!-- Barre de navigation Boostrap pour trier les questions ou en creer une nouvelle -->
 <nav class="navbar navbar-expand-sm navbar-dark" id="navQuestions" style="background-color:rgb(169, 177, 177)">
   <div class="container-fluid">
@@ -17,13 +19,12 @@
         <li class="nav-item">
           <form action="" method="GET" id="tagForm">
             <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
-            <div class="dropdown" style="padding: 3px;">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-radius: 33px; border-width: 2px;">
+            <div class="dropdown">
+              <button type="button" class="btn btn-primary dropdown-toggle itemBut" data-bs-toggle="dropdown">
                 Tags
               </button>
 
-              <ul class="dropdown-menu overflow-auto" id="tagListMesQuestions">
+              <ul class="dropdown-menu overflow-auto" id="tagList">
                 {%for t in tags%}
                 <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck">{{t}}</label></li>
                 {%endfor%}
@@ -32,20 +33,16 @@
             </div>
           </form>
         </li>
-        <li class="nav-item" style="padding: 3px;">
-          <input type="button" class="btn btn-primary" onclick="filterByTags()" value="Filtrer par tag"
-            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">
+        <li class="nav-item">
+          <input type="button" class="btn btn-primary itemBut" onclick="filterByTags()" value="Filtrer par tag">
         </li>
 
 
-        <li class="nav-item" style="padding: 3px;">
-          <a class="btn btn-primary" href="{{url_for('editeur.init', questionId='createNew')}}"
-            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une
-            question</a>
+        <li class="nav-item">
+          <a class="btn btn-primary itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une question</a>
         </li>
-        <li class="nav-item" style="padding: 3px;">
-          <button type="submit" form="questionsForm" class="btn btn-primary"
-            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Créer une sélection</button>
+        <li class="nav-item">
+          <button type="submit" form="questionsForm" class="btn btn-primary itemBut">Créer une sélection</button>
         </li>
       </ul>
     </div>
@@ -75,7 +72,7 @@
   function filterByTags() {
 
     questions = $("#questionCards").find(".questionCard");
-    allTags = $("#tagListMesQuestions").find(".tagCheck");
+    allTags = $("#tagList").find(".tagCheck");
     selectedTags = [];
 
     // récupération des tags cochés

@@ -116,7 +116,7 @@
         <div class="col-md-6 mainBoxes"> <!-- Colonne de droite : Apercu -->
             <h1 style="font-size: large;">Enoncé :</h1>
 
-            <div id="previewState">{{stateFormated|safe}}</div> <!--Affichage de l'énoncé formatés -->
+            <div id="previewState" class="borderedDiv">{{stateFormated|safe}}</div> <!--Affichage de l'énoncé formatés -->
 
             </br>
 
@@ -125,7 +125,7 @@
             <h1 style="font-size: large;">Réponses :</h1>
             <div id="previewAnswerList" class="container-fluid">
                 {%for i in range(0, answersFormated|length)%} <!--Affichage des réponses formatés -->
-                <div class="previewDivAnswer row align-items-center">
+                <div class="previewDivAnswer row align-items-center borderedDiv">
                     <div class="col-sm-1">
                         <input type="checkbox" name="PreviewCheckAnswer{{i}}" id="PreviewCheckAnswer{{i}}">
                     </div>

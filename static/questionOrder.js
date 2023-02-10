@@ -12,7 +12,11 @@ createList();
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
+});
+
+function submitForm(mode){
     orderedId = [];
+    console.log(mode)
     for(ele of listItems){
         orderedId.push(parseInt(ele.querySelector('div').getAttribute("id")));
     }
@@ -22,8 +26,13 @@ form.addEventListener("submit", (e) => {
         .attr("value", JSON.stringify(orderedId))
         .appendTo("#form");
 
+    $("<input />").attr("type", "hidden")
+        .attr("name", "action")
+        .attr("value", mode)
+        .appendTo("#form");
+
     form.submit()
-});
+}
 
 // Insert list items into DOM
 function createList() {

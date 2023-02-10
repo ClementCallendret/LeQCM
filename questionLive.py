@@ -9,7 +9,7 @@ questionLive = Blueprint('questionLive',__name__)
 
 @questionLive.route('/liveQ')
 def liveQ():
-    return render_template('AffichageQuestion.html', state="this is the state", answers=[{"text": "texte de la réponse 1"}, {"text": "texte de la réponse 2"}], inSequence=False, isProf=True)
+    return render_template('questionDisplay.html', state="this is the state", answers=[{"text": "texte de la réponse 1"}, {"text": "texte de la réponse 2"}], inSequence=False, isProf=True)
 
 @socketio.on('message')
 def handle_message(data):

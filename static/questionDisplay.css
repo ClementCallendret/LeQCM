@@ -15,21 +15,12 @@ h3 {
 }
 
 .borderedDiv {
-    position : relative;
-    padding : 5px;
+    position: relative;
     padding-left : 10px;
     margin : 10px;
-    border-style: solid;
-    border-radius: 15px;
-    border-width: 1px;
-    border-color:black;
 }
 
 .liveAnswer {
     margin : 5px;
     margin-top : 10px;
-}
-
-.bottomButton {
-    margin:5px;
 }
