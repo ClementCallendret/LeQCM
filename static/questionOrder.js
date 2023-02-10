@@ -2,29 +2,53 @@
 
 const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('check');
+const form = document.getElementById("form");
 
 // Store listitems
 const listItems = [];
 
 let dragStartIndex;
-
 createList();
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    orderedId = [];
+    for(ele of listItems){
+        orderedId.push(parseInt(ele.querySelector('div').getAttribute("id")));
+    }
+    console.log(orderedId)
+
+    $("<input />").attr("type", "hidden")
+        .attr("name", "orderedId")
+        .attr("value", JSON.stringify(orderedId))
+        .appendTo("#form");
+
+    form.submit()
+});
 
 // Insert list items into DOM
 function createList() {
-    for (let index = 0; index < 5; index++) {
+    jsonQuestions = $("#questionJson").val();
+    console.log(jsonQuestions);
+    questions = JSON.parse(jsonQuestions);
+    for (let index = 0; index < questions.length; index++) {
         const listItem = document.createElement('li');
 
         listItem.setAttribute('data-index', index);
 
+        tagStr = ""
+        for (t in questions[index]["tags"]) {
+            tagStr += t + ";"
+        }
+
         listItem.innerHTML = `
-        <div class="draggable card questionCard" draggable="true">
+        <div class="draggable card questionCard" id="${questions[index]["id"]}" draggable="true">
             <div class="card-header" >
-                <input type="checkbox" name="1" class="checkBoxQuestion">
-                <a href="/editeur/1" class="link-dark">${index}</a>
+                ${questions[index]["title"]}
+                <button type="button" onclick="removeQ(${questions[index]["id"]})" class="deleteBut btn btn-light">x</button>
             </div>
-            <div class="card-body"></div>
-            <div class="card-footer" style="color:blue">2;</div>
+            <div class="card-body">${questions[index]["state"]}</div>
+            <div class="card-footer" style="color:blue">${tagStr}</div>
         </div>
       `;
 
@@ -33,6 +57,17 @@ function createList() {
         draggable_list.appendChild(listItem);
     }
     addEventListeners();
+}
+
+function removeQ(i) {
+    parent = document.getElementById(i).parentElement;
+    for (ele of listItems) {
+        if (ele.getAttribute('data-index') > parent.getAttribute('data-index')) {
+            ele.setAttribute('data-index', ele.getAttribute('data-index') - 1)
+        }
+    }
+    listItems.splice(listItems.indexOf(parent), 1);
+    parent.remove();
 }
 
 function dragStart() {
@@ -70,17 +105,18 @@ function swapItems(fromIndex, toIndex) {
     if (fromIndex < toIndex) {
         for (let i = fromIndex + 1; i <= toIndex; i++) {
             const item = listItems[i].querySelector('.draggable');
-            listItems[i-1].appendChild(item);
+            listItems[i - 1].appendChild(item);
         }
     }
-    else{
-        for (let i = toIndex ; i < fromIndex; i++) {
+    else {
+        for (let i = toIndex; i < fromIndex; i++) {
             const item = listItems[i].querySelector('.draggable');
-            listItems[i+1].appendChild(item);
+            listItems[i + 1].appendChild(item);
         }
     }
 
     listItems[toIndex].appendChild(movedItem);
+    console.log(listItems)
 }
 
 function addEventListeners() {

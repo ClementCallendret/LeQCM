@@ -45,8 +45,7 @@
         </li>
         <li class="nav-item" style="padding: 3px;">
           <button type="submit" form="questionsForm" class="btn btn-primary"
-            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Creer une
-            page de question</button>
+            style="background-color: rgb(88, 86, 86); border-color: rgba(0, 0, 0, 0.5); border-width: 2px;">Créer une sélection</button>
         </li>
       </ul>
     </div>
@@ -55,7 +54,7 @@
 
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
-<form id="questionsForm" action="/MesQuestions/creerQCM" method="POST">
+<form id="questionsForm" action="/MesQuestions/Sorting" method="POST">
   <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
     <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
     {%for q in questions%}

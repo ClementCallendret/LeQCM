@@ -5,8 +5,14 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'questionOrder.css') }}">
 
+<form action="/MesQuestions/creerQCM" method="POST" id="form">
+    <input type="submit" name="action" value="Creer une Page">
+    <input type="submit" name="action" value="Creer une Séquence">
 <ul class="d-flex flex-wrap justify-content-around draggable-list" id="draggable-list">
 </ul>
+</form>
+
+<input type="hidden" id="questionJson" value="{{questions}}">
 
 <script src="{{ url_for('static', filename = 'questionOrder.js') }}"></script>
 {% endblock %}
