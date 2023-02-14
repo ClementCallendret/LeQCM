@@ -34,7 +34,7 @@
           </form>
         </li>
         <li class="nav-item">
-          <input type="button" class="btn btn-primary itemBut" onclick="filterByTags()" value="Filtrer par tag">
+          <button type="button" class="btn btn-primary itemBut" onclick="filterByTags()">Filtrer par tag</button>
         </li>
 
 
@@ -42,7 +42,10 @@
           <a class="btn btn-primary itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une question</a>
         </li>
         <li class="nav-item">
-          <button type="submit" form="questionsForm" class="btn btn-primary itemBut">Créer une sélection</button>
+          <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/Sorting')">Ordonner la sélection</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-danger itemBut" onclick="submitForm('/MesQuestions/Delete')">Supprimer la sélection</button>
         </li>
       </ul>
     </div>
@@ -51,22 +54,48 @@
 
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
-<form id="questionsForm" action="/MesQuestions/Sorting" method="POST">
-  <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
-    <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
-    {%for q in questions%}
-    <div class="card questionCard">
-      <div class="card-header">
-        <input type="checkbox" name="{{q['id']}}" class="checkBoxQuestion">
-        <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
-      </div>
-      <div class="card-body">{{q['state']|safe}}</div>
-      <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
-    </div>
 
-    {%endfor%}
-  </div>
-</form>
+<button data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut"><h3>Réponses ⌄</h3></button>
+
+<div id="questionsCollapse" class="collapse show">
+  <form id="questionsForm" action="/MesQuestions/Sorting" method="POST">
+    <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
+      <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
+      {%for q in questions%}
+      <div class="card questionCard">
+        <div class="card-header">
+          <input type="checkbox" name="{{q['id']}}" class="checkBoxQuestion">
+          <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
+        </div>
+        <div class="card-body">{{q['state']|safe}}</div>
+        <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
+      </div>
+
+      {%endfor%}
+    </div>
+  </form>
+</div>
+
+<button data-bs-toggle="collapse" data-bs-target="#sequencesCollapse" class="collapseBut"><h3>Séquences ⌄</h3></button>
+
+<div id="sequencesCollapse" class="collapse show">
+  <form id="sequencesForm" action="" method="POST">
+    <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
+      <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
+      {%for s in sequences%}
+      <div class="card questionCard">
+        <div class="card-header">
+          <input type="checkbox" name="{{s['id']}}" class="checkBoxQuestion">
+          {{s['title']}}
+        </div>
+        <div class="card-body"><ul>{% for t in s['questionTitles'] %}<li>{{t}}</li>{%endfor%}</ul></div>
+        <div class="card-footer" style="color:blue">tags quand yen auras</div>
+      </div>
+
+      {%endfor%}
+    </div>
+  </form>
+</div>
 
 <script>
   function filterByTags() {
@@ -108,6 +137,12 @@
         }
       })
     }
+  }
+
+  function submitForm(destination){
+    let form = document.getElementById("questionsForm");
+    form.action = destination;
+    form.submit()
   }
 
 </script>

@@ -1,4 +1,4 @@
-from flask import Blueprint, request,render_template, url_for, redirect
+from flask import Blueprint, request,render_template, url_for, redirect, session
 import database
 import formatage
 import json
@@ -21,11 +21,14 @@ def sorting():
 @crea.route('/MesQuestions/validerSelection',methods = ['POST'])
 def validerSelection():
     ids = json.loads(request.form.get("orderedId"))
-    print(request.form["action"])
     if request.form["action"] == "Page":
         return creationPageQCM(ids)
     else:
-        return creationSequence(ids)
+        title = request.form.get("title")
+        if title is None:
+            title = "Sans Titre"
+
+        return creationSequence(ids, title)
 
 def creationPageQCM(idList):
     questions = []
@@ -39,6 +42,6 @@ def creationPageQCM(idList):
     if (idList != []):
         return render_template("creation.html",res = questions)
 
-def creationSequence(idList):
-    database.createSequence(idList)
-    return redirect(url_for('mesQues.mesQuestions'))
+def creationSequence(idList, title):
+    print(database.saveSequence(idList, session["loginP"], title))
+    return redirect(url_for('mesQuestions.mesQuestions'))

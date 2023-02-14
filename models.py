@@ -39,8 +39,11 @@ class HasTag(db.Model):
 class Serie(db.Model):
     __tablename__ = "serie"
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(50), nullable=False)
+    idP = db.Column(db.Integer, db.ForeignKey("professor.username"))
 
 class inSerie(db.Model):
+    __tablename__ = "inSerie"
     idS = db.Column(db.Integer, db.ForeignKey("serie.id"), primary_key=True)
     idQ = db.Column(db.Integer, db.ForeignKey("question.id"), primary_key=True)
-    num = db.Column(db.Integer, nullable=False)
+    posQ = db.Column(db.Integer, nullable=False)

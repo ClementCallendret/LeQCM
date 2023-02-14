@@ -13,6 +13,53 @@
     border-color:black;
 }
 
+.questionCard {
+    border-width: 2px;
+    border-radius: 8px;
+    box-shadow: 24px 24px 4px rgba(0, 0, 0, 0.5);
+    position : relative;
+    border-style: solid, 10px;
+    border-color: black;
+    max-width : 400px;
+    min-width : 200px;
+    height: 200px;
+    margin : 10px;
+    margin-bottom: 10px;
+}
+
+.card-header {
+    background-color: rgb(139, 139, 139);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 40px;
+    max-height: 40px;
+}
+
+.card-body {
+    padding-top: 5px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 120px;
+    min-height: 120px;
+}
+
+.card-footer {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 38px;
+    min-height: 38px;
+    background-color: rgba(221, 185, 132, 0.822);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
 /* maxi code css pour pygments pour Markdown fonctionne avec le code coloré il est généré par Pygmentize  utilisé et recupéré sur internet */
 pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }

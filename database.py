@@ -35,7 +35,8 @@ def addProfessor(username, password, sel) :
         return False
 
 def changeProfessorPassword(username, newPswd):
-    db.session.query(models.Professor).filter(models.Professor.username == username).update({"password" : newPswd})
+    prof = models.Professor.query.filter_by(username=username).first()
+    prof.password = newPswd
     return dbCommit()
 
 def getProfessorSel(username):
@@ -70,7 +71,8 @@ def addStudent(idS, password, sel) :
     return False
 
 def changeStudentPassword(idS, newPswd):
-    db.session.query(models.Student).filter(models.Student.id == idS).update({"password" : newPswd})
+    std = models.Student.query.filter_by(id=idS).first()
+    stdpassword = newPswd
     return dbCommit()
 
 def getStudentSel(idS):
@@ -122,6 +124,7 @@ def deleteHasTag(idQ, idT):
     db.session.delete(relation)
     if not models.HasTag.query.filter_by(idT=idT).first():
         deleteTag(idT)
+    return dbCommit()
 
 ####################### ANSWERS ######################
 
@@ -130,6 +133,11 @@ def addAnswer(answer, idQuestion):
     db.session.add(rep)
     dbCommit()
     return rep.id
+
+def deleteAnswer(idA):
+    relation = models.Answer.query.filter_by(idQ=idA).first()
+    db.session.delete(relation)
+    return dbCommit()
 
 ###################### MODIFICATIONS QUESTIONS ####################
 
@@ -141,27 +149,24 @@ def saveQuestion(idProf, title, state, answers, tags):
 
     db.session.add(question)
     if not dbCommit():
-        return "Could not add question " + title + " to database\n"
+        return False
 
     questionId = question.id
 
-    returnMessage = ""
     for t in tags:
         addHasTag(questionId, t)
     
     if isinstance(answers, list):
         for rep in answers:
             if not addAnswer(rep, questionId):
-                returnMessage += "Could not add answer " + rep + " to database\n"
+                return False
 
-    if returnMessage == "":
-        return questionId
-    else:
-        return returnMessage
+    return questionId
 
 def updateQuestion(idQuestion, idProf, title, state, answers, tags):
     dataAnswers = models.Answer.query.filter_by(idQ=idQuestion)
     dataTags = models.HasTag.query.filter_by(idQ=idQuestion)
+    dataQuestion = models.Question.query.filter_by(id=idQuestion).first()
 
     if isinstance(answers, list):
         #Suppression des réponses qui ne sont plus présentes
@@ -176,7 +181,7 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
                 addAnswer(ans, idQuestion)
 
         #On s'assure que la réponse numérique soit Null
-        db.session.query(models.Question).filter(models.Question.id == idQuestion).update({"numeralAnswer" : None})
+        dataQuestion.numeralAnswer = None
 
     else:
         #Suppression des réponse QCM si jamais on a changé de mode
@@ -185,7 +190,7 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
             db.session.commit()
         
         #Maj de la réponse numérique
-        db.session.query(models.Question).filter(models.Question.id == idQuestion).update({"numeralAnswer" : answers})
+        dataQuestion.numeralAnswer = answers
 
 
     #suppression des tags qui ne sont plus présents
@@ -198,10 +203,28 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
         if not models.HasTag.query.filter_by(idQ=idQuestion, idT=t).first() :
             addHasTag(idQuestion, t)
 
-    db.session.query(models.Question).filter(models.Question.id == idQuestion).update({"title" : title, "state" : state})
+    dataQuestion.title = title
+    dataQuestion.state = state
     db.session.commit()
 
-###################### REQUETES QUESTIONS ############################
+def deleteQuestion(idQuestion):
+    dataAnswers = models.Answer.query.filter_by(idQ=idQuestion)
+    dataTags = models.HasTag.query.filter_by(idQ=idQuestion)
+
+    for row in dataAnswers:
+        db.session.delete(row)
+        db.session.commit()
+
+    for row in dataTags:
+        deleteHasTag(idQuestion, row.idT)
+
+    deleteQuestionFromSquences(idQuestion)
+
+    q = models.Question.query.filter_by(id=idQuestion).first()
+    db.session.delete(q)
+    return dbCommit()
+
+######################### REQUETES QUESTIONS ############################
 
 def parseQuestionData(dataQuestion, dataAnswers, dataTags): #(fct intermédiaire)
     question = {"id":None, "owner" : "", "title" : "", "state":"", "tags":[]}
@@ -249,3 +272,53 @@ def possedeQuestion(idQ, idProf):
         return True
     else :
         return False
+
+###################### SEQUENCE DE QUESTION ############################
+
+def addQuestionToSerie(idSerie, idQuestion, posQ):
+    inSerie = models.inSerie(idS = idSerie, idQ=idQuestion, posQ=posQ)
+    db.session.add(inSerie)
+    return dbCommit()
+
+def saveSequence(idList, idProf, title):
+    serie = models.Serie(idP = idProf, title=title)
+    db.session.add(serie)
+    if not dbCommit():
+        return False
+
+    for i in range(0, len(idList)):
+        addQuestionToSerie(serie.id, idList[i], i)
+    
+    return serie.id
+
+def deleteQuestionFromSquences(idQ):
+    inSeries = models.inSerie.query.filter_by(idQ=idQ)
+    for row in inSeries:
+        pos = row.posQ
+        others = models.inSerie.query.filter_by(idS=row.idS)
+        for oth in others:
+            if oth.posQ > pos:
+                oth.posQ -= 1
+        db.session.delete(row)
+    return dbCommit()
+
+def loadSequenceById(idSerie):
+    serie = {}
+    serieDatas = models.Serie.query.filter_by(id=idSerie).first()   
+    serie["title"] = serieDatas.title
+    serie["id"] = serieDatas.id
+    questionsData = models.inSerie.query.filter_by(idS=idSerie).order_by(models.inSerie.posQ)
+
+    serie["idList"] = []
+    serie["questionTitles"] = []
+    for row in questionsData:
+        serie["idList"].append(row.idQ)
+        serie["questionTitles"].append(models.Question.query.filter_by(id=row.idQ).first().title)
+
+    return serie
+
+def loadSequencesByProf(idProf):
+    series = []
+    for row in models.Serie.query.filter_by(idP=idProf):
+        series.append(loadSequenceById(row.id))
+    return series
