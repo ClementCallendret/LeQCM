@@ -25,7 +25,7 @@ def validerSelection():
         return creationPageQCM(ids)
     else:
         title = request.form.get("title")
-        if title is None:
+        if title == "":
             title = "Sans Titre"
 
         return creationSequence(ids, title)

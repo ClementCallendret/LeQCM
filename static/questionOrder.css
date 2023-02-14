@@ -1,3 +1,17 @@
 ul {
     list-style-type: none;
 }
+
+.navBar {
+    margin-bottom: 10px;
+    padding:5px;
+    background-color:rgb(169, 177, 177)
+}
+
+#titleInput {
+    max-height:45px;
+    margin-top : auto;
+    margin-bottom : auto;
+    display:inline;
+    width:190px;
+}
