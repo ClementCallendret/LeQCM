@@ -7,10 +7,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename = 'questionOrder.css') }}">
 
 <form action="/MesQuestions/validerSelection" method="POST" id="form">
+    <input type="hidden" name="orderedId" id="orderedId" />
     <div class="d-flex flex-wrap justify-content-center navBar">
-        <a href="{{url_for( 'mesQuestions.mesQuestions' )}}" class="btn btn-danger itemBut">Annuler</a>
-        <button type="button" class="btn btn-primary itemBut" onclick="submitForm('Page')">Creer une Page</button>
-        <button type="button" class="btn btn-primary itemBut" onclick="submitForm('Sequence')">Creer une Séquence</button>
+        <a href="{{url_for( 'mesQuestions.mainPage' )}}" class="btn btn-danger itemBut">Annuler</a>
+        <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/PageQCM')">Creer une Page</button>
+        <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/CreerSequence')">Creer une Séquence</button>
         <input type="text" id="titleInput" class="form-control" name="title" placeHolder="Titre">
     </div>
     <ul class="d-flex flex-wrap justify-content-around draggable-list" id="draggable-list">
@@ -19,5 +20,5 @@
 
 <input type="hidden" id="questionJson" value="{{questions}}">
 
-<script src="{{ url_for('static', filename = 'questionOrder.js') }}"></script>
+<script src="{{ url_for('static', filename = 'sorting.js') }}"></script>
 {% endblock %}

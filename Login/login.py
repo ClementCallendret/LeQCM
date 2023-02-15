@@ -1,15 +1,15 @@
 from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
 import database
 import encryption
-logi = Blueprint('login',__name__)
+login = Blueprint('login',__name__)
 
 
 
-@logi.route('/login')
+@login.route('/login')
 def init():
     return render_template('login.html')
 
-@logi.route('/loginP',methods = ['POST'])
+@login.route('/loginP',methods = ['POST'])
 def loginP():
     if (request.method == 'POST'):
         login = request.form.get('loginP')
@@ -35,7 +35,7 @@ def loginP():
             return render_template('login.html') 
 
 
-@logi.route('/loginE',methods = ['POST'])
+@login.route('/loginE',methods = ['POST'])
 def loginE():
     if (request.method == 'POST'):
         login = request.form.get('loginE')

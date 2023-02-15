@@ -268,9 +268,9 @@ def loadQuestionsByProf(idProf):
 
 def possedeQuestion(idQ, idProf):
     question = models.Question.query.filter_by(id=idQ).first()
-    if question.idP == idProf:
-        return True
-    else :
+    if question :
+        return question.idP == idProf
+    else:
         return False
 
 ###################### SEQUENCE DE QUESTION ############################
@@ -295,13 +295,28 @@ def deleteQuestionFromSquences(idQ):
     inSeries = models.inSerie.query.filter_by(idQ=idQ)
     for row in inSeries:
         pos = row.posQ
-        others = models.inSerie.query.filter_by(idS=row.idS)
-        for oth in others:
-            if oth.posQ > pos:
-                oth.posQ -= 1
+        questionsAfter = models.inSerie.query.filter(models.inSerie.idS == row.idS, models.inSerie.posQ>pos)
+        for q in questionsAfter:
+            q.posQ -= 1
         db.session.delete(row)
     return dbCommit()
 
+def deleteSequence(idSequence):
+    inSeries = models.inSerie.query.filter_by(idS=idSequence)
+    for row in inSeries:
+        db.session.delete(row)
+    
+    serie = models.Serie.query.filter_by(id=idSequence).first()
+    db.session.delete(serie)
+    return dbCommit()
+
+def possedeSequence(idS, idProf):
+    serie = models.Serie.query.filter_by(id=idS).first()
+    if serie:
+        return serie.idP == idProf
+    else:
+        return False
+    
 def loadSequenceById(idSerie):
     serie = {}
     serieDatas = models.Serie.query.filter_by(id=idSerie).first()   
@@ -322,3 +337,4 @@ def loadSequencesByProf(idProf):
     for row in models.Serie.query.filter_by(idP=idProf):
         series.append(loadSequenceById(row.id))
     return series
+

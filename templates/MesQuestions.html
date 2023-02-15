@@ -39,13 +39,16 @@
 
 
         <li class="nav-item">
-          <a class="btn btn-primary itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une question</a>
+          <a class="btn btn-primary itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une
+            question</a>
         </li>
         <li class="nav-item">
-          <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/Sorting')">Ordonner la sélection</button>
+          <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/Sorting')">Ordonner
+            la sélection</button>
         </li>
         <li class="nav-item">
-          <button type="button" class="btn btn-danger itemBut" onclick="submitForm('/MesQuestions/Delete')">Supprimer la sélection</button>
+          <button type="button" class="btn btn-danger itemBut" onclick="submitForm('/MesQuestions/Delete')">Supprimer la
+            sélection</button>
         </li>
       </ul>
     </div>
@@ -55,16 +58,19 @@
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
 
-<button data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut"><h3>Réponses ⌄</h3></button>
+<button type="button" data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut">
+  <h3>Questions ⌄</h3>
+</button>
 
-<div id="questionsCollapse" class="collapse show">
-  <form id="questionsForm" action="/MesQuestions/Sorting" method="POST">
+<form id="questionsForm" action="/MesQuestions/Sorting" method="POST">
+  <div id="questionsCollapse" class="collapse show">
+    <input type="hidden" name="selectedQ" id="selectedQ">
     <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
       <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
       {%for q in questions%}
       <div class="card questionCard">
         <div class="card-header">
-          <input type="checkbox" name="{{q['id']}}" class="checkBoxQuestion">
+          <input type="checkbox" name="{{q['id']}}" class="checkQuestion">
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
         </div>
         <div class="card-body">{{q['state']|safe}}</div>
@@ -73,78 +79,33 @@
 
       {%endfor%}
     </div>
-  </form>
-</div>
+  </div>
 
-<button data-bs-toggle="collapse" data-bs-target="#sequencesCollapse" class="collapseBut"><h3>Séquences ⌄</h3></button>
+  <button type="button" data-bs-toggle="collapse" data-bs-target="#sequencesCollapse" class="collapseBut">
+    <h3>Séquences ⌄</h3>
+  </button>
 
-<div id="sequencesCollapse" class="collapse show">
-  <form id="sequencesForm" action="" method="POST">
+  <div id="sequencesCollapse" class="collapse show">
+    <input type="hidden" name="selectedS" id="selectedS">
     <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
       <!-- Card Boostrap car cela rendais bien pour un bref apercu -->
       {%for s in sequences%}
       <div class="card questionCard">
         <div class="card-header">
-          <input type="checkbox" name="{{s['id']}}" class="checkBoxQuestion">
+          <input type="checkbox" name="{{s['id']}}" class="checkSequence" >
           {{s['title']}}
         </div>
-        <div class="card-body"><ul>{% for t in s['questionTitles'] %}<li>{{t}}</li>{%endfor%}</ul></div>
+        <div class="card-body">
+          <ul>{% for t in s['questionTitles'] %}<li>{{t}}</li>{%endfor%}</ul>
+        </div>
         <div class="card-footer" style="color:blue">tags quand yen auras</div>
       </div>
 
       {%endfor%}
     </div>
-  </form>
-</div>
+  </div>
+</form>
 
-<script>
-  function filterByTags() {
-
-    questions = $("#questionCards").find(".questionCard");
-    allTags = $("#tagList").find(".tagCheck");
-    selectedTags = [];
-
-    // récupération des tags cochés
-    allTags.each(function () {
-      if (this.checked) {
-        selectedTags.push(this.name);
-      }
-    });
-
-    // si aucun montrer toutes les questions
-    if (selectedTags.length == 0) {
-      questions.each(function () {
-        this.setAttribute("style", "");
-      });
-    }
-    // sinon on verifie si le tag appartient à la question grace à la chaine de charactères
-    else {
-      console.log(selectedTags)
-      questions.each(function () {
-        q = $(this)
-        tags = q.find(".card-footer").text().split(";");
-        hasTag = false
-        for (let i = 0; i < tags.length - 1; i++) {
-          if (selectedTags.includes(tags[i])) {
-            hasTag = true;
-          }
-        }
-        if (!hasTag) {
-          this.setAttribute("style", "display : none");
-        }
-        else {
-          this.setAttribute("style", "");
-        }
-      })
-    }
-  }
-
-  function submitForm(destination){
-    let form = document.getElementById("questionsForm");
-    form.action = destination;
-    form.submit()
-  }
-
-</script>
+<script src="{{ url_for('static', filename = 'mesQuestions.js') }}"></script>
 
 {% endblock %}

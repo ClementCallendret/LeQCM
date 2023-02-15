@@ -14,23 +14,15 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
 });
 
-function submitForm(mode){
+function submitForm(destination){
     orderedId = [];
-    console.log(mode)
     for(ele of listItems){
         orderedId.push(parseInt(ele.querySelector('div').getAttribute("id")));
     }
 
-    $("<input />").attr("type", "hidden")
-        .attr("name", "orderedId")
-        .attr("value", JSON.stringify(orderedId))
-        .appendTo("#form");
+    $("#orderedId").val(JSON.stringify(orderedId))
 
-    $("<input />").attr("type", "hidden")
-        .attr("name", "action")
-        .attr("value", mode)
-        .appendTo("#form");
-
+    form.action = destination;
     form.submit()
 }
 

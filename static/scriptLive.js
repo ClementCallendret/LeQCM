@@ -14,7 +14,7 @@ function addLiveAnswersQCM(){
         let nbAnswered = 50; // inserer le nombre de personnes ayants proposés la réponse i
         html = "<div id=\"liveAnswer" + i.toString() + "\" class=\"progress liveAnswer\">";
         html += "<div class=\"progress-bar\" style=\"width:" + nbAnswered.toString() + "%\">" + nbAnswered.toString() + "</div></div>";
-        allAnswers.eq(i).append(html);
+        v.append(html);
         html = "";
     });
 }

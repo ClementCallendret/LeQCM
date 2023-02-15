@@ -5,10 +5,10 @@ import json
 
 #import base64 //
 
-edit = Blueprint('editeur',__name__)
+editeur = Blueprint('editeur',__name__)
 
 # Ouverture sans requête POST
-@edit.route('/editeur/<questionId>')
+@editeur.route('/editeur/<questionId>')
 def init(questionId):
   if 'loginP' in session:
 
@@ -50,7 +50,7 @@ def init(questionId):
 
 
 # Cas ou l'on veut charger l'apercu ou sauvegarder
-@edit.route('/editeur/<questionId>', methods=['POST'])
+@editeur.route('/editeur/<questionId>', methods=['POST'])
 def editeurPOST(questionId):
   if 'loginP' in session:
     # Récupération de l'énoncé et calcul du rendu

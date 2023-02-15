@@ -4,24 +4,24 @@ import models
 
 from extension import db, socketio, app # fichier a part pour éviter les circular imports
 
-from Login.login import logi
-from Login.logout import logo
-from Login.register import regist
+from Login.login import login
+from Login.logout import logout
+from Login.register import register
 from Login.connected import connect
-from GestionQuestions.editeur import edit
-from GestionQuestions.mesQuestions import mesQues
-from GestionQuestions.creation import crea
+from GestionQuestions.editeur import editeur
+from GestionQuestions.mesQuestions import mesQuestions
+from GestionQuestions.creation import creation
 from questionLive import questionLive
 from AjoutStudents import ajt_Stu
 
 #nom de la variable accueillant le BluePrint
-app.register_blueprint(logi)
-app.register_blueprint(logo)
-app.register_blueprint(regist)
+app.register_blueprint(login)
+app.register_blueprint(logout)
+app.register_blueprint(register)
 app.register_blueprint(connect)
-app.register_blueprint(edit)
-app.register_blueprint(mesQues)
-app.register_blueprint(crea)
+app.register_blueprint(editeur)
+app.register_blueprint(mesQuestions)
+app.register_blueprint(creation)
 app.register_blueprint(questionLive)
 app.register_blueprint(ajt_Stu)
 

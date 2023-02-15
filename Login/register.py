@@ -2,14 +2,14 @@ from flask import Flask, redirect, url_for, request, Blueprint,render_template, 
 import database
 import encryption
 
-regist = Blueprint('register',__name__)
+register = Blueprint('register',__name__)
 
-@regist.route('/register')
+@register.route('/register')
 def init():
     return render_template('register.html')
 
-@regist.route('/register',methods = ['POST'])
-def register():
+@register.route('/register',methods = ['POST'])
+def registerRoute():
     if (request.method == 'POST'):
         login = request.form.get('login')
         password = request.form.get('password')

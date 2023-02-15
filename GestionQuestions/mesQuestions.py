@@ -3,10 +3,10 @@ import database
 import formatage
 import json
 
-mesQues = Blueprint('mesQuestions',__name__)
+mesQuestions = Blueprint('mesQuestions',__name__)
 
-@mesQues.route('/MesQuestions')
-def mesQuestions():
+@mesQuestions.route('/MesQuestions')
+def mainPage():
   if "loginP" in session:
     #on charge les question de l'utilisateur et tous les tags pour le filtrage 
     tags = database.allTags()
@@ -21,13 +21,15 @@ def mesQuestions():
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.init'))
 
-@mesQues.route('/MesQuestions/Delete', methods=['POST'])
+@mesQuestions.route('/MesQuestions/Delete', methods=['POST'])
 def deleteQuestions():
-  idList = []
-  for key,value in request.form.items():
-    idList.append(key)
-  print(idList)
-  for id in idList :
+  questionIdList = json.loads(request.form["selectedQ"])
+  for id in questionIdList :
     if database.possedeQuestion(id, session["loginP"]):
       database.deleteQuestion(id)
-  return redirect(url_for('mesQuestions.mesQuestions'))
+
+  sequenceIdList = json.loads(request.form["selectedS"])
+  for id in sequenceIdList :
+    if database.possedeSequence(id, session["loginP"]):
+      database.deleteSequence(id)
+  return redirect(url_for('mesQuestions.mainPage'))

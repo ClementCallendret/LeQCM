@@ -33,8 +33,8 @@
             <!--On affiche un menu different si l'utilisateur est connecté ou non     <h3>Login : {{login}}</h3>-->
             {% if isLogedP %} 
             <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mesQuestions') }}">Mes Questions</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logout') }}">Se déconnecter</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mainPage') }}">Mes Questions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('AjoutStudents.AjoutStudents') }}">Ajout d'élèves</a></li> <!--nom du fichier.nom de la fonction appelée-->
 
             {% elif isLogedE %} 
