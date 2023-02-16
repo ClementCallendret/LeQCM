@@ -16,7 +16,7 @@ function changeQuestionMode(checkboxElem) {
 }
 
 function maxOfTab(tab) {
-    if(tab.length == 0)
+    if (tab.length == 0)
         return 0;
     return Math.max.apply(null, tab);
 }
@@ -36,7 +36,7 @@ function addAnswer() {
     let newId = maxOfTab(idAnswers) + 1;
 
     // Ajout de la nouvelle réponse au HTML avec le bon id
-    let html =`
+    let html = `
         <div id="divAnswer${newId}" class="divAnswer row align-items-center">
             <div class="col-sm-1">
                 <label class="switch">
@@ -97,9 +97,9 @@ inputTag.addEventListener("keypress", function (event) {
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-}); 
+});
 
-function submitForm(mode){
+function submitForm(mode) {
     $("#idAnswers").val(JSON.stringify(idAnswers))
     $("#newTags").val(JSON.stringify(newTags))
 
@@ -110,3 +110,10 @@ function submitForm(mode){
 
     form.submit()
 }
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        submitForm("Enregistrer");
+    }
+});

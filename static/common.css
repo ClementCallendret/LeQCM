@@ -16,7 +16,7 @@
 .questionCard {
     border-width: 2px;
     border-radius: 8px;
-    box-shadow: 24px 24px 4px rgba(0, 0, 0, 0.5);
+    /*box-shadow: 24px 24px 4px rgba(0, 0, 0, 0.5);*/
     position : relative;
     border-style: solid, 10px;
     border-color: black;
@@ -28,9 +28,9 @@
 }
 
 .card-header {
-    background-color: rgb(139, 139, 139);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    background-color: rgb(160, 158, 158);
+    border-top-left-radius: 6px !important;
+    border-top-right-radius: 6px !important;
     word-wrap: break-word;
     white-space: nowrap;
     overflow: hidden;
@@ -49,6 +49,7 @@
 }
 
 .card-footer {
+    position:relative;
     word-wrap: break-word;
     white-space: nowrap;
     overflow: hidden;
@@ -56,8 +57,9 @@
     max-height: 38px;
     min-height: 38px;
     background-color: rgba(221, 185, 132, 0.822);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
+    bottom:1.75px;
 }
 
 /* maxi code css pour pygments pour Markdown fonctionne avec le code coloré il est généré par Pygmentize  utilisé et recupéré sur internet */
