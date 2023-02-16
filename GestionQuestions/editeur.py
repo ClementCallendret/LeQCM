@@ -29,7 +29,7 @@ def init(questionId):
       # On accède a la page seulement si la question appartient bien au Professeur
       if question["owner"] == session["loginP"] :
 
-        if question.get("numeralAnswer") :
+        if "numeralAnswer" in question :
           idAnswers = json.dumps([], indent=4)
           return render_template('EditeurDeQuestion.html', title=question["title"], isQcm=False, state=question["state"], stateFormated=formatage.formatageMD(question["state"]), idAnswers=idAnswers, answers=[], answersFormated=[], numeralAnswer=question["numeralAnswer"], tags=allTag, selectedTag=question["tags"], newTags=newTags)
         else:

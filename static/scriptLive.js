@@ -1,28 +1,83 @@
-var socket = io();
+const socket = io();
+
 socket.on('connect', () => {
-    socket.emit('message', { m : 'I\'m connected!'});
+    socket.emit('joinRoom', { "rId": getCurrentSId() });
 });
 
-socket.on("messageToClient", (data) => {
-    $("#diviv").append(data.m);
+socket.on('addOneConnected', () => {
+    console.log("nouvelle Connection")
+    $("#nbStudents").html((parseInt($("#nbStudents").contents()) + 1).toString());
 })
 
-function addLiveAnswersQCM(){
-    allAnswers = $("#answers").find(".divAnswer");
-    let html = "";
-    allAnswers.each((i, v) => {
-        let nbAnswered = 50; // inserer le nombre de personnes ayants proposés la réponse i
-        html = "<div id=\"liveAnswer" + i.toString() + "\" class=\"progress liveAnswer\">";
-        html += "<div class=\"progress-bar\" style=\"width:" + nbAnswered.toString() + "%\">" + nbAnswered.toString() + "</div></div>";
-        v.append(html);
-        html = "";
-    });
+function getCurrentSId() {
+    return window.location.href.split('/').slice(-1)[0]
 }
 
-function showCorrection(corrects){ // passer la liste des indexes des réponses correctes
-    for(i in corrects){
-        ans = $("#divAnswer" + i);
-        ans.css("border-width", "7px");
-        ans.css("border-color", "green")
+function showLiveAnswers() {
+    socket.emit("showLiveAnswers", getCurrentSId())
+}
+
+socket.on("showLiveAnswers", (data) => {
+    data = JSON.parse(data)
+    console.log("Affichage des réponses lives")
+    if (data.length == 2) {
+        div = $("#answers")
+        for (let i = 0; i < 5; i++) {
+            if (data[0][i] != "None") {
+                html = `
+                <div id="liveAnswer${i.toString()}" class="progress liveAnswer">
+                <div class="progress-bar" style="width:${data[1][i].toString()}%">${data[1][i].toString()}%
+                </div></div>
+                `
+                div.append(html);
+            }
+        }
     }
+    else {
+        allAnswers = $("#answers").find(".divAnswer");
+        allAnswers = document.getElementsByClassName("divAnswer")
+        for (let i = 0; i < allAnswers.length; i++) {
+            html = `
+            <div id="liveAnswer${i.toString()}" class="progress liveAnswer">
+            <div class="progress-bar" style="width:${data[i].toString()}%">${data[i].toString()}%
+            </div></div>
+            `
+            allAnswers[i].innerHTML += html;
+        }
+    }
+})
+
+function showCorrection() {
+    socket.emit("showCorrection", getCurrentSId())
+}
+
+socket.on('showCorrection', (corrects) => {
+    corrects = JSON.parse(corrects)
+    console.log("Affichage de la correction : " + corrects)
+    if (Array.isArray(corrects)) {
+        for (i of corrects) {
+            ans = $("#divAnswer" + i);
+            ans.css("border-width", "7px");
+            ans.css("border-color", "green")
+        }
+    }
+    else{
+        $('#correctionNumeral').append(corrects.toString())
+    }
+})
+
+function stopAnswers() {
+    socket.emit("stopAnswers", getCurrentSId())
+}
+
+socket.on("desactivateAnswers", () => {
+    $("#validation").addClass("disabled")
+})
+
+function stopSession() {
+    socket.emit("stopSession", getCurrentSId())
+}
+
+function sendAnswers() {
+
 }

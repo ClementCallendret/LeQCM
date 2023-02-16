@@ -23,13 +23,17 @@ def mainPage():
 
 @mesQuestions.route('/MesQuestions/Delete', methods=['POST'])
 def deleteQuestions():
-  questionIdList = json.loads(request.form["selectedQ"])
-  for id in questionIdList :
-    if database.possedeQuestion(id, session["loginP"]):
-      database.deleteQuestion(id)
+  if "loginP" in session:
+    questionIdList = json.loads(request.form["selectedQ"])
+    for id in questionIdList :
+      if database.possedeQuestion(id, session["loginP"]):
+        database.deleteQuestion(id)
 
-  sequenceIdList = json.loads(request.form["selectedS"])
-  for id in sequenceIdList :
-    if database.possedeSequence(id, session["loginP"]):
-      database.deleteSequence(id)
-  return redirect(url_for('mesQuestions.mainPage'))
+    sequenceIdList = json.loads(request.form["selectedS"])
+    for id in sequenceIdList :
+      if database.possedeSequence(id, session["loginP"]):
+        database.deleteSequence(id)
+    return redirect(url_for('mesQuestions.mainPage'))
+  else:
+    flash("Vous devez être connecté pour acceder à cette page")
+    return redirect(url_for('login.init'))
