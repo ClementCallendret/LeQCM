@@ -10,8 +10,11 @@ ul {
 
 #titleInput {
     max-height:45px;
+    margin-left : 10px;
     margin-top : auto;
     margin-bottom : auto;
     display:inline;
+    min-width:190px;
+    max-width:500px;
     width:190px;
 }

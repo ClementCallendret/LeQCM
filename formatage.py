@@ -11,8 +11,9 @@ def formatageMD(text):
 def dictTodictFormated(dico):
     for question in dico:
         question['state']=formatageMD(question['state'])
-        for answer in question['answers']:
-            answer['text']=formatageMD(answer['text'])
+        if not question.get("numeralAnswer"):
+            for answer in question['answers']:
+                answer['text']=formatageMD(answer['text'])
     return dico
 
 def formatAnswers(answers):

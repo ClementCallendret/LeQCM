@@ -23,12 +23,10 @@ def creationPageQCM():
     for id in idList:
         questions.append(database.loadQuestionById(id))
     questions = formatage.dictTodictFormated(questions)
-    #Pour numéroter les questions 
-    for i in range (len(questions)):
-        questions[i]['state'] = str(i+1)+". "+questions[i]['state']
-    #Formatage
-    if (idList != []):
-        return render_template("PageQcm.html",res = questions)
+    title = request.form.get("title")
+    if title == "":
+        title = "Sans Titre"
+    return render_template("PageQcm.html",questions = questions, title=title)
 
 @creation.route('/MesQuestions/CreerSequence',methods = ['POST'])
 def creationSequence():

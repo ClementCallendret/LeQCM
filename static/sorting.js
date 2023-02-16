@@ -10,6 +10,15 @@ const listItems = [];
 let dragStartIndex;
 createList();
 
+var inputT = document.getElementById('titleInput'); // get the input element
+inputT.addEventListener('input', resizeInputT);
+resizeInputT();
+
+function resizeInputT(){
+    inputT.style.width = inputT.value.length + "ch";
+}
+
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 });

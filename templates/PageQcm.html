@@ -3,40 +3,45 @@
 {% block title %}Creation de page{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'pageQcm.css') }}">
 
 <div class="container-fluid">
 
-<div class="printButton">
-    <button onclick="window.print();" class="printButton">Imprimer le QCM</button>
-</div>
-
-
-{% for question in res %}
-<div class="state">
-    <state>{{ question.state|safe }}</state>
-</div>
-
-{% for answer in question.answers %}
-<div id="totalAnswer">
-
-    <div class="caseacocher">
-        <img src="{{url_for('static', filename='caseacocher.png')}}" width="50" height="25" align="left"/>
+    <div class="printButton">
+        <button onclick="window.print();" class="printButton">Imprimer le QCM</button>
     </div>
 
-    <div class="answers"> 
-        <answer>{{ answer.text|safe}}</answer>
+    <h1 id="titre">{{title}}</h1>
+
+    {% for i in range(0, questions|length)%}
+    <h3 class="questionIndex">Question {{i}} :</h3>
+    <div class="state">
+        <state>{{ questions[i].state|safe }}</state>
     </div>
 
-</div>
+    <div class="answers">
+    {% if questions[i].numeralAnswer %}
+    <div class="borderedDiv numberField"></div>
+    {% else %}
+    {% for answer in questions[i].answers %}
+
+        <div class="caseacocher">
+            <img src="{{url_for('static', filename='caseacocher.png')}}" width="50" height="25" align="left" />
+        </div>
+
+        <div class="answer">
+            <answer>{{ answer.text|safe}}</answer>
+        </div>
 
     {% endfor %}
-{% endfor %}
+    {% endif %}
+    </div>
+    {% endfor %}
 
 </div>
 
 <script>
-    mermaid.initialize({startOnLoad:true}); // Lancement de mermaid
+    mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
 </script>
 
 {% endblock %}
-

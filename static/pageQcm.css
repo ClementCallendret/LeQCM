@@ -1,0 +1,65 @@
+#titre {
+    text-align: center;
+    margin : 15px;
+    margin-bottom: 50px;
+    font-size: xx-large;
+}
+
+.state {
+    font-size: 20px;
+    margin-left:20px;
+    margin-bottom:15px
+}
+
+.questionIndex {
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.numberField{
+    height : 50px;
+    width : 1000px;
+}
+
+.caseacocher {
+    display: inline;
+}
+
+.answers {
+    margin-left:20px;
+    margin-bottom : 30px;
+}
+
+.answer {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    line-height: 25px;
+    font-size: 17px;
+}
+
+.printButton {
+    font-size: 30px;
+    text-align: center;
+
+}
+
+@media print {
+    @page {
+        margin: 0;
+    }
+
+    body {
+        margin: 1.6cm;
+    }
+
+    .navbar {
+        display: none;
+        visibility: hidden;
+    }
+
+    .printButton {
+        display: none;
+        visibility: hidden;
+    }
+}
