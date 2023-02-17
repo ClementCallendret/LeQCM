@@ -74,16 +74,16 @@ def generateSessionId():
 def joinRoom(data):
     id = data["rId"]
     if id in rooms:
-        if "loginP" in session:
+        if "loginP" in session: # pour un autre compte prof qui assisterais a la session
             join_room(id)
             if session["loginP"] != rooms[id]["creator"] and session["loginP"] not in rooms[id]["connected"]:
-                rooms[id]["connected"][session["loginP"]] = False #pour enregistrer ses réponses
+                rooms[id]["connected"][session["loginP"]] = None #pour enregistrer ses réponses
                 rooms[id]["nbConnected"] += 1
                 emit("addOneConnected", to=id)
-        elif "loginS" in session:
+        elif "loginS" in session: # pour un élève
             join_room(id)
             if session["loginS"] not in rooms[id]["connected"]:
-                rooms[id]["connected"][session["loginS"]] = [] #pour enregistrer ses reponses
+                rooms[id]["connected"][session["loginS"]] = None #pour enregistrer ses reponses
                 rooms[id]["nbConnected"] += 1
                 emit("addOneConnected", to=id)
         else:
@@ -97,6 +97,33 @@ def joinRoom(data):
 
     else:
         return "Session Introuvable :("
+
+@socketio.on("sendAnswers")
+def saveAnswers(data):
+    data = json.loads(data)
+    answers = data["answers"]
+    id = data["rId"]
+    login = ""
+    if session.get("loginS") and session["loginS"] in rooms[id]["connected"] :
+        login = session["loginS"]
+        emit("desactivateAnswers")
+    elif session.get("loginP") and session["loginP"] in rooms[id]["connected"]:
+        login = session["loginP"]
+        emit("desactivateAnswers")
+    else:
+        return
+    
+    if rooms[id]["connected"][login] is None:
+        rooms[id]["connected"][login] = answers
+        if isinstance(answers, list):
+            for a in answers:
+                rooms[id]["totalAnswers"][a] += 1
+        else:
+            if answers in rooms[id]["totalAnswers"]:
+                rooms[id]["totalAnswers"][answers] += 1
+            else:
+                rooms[id]["totalAnswers"][answers] = 1
+
 
 @socketio.on("showCorrection")
 def sendCorrection(id):

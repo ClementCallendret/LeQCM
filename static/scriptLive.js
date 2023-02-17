@@ -34,7 +34,6 @@ socket.on("showLiveAnswers", (data) => {
         }
     }
     else {
-        allAnswers = $("#answers").find(".divAnswer");
         allAnswers = document.getElementsByClassName("divAnswer")
         for (let i = 0; i < allAnswers.length; i++) {
             html = `
@@ -79,5 +78,21 @@ function stopSession() {
 }
 
 function sendAnswers() {
-
+    let numeralAns = $("#numeralAnswer");
+    if(numeralAns.length){
+        val = numeralAns.val();
+        if(val.length){
+            socket.emit("sendAnswers", { "answers" : parseInt(val), "rId" : getCurrentSId()});
+        }
+    }
+    else{
+        checks = document.getElementsByClassName("checkAnswer");
+        checkeds = [];
+        for (let i = 0; i < checks.length; i++){
+            if(checks[i].checked){
+                checkeds.push(parseInt(checks[i].id))
+            }
+        }
+        socket.emit("sendAnswers", { "answers" : parseInt(val), "rId" : getCurrentSId()});
+    }
 }

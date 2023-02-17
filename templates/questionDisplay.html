@@ -38,7 +38,7 @@
         {%for i in range(0, question['answers']|length)%} <!--Affichage des réponses formatés -->
         <div class="divAnswer borderedDiv" id="divAnswer{{i}}">
             {% if not isProf %}
-            <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
+            <input type="checkbox" name="checkAnswer{{i}}" id="{{i}}" class="checkAnswer">
             {% endif %}
             <div class="col-sm-11" id="textAnswer">
                 {{question['answers'][i]['text']|safe}}
