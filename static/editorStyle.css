@@ -3,7 +3,6 @@
 }
 
 #inputState {
-    position: relative;
     width : 100%;
     height : 400px;
     resize: vertical;
@@ -14,7 +13,6 @@
 }
 
 .inputAnswer{
-    position:relative;
     width:100%;
 }
 
@@ -43,7 +41,6 @@
 }
 
 #tagList{
-    position: relative;
     width : 400px !important;
     max-height: 300px;
     padding:5px;
@@ -55,26 +52,22 @@
 }
 
 #newTagButton{
-    position:relative;
     display: inline;
     font-size:medium;
 }
 
 #newTagName{
-    position:relative;
     display:inline;
     width:80%;
 }
 
 .middleButton{
-    position: relative;
     width:50%;
     display: block;
     margin:15px;
 }
 
 #numeralAnswer{
-    position:relative;
     display:block;
     margin : 10px;
 }

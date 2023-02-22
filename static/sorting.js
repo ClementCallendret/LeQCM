@@ -52,8 +52,8 @@ function createList() {
         listItem.innerHTML = `
         <div class="draggable card questionCard" id="${questions[index]["id"]}" draggable="true">
             <div class="card-header" >
-                ${questions[index]["title"]}
-                <button type="button" onclick="removeQ(${questions[index]["id"]})" class="deleteBut btn btn-light">x</button>
+                <span>${questions[index]["title"]}</span>
+                <button type="button" onclick="removeQ(${questions[index]["id"]})" class="deleteBut btn btn-danger">X</button>
             </div>
             <div class="card-body">${questions[index]["state"]}</div>
             <div class="card-footer" style="color:blue">${tagStr}</div>

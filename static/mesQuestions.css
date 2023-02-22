@@ -14,11 +14,18 @@
     background-color:rgb(169, 177, 177)
 }
 
+.collapseTitles > * {
+    display: inline;
+}
+
+.collapseTitles{
+    margin-left: 20px;
+}
+
 .collapseBut {
-    display:block;
     background:none;
     border:none;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .collapseBut > h3 {

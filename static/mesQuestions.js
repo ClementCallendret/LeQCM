@@ -1,5 +1,5 @@
 function filterByTags() {
-
+    document.getElementById("selectAll").checked = false;
     questions = $("#questionCards").find(".questionCard");
     allTags = $("#tagList").find(".tagCheck");
     selectedTags = [];
@@ -8,6 +8,7 @@ function filterByTags() {
     allTags.each(function () {
         if (this.checked) {
             selectedTags.push(this.name);
+            this.checked = false;
         }
     });
 
@@ -19,7 +20,6 @@ function filterByTags() {
     }
     // sinon on verifie si le tag appartient à la question grace à la chaine de charactères
     else {
-        console.log(selectedTags)
         questions.each(function () {
             q = $(this)
             tags = q.find(".card-footer").text().split(";");
@@ -39,19 +39,58 @@ function filterByTags() {
     }
 }
 
+function selectAllTag(c) {
+    val = c.checked;
+    $(".tagCheck").each((i, v) => {
+        v.checked = val
+    })
+}
+
+function selectAllSeq(c) {
+    val = c.checked;
+    $(".checkSequence").each((i, v) => {
+        v.checked = val
+    })
+}
+
+function selectAllQ(c) {
+    val = c.checked;
+    $(".checkQuestion").each((i, v) => {
+        v.checked = val
+    })
+}
+
+function checkTag(c) {
+    if (! c.checked) {
+        document.getElementById("selectAll").checked = false;
+    }
+}
+
+function checkSeq(c) {
+    if (! c.checked) {
+        document.getElementById("selectAllSeq").checked = false;
+    }
+}
+
+function checkQ(c) {
+    if (! c.checked) {
+        document.getElementById("selectAllQ").checked = false;
+    }
+}
+
 function submitForm(destination) {
     let form = document.getElementById("questionsForm");
     form.action = destination;
 
     selectedQ = []
     $(".checkQuestion").each((i, v) => {
-        if(v.checked){
+        if (v.checked) {
             selectedQ.push(parseInt(v.name))
         }
     })
     selectedS = []
     $(".checkSequence").each((i, v) => {
-        if(v.checked){
+        if (v.checked) {
             selectedS.push(parseInt(v.name))
         }
     })

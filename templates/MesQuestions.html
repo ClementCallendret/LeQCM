@@ -25,8 +25,11 @@
               </button>
 
               <ul class="dropdown-menu overflow-auto" id="tagList">
+                <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
+                      onchange="selectAllTag(this)">Tout sélectioner</label></li>
+                <hr />
                 {%for t in tags%}
-                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck">{{t}}</label></li>
+                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck" onchange="checkTag(this)">{{t}}</label></li>
                 {%endfor%}
               </ul>
 
@@ -58,9 +61,12 @@
 <!-- Flexbox Boostrap pour que tous les éléments se replacent en fonction de la taille de l'écran-->
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
 
-<button type="button" data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut">
-  <h3>Questions ⌄</h3>
-</button>
+<div class="collapseTitles">
+  <input type="checkbox" name="selctAllQ" id="selectAllQ" onchange="selectAllQ(this)">
+  <button type="button" data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut">
+    <h3>Questions ⌄</h3>
+  </button>
+</div>
 
 <form id="questionsForm" action="/MesQuestions/Sorting" method="POST">
   <div id="questionsCollapse" class="collapse show">
@@ -70,7 +76,7 @@
       {%for q in questions%}
       <div class="card questionCard">
         <div class="card-header">
-          <input type="checkbox" name="{{q['id']}}" class="checkQuestion">
+          <input type="checkbox" name="{{q['id']}}" class="checkQuestion" onchange="checkQ(this)">
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
         </div>
         <div class="card-body">{{q['state']|safe}}</div>
@@ -81,9 +87,13 @@
     </div>
   </div>
 
-  <button type="button" data-bs-toggle="collapse" data-bs-target="#sequencesCollapse" class="collapseBut">
-    <h3>Séquences ⌄</h3>
-  </button>
+
+  <div class="collapseTitles">
+    <input type="checkbox" name="selctAllS" id="selectAllS" onchange="selectAllSeq(this)">
+    <button type="button" data-bs-toggle="collapse" data-bs-target="#sequencesCollapse" class="collapseBut">
+      <h3>Séquences ⌄</h3>
+    </button>
+  </div>
 
   <div id="sequencesCollapse" class="collapse show">
     <input type="hidden" name="selectedS" id="selectedS">
@@ -92,7 +102,7 @@
       {%for s in sequences%}
       <div class="card questionCard">
         <div class="card-header">
-          <input type="checkbox" name="{{s['id']}}" class="checkSequence" >
+          <input type="checkbox" name="{{s['id']}}" class="checkSequence" onchange="checkS(this)">
           {{s['title']}}
         </div>
         <div class="card-body">
