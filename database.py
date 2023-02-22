@@ -273,7 +273,7 @@ def possedeQuestion(idQ, idProf):
     else:
         return False
 
-###################### SEQUENCE DE QUESTION ############################
+###################### MODIFICATIONS SEQUENCE ############################
 
 def addQuestionToSerie(idSerie, idQuestion, posQ):
     inSerie = models.inSerie(idS = idSerie, idQ=idQuestion, posQ=posQ)
@@ -310,6 +310,8 @@ def deleteSequence(idSequence):
     db.session.delete(serie)
     return dbCommit()
 
+######################### REQUETES SEQUENCES ############################
+
 def possedeSequence(idS, idProf):
     serie = models.Serie.query.filter_by(id=idS).first()
     if serie:
@@ -338,3 +340,9 @@ def loadSequencesByProf(idProf):
         series.append(loadSequenceById(row.id))
     return series
 
+def getQuestionFromSequence(id, index):
+    question = models.inSerie.query.filter_by(idS=id, posQ=index).first()
+    if question:
+        return loadQuestionById(question.idQ)
+    else:
+        return None

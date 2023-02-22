@@ -62,7 +62,7 @@
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
 
 <div class="collapseTitles">
-  <input type="checkbox" name="selctAllQ" id="selectAllQ" onchange="selectAllQ(this)">
+  <input  type="checkbox" name="selctAllQ" id="selectAllQ" onchange="selectAllQ(this)">
   <button type="button" data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut">
     <h3>Questions ⌄</h3>
   </button>
@@ -78,6 +78,7 @@
         <div class="card-header">
           <input type="checkbox" name="{{q['id']}}" class="checkQuestion" onchange="checkQ(this)">
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
+          <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}" class="sessionBut btn btn-success">live</a>
         </div>
         <div class="card-body">{{q['state']|safe}}</div>
         <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
@@ -104,6 +105,7 @@
         <div class="card-header">
           <input type="checkbox" name="{{s['id']}}" class="checkSequence" onchange="checkS(this)">
           {{s['title']}}
+          <a href="{{url_for('questionLive.createNew', mode='Sequence', id=s['id'])}}" class="sessionBut btn btn-success">live</a>
         </div>
         <div class="card-body">
           <ul>{% for t in s['questionTitles'] %}<li>{{t}}</li>{%endfor%}</ul>

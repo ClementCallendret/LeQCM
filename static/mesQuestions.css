@@ -39,3 +39,19 @@
 #sequencesCollapse {
     margin-bottom: 25px;
 }
+
+.card-header > input{
+    margin-right: 5px;
+}
+
+.sessionBut {
+    position :absolute;
+    right:5px;
+    top:5px;
+    padding: 10px;
+    padding-top : 1px;
+    padding-bottom : 1px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(53, 53, 53);
+}

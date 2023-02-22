@@ -42,7 +42,9 @@ def createNew(mode, id):
             question = {}
             if mode == "Sequence":
                 newRoom["inSequence"] = True
-                question = database.getFirstQuestion(id)
+                newRoom["idSequence"] = id
+                newRoom["indexQ"] = 0
+                question = database.getQuestionFromSequence(id,0)
             else:
                 newRoom["inSequence"] = False
                 question = database.loadQuestionById(id)
@@ -104,10 +106,10 @@ def saveAnswers(data):
     answers = data["answers"]
     id = data["rId"]
     login = ""
-    if session.get("loginS") and session["loginS"] in rooms[id]["connected"] :
+    if session.get("loginS") in rooms[id]["connected"] :
         login = session["loginS"]
         emit("desactivateAnswers")
-    elif session.get("loginP") and session["loginP"] in rooms[id]["connected"]:
+    elif session.get("loginP") in rooms[id]["connected"]:
         login = session["loginP"]
         emit("desactivateAnswers")
     else:
@@ -142,6 +144,42 @@ def stopAnswers(id):
     if session.get("loginP") == rooms[id]["creator"] and rooms[id]["answersOpen"]:
         rooms[id]["answersOpen"] = False
         emit("desactivateAnswers", to=id)
+
+@socketio.on("nextQuestion")
+def nextQuestion(id):
+    if session.get("loginP") == rooms[id]["creator"] and rooms[id]["inSequence"]:
+        rooms[id]["indexQ"] += 1
+        question = database.getQuestionFromSequence(rooms[id]["idSequence"], rooms[id]["indexQ"])
+        if question is not None:
+            if not "numeralAnswer" in question:
+                question["answers"] = formatage.formatAnswers(question["answers"])
+            question["state"] = formatage.formatageMD(question["state"])
+            rooms[id]["activeQuestion"] = question
+            rooms[id]["answersOpen"] = True
+            rooms[id]["corrected"] = False
+            rooms[id]["liveAnswersShown"] = False
+            if "numeralAnswer" in question:
+                rooms[id]["totalAnswers"] = {}
+            else:
+                rooms[id]["totalAnswers"] = [0]*len(question["answers"])
+            emit("nextQuestion", question, to=id)
+        else:
+            emit("stopSession", url_for('accueil'), to=id)
+
+@socketio.on("stopSession")
+def stopSession(id):
+    if session.get("loginP") == rooms[id]["creator"]:
+        emit("stopSession", url_for('accueil'), to=id)
+
+@socketio.on("quitSession")
+def quitSession(id):
+    if session.get("loginP") == rooms[id]["creator"]:
+        del rooms[id]
+        emit("stopSession", to=id)
+    elif session.get("loginS") in rooms[id]["connected"]:
+        rooms[id]["nbConnected"] -= 1
+        emit("rmOneConnected", to=id)
+        del rooms[id]["connected"][session["loginS"]]
 
 def getCorrection(rId):
     if "numeralAnswer" in rooms[rId]["activeQuestion"]:

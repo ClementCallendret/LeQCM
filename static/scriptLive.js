@@ -8,6 +8,10 @@ socket.on('addOneConnected', () => {
     console.log("nouvelle Connection")
     $("#nbStudents").html((parseInt($("#nbStudents").contents()) + 1).toString());
 })
+socket.on('rmOneConnected', () => {
+    console.log("nouvelle Connection")
+    $("#nbStudents").html((parseInt($("#nbStudents").contents()) - 1).toString());
+})
 
 function getCurrentSId() {
     return window.location.href.split('/').slice(-1)[0]
@@ -73,10 +77,6 @@ socket.on("desactivateAnswers", () => {
     $("#validation").addClass("disabled")
 })
 
-function stopSession() {
-    socket.emit("stopSession", getCurrentSId())
-}
-
 function sendAnswers() {
     let numeralAns = $("#numeralAnswer");
     if(numeralAns.length){
@@ -96,3 +96,19 @@ function sendAnswers() {
         socket.emit("sendAnswers", { "answers" : parseInt(val), "rId" : getCurrentSId()});
     }
 }
+
+function nextQuestion() {
+    socket.emit("nextQuestion", getCurrentSId());
+}
+
+socket.on("nextQuestion", () => {
+    window.location.reload();
+});
+
+function stopSession() {
+    socket.emit("stopSession", getCurrentSId());
+}
+socket.on("stopSession", (url) => {
+    socket.emit("quitSession", getCurrentSId());
+    window.location = url;
+});
