@@ -38,16 +38,13 @@ function addAnswer() {
     // Ajout de la nouvelle réponse au HTML avec le bon id
     let html = `
         <div id="divAnswer${newId}" class="divAnswer row align-items-center">
-            <div class="col-sm-2 col-lg-1">
-                <label class="switch">
+            <div class="col-sm-1">
                 <input type="checkbox" name="checkAnswer${newId}" id="checkAnswer${newId}">
-                <span class="slider round"></span>
-                </label>
             </div>
-            <div class="col-sm-9 col-lg-10">
+            <div class="col-sm-9">
                 <textarea class="inputAnswer form-control" name="textAnswer${newId}" id="textAnswer${newId}" value="" placeholder="Réponse"></textarea>
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <button type="button" class="btn btn-danger deleteButton" onclick="deleteAnswer(${newId})" value="Supprimer"><img src="/static/trash.png"></button>
             </div>
         </div>

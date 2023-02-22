@@ -37,17 +37,14 @@
                 <div id="answerList" class="container-fluid">
                     {%for i in range(0, answers|length)%} <!--Replacement des réponses après un rechargement-->
                     <div id="divAnswer{{i}}" class="divAnswer row align-items-center">
-                        <div class="col-sm-2 col-lg-1">
-                            <label class="switch">
-                                <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
-                                <span class="slider round"></span>
-                            </label>
+                        <div class="col-1">
+                            <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
                         </div>
-                        <div class="col-sm-9 col-lg-10">
+                        <div class="col-9">
                             <textarea class="inputAnswer form-control" name="textAnswer{{i}}" id="textAnswer{{i}}"
                                 value="" placeholder="Réponse">{{answers[i]['text']}}</textarea>
                         </div>
-                        <div class="col-sm-1">
+                        <div class="col-2">
                             <button type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger deleteButton"
                                 value="Supprimer"><img src="{{ url_for('static', filename = 'trash.png') }}"></button>
                         </div>
