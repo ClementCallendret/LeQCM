@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 from extension import db
 import models
+from datetime import datetime
 
 def dbCommit(): #(fct intermediaire)
     try:
@@ -62,9 +63,9 @@ def studentExist(idS) :
     else :
         return False
 
-def addStudent(idS, password, sel) :
+def addStudent(idS, password, name, surname, sel) :
     if not studentExist(idS):
-        std = models.Student(id=idS, password=password, sel=sel)
+        std = models.Student(id=idS, password=password, name=name, surname=surname, sel=sel)
         db.session.add(std)
         if dbCommit():
             return std.id
@@ -79,6 +80,20 @@ def getStudentSel(idS):
     std = models.Student.query.filter_by(id=idS).first()
     if std :
         return std.sel
+    else:
+        return False
+    
+def getStudentName(idS):
+    std = models.Student.query.filter_by(id=idS).first()
+    if std :
+        return std.name
+    else:
+        return False
+    
+def getStudentSurname(idS):
+    std = models.Student.query.filter_by(id=idS).first()
+    if std :
+        return std.surname
     else:
         return False
 
@@ -276,8 +291,8 @@ def possedeQuestion(idQ, idProf):
 ###################### MODIFICATIONS SEQUENCE ############################
 
 def addQuestionToSerie(idSerie, idQuestion, posQ):
-    inSerie = models.inSerie(idS = idSerie, idQ=idQuestion, posQ=posQ)
-    db.session.add(inSerie)
+    InSerie = models.InSerie(idS = idSerie, idQ=idQuestion, posQ=posQ)
+    db.session.add(InSerie)
     return dbCommit()
 
 def saveSequence(idList, idProf, title):
@@ -292,17 +307,17 @@ def saveSequence(idList, idProf, title):
     return serie.id
 
 def deleteQuestionFromSquences(idQ):
-    inSeries = models.inSerie.query.filter_by(idQ=idQ)
+    inSeries = models.InSerie.query.filter_by(idQ=idQ)
     for row in inSeries:
         pos = row.posQ
-        questionsAfter = models.inSerie.query.filter(models.inSerie.idS == row.idS, models.inSerie.posQ>pos)
+        questionsAfter = models.InSerie.query.filter(models.InSerie.idS == row.idS, models.InSerie.posQ>pos)
         for q in questionsAfter:
             q.posQ -= 1
         db.session.delete(row)
     return dbCommit()
 
 def deleteSequence(idSequence):
-    inSeries = models.inSerie.query.filter_by(idS=idSequence)
+    inSeries = models.InSerie.query.filter_by(idS=idSequence)
     for row in inSeries:
         db.session.delete(row)
     
@@ -324,7 +339,7 @@ def loadSequenceById(idSerie):
     serieDatas = models.Serie.query.filter_by(id=idSerie).first()   
     serie["title"] = serieDatas.title
     serie["id"] = serieDatas.id
-    questionsData = models.inSerie.query.filter_by(idS=idSerie).order_by(models.inSerie.posQ)
+    questionsData = models.InSerie.query.filter_by(idS=idSerie).order_by(models.InSerie.posQ)
 
     serie["idList"] = []
     serie["questionTitles"] = []
@@ -341,8 +356,23 @@ def loadSequencesByProf(idProf):
     return series
 
 def getQuestionFromSequence(id, index):
-    question = models.inSerie.query.filter_by(idS=id, posQ=index).first()
+    question = models.InSerie.query.filter_by(idS=id, posQ=index).first()
     if question:
         return loadQuestionById(question.idQ)
     else:
         return None
+    
+####################### ARCHIVAGE SESSIONS ###############################
+
+def saveSession(idProf, idSQ, isSequence):
+    session = models.Session(idP=idProf, idSQ=idSQ, date=datetime.now(), isSequence=isSequence)
+    db.session.add(session)
+    if dbCommit():
+        return session.id
+    else:
+        return None
+
+def saveStudentAnswer(idStudent, idSession, correct, indexInSerie = None):
+    answer = models.StudentAnswer(idSession=idSession, idStudent=idStudent, correct=correct, indexInSeries=indexInSerie)
+    db.session.add(answer)
+    return dbCommit()

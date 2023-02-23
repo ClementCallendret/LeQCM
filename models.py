@@ -9,6 +9,8 @@ class Professor(db.Model):
 class Student(db.Model):
     __tablename__ = "student"
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    surname = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     sel = db.Column(db.String(64))
 
@@ -42,8 +44,24 @@ class Serie(db.Model):
     title = db.Column(db.String(50), nullable=False)
     idP = db.Column(db.Integer, db.ForeignKey("professor.username"))
 
-class inSerie(db.Model):
+class InSerie(db.Model):
     __tablename__ = "inSerie"
     idS = db.Column(db.Integer, db.ForeignKey("serie.id"), primary_key=True)
     idQ = db.Column(db.Integer, db.ForeignKey("question.id"), primary_key=True)
     posQ = db.Column(db.Integer, nullable=False)
+
+class Session(db.Model):
+    __tablename__ = "session"
+    id = db.Column(db.Integer, primary_key=True)
+    idP = db.Column(db.Integer, db.ForeignKey("professor.username"), nullable=False)
+    isSequence = db.Column(db.Boolean, nullable=False)
+    idSQ = db.Column(db.Integer, db.ForeignKey("serie.id"), nullable=False) #id serie ou question
+    date = db.Column(db.Date, nullable=False)
+
+class StudentAnswer(db.Model):
+    __tablename__ = "studentAnswer"
+    id = db.Column(db.Integer, primary_key=True)
+    idSession = db.Column(db.Integer, db.ForeignKey("session.id"), nullable=False)
+    idStudent = db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
+    correct = db.Column(db.Boolean, nullable=False)
+    indexInSerie = db.Column(db.Integer, nullable=True)
