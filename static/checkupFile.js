@@ -29,18 +29,31 @@ function validation() {
 
     $('#boutoncancel').css("display", "block")
 
+    // trouvé sur https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions afin de retournr l'exception
+    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+      efface(69); // afin de pouvoir re-essayer sans avoir a F5
+      alert("Il y a eu une erreur sur votre fichier csv..\nATTENTION au format (numEtu , prenom , nom)\nAvec le SEPARATEUR VIRGULE -->  ,  <-- \n\n" + errorMsg);
+      return false;
+  }
+  $('#Soumettre').css("display", "none");
+
 }   
 
-function efface(){
+function efface(x){
   $('#boutonsubmit').css("display", "none")
 
   $('#boutoncancel').css("display", "none")
+    
+  $('#Soumettre').css("display", "block");
 
   $('#myFile').val("")
 
   $('#TabToSend').val("")
 
   $('#etudiant_ajt').empty()
+
+  if(x != 69) // si on declenche efface avec 1 c'est qu'il y avait l'arreur de fichier 
+    alert("Etudiants ajoutés !");
 }
 
 
