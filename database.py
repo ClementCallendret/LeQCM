@@ -364,20 +364,77 @@ def getQuestionFromSequence(id, index):
     
 ####################### ARCHIVAGE SESSIONS ###############################
 
-def saveSession(idProf, idSQ, isSequence):
-    session = models.Session(idP=idProf, idSQ=idSQ, date=datetime.now(), isSequence=isSequence)
+def saveSession(idProf, idSequence=None):
+    session = models.Session(idP=idProf, idSequence=idSequence, date=datetime.now())
     db.session.add(session)
     if dbCommit():
         return session.id
     else:
         return None
 
-def saveStudentAnswer(idStudent, idSession, correct, indexInSerie = None):
-    answer = models.StudentAnswer(idSession=idSession, idStudent=idStudent, correct=correct, indexInSeries=indexInSerie)
+def saveStudentAnswer(idSession, idStudent, correct, idQuestion):
+    answer = models.StudentAnswer(idSession=idSession, idStudent=idStudent, idQuestion=idQuestion, correct=correct)
     db.session.add(answer)
     return dbCommit()
 
+def getSessionData(idSession):
+    session = models.Session.query.filter_by(id=idSession).first()
+    if session:
+        sessionData = {}
+        sessionData["id"] = session.id
+        sessionData["date"] = session.date
+        sessionData["idProf"] = session.idP
+        if session.idSequence != None:
+            sessionData["idSequence"] = session.idSequence
+            sessionData["isSequence"] = True
+        else :
+            sessionData["idQuestion"] = models.StudentAnswer.query.filter_by(idSession=idSession).firrst().idQuestion
+            sessionData["isSequence"] = False
+        return sessionData
+    else:
+        return None
+    
+    # pour afficher juste un apercu des sessions passés (un peu comme dans mes questions)
+    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int}
+
 def getSessionResults(idSession):
-    #retourner les résultats de la session
-    #{isSequence : bool, results : [{"idStudent":id, "correct":nbCorrect}, ...]}
-    pass
+    session = models.Session.query.filter_by(id=idSession).first()
+    if session:
+        sessionData = getSessionData(idSession)
+        if sessionData["isSequence"]:
+            sessionData["results"] = getAvgSequenceResults(idSession, sessionData["idSequence"])
+        else:
+            sessionData["results"] = getQuestionsResults(idSession, sessionData["idQuestion"])
+        return sessionData
+    else:
+        return None
+    
+    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, results}
+    # results si question unique: {idStudent1 : bool, idStudent2 : bool, ...}
+    # results si séquence: {idStudent1 : float(pourcentage), idStudent2 : float, ...}
+    
+def getQuestionsResults(idSession, idQuestion=None): #intermediaire
+    results = {}
+    allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
+    for row in allAnswers:
+        results[row.idStudent] = row.correct
+    return results
+
+def getAvgSequenceResults(idSession, idSequence): #intermediaire
+    results = []
+    questions = models.InSerie.query.filter_by(idS=idSequence).order_by(models.InSerie.posQ)
+    for row in questions:
+        results.append(getQuestionsResults(idSession, row.idQ))
+    return avgResults(results)
+
+def avgResults(results): #intermediaire
+    avgResults = {}
+    n = len(results)
+    for i in range(0, n):
+        for student in results[i]:
+            if student not in avgResults:
+                avgResults[student] = 0.0
+            if results[i][student]:
+                avgResults[student] += 100.0 / n
+
+    return avgResults

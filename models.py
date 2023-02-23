@@ -54,14 +54,13 @@ class Session(db.Model):
     __tablename__ = "session"
     id = db.Column(db.Integer, primary_key=True)
     idP = db.Column(db.Integer, db.ForeignKey("professor.username"), nullable=False)
-    isSequence = db.Column(db.Boolean, nullable=False)
-    idSQ = db.Column(db.Integer, db.ForeignKey("serie.id"), nullable=False) #id serie ou question
     date = db.Column(db.Date, nullable=False)
+    idSequence = db.Column(db.Integer, db.ForeignKey("serie.id"), nullable=True)
 
 class StudentAnswer(db.Model):
     __tablename__ = "studentAnswer"
-    id = db.Column(db.Integer, primary_key=True)
-    idSession = db.Column(db.Integer, db.ForeignKey("session.id"), nullable=False)
-    idStudent = db.Column(db.Integer, db.ForeignKey("student.id"), nullable=False)
+    idSession = db.Column(db.Integer, db.ForeignKey("session.id"), primary_key=True)
+    idStudent = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
+    idQuestion = db.Column(db.Integer, db.ForeignKey("question.id"), primary_key=True)
     correct = db.Column(db.Boolean, nullable=False)
-    indexInSerie = db.Column(db.Integer, nullable=True)
+    
