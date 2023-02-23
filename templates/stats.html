@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Stats{% endblock %}
+
+{% block content %}
+{% if isLogedP %}
+
+<div class="container-fluid">
+    <div class="sequence">
+        {{session.title}}
+        <div class="tabStat">
+            <table>
+            {% for eleve in session %}
+                <div class="resEleves">
+                    <tr>
+                        <td>
+                            {{ eleve.nom }}               
+                        </td>
+                        <td>
+                            {{ eleve.pourcentage }}
+                        </td>
+                    </tr>
+                </div>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

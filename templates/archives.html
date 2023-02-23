@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Archives{% endblock %}
+
+{% block content %}
+{% if isLogedP %}
+
+<div class="container-fluid">
+    <div class="sequence">
+
+        {% for session in sessions %}
+            <a href="{{url_for('archives.stats', idSession=session['id'])}}">{{session.title}}</a>
+   
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}
