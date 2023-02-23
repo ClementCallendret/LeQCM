@@ -5,20 +5,28 @@
 {% block content %}
 
 <div class="container-fluid">
-<input type="file" id="myFile" name="fichier" accept=".csv" value=""> </br> </br></br> <!-- si tu veux que ca filtre direct dans tes fichiers les csv possibles utilise accept=".csv"-->
-<form name="FormAjout" action="" onsubmit="" method="post" required>     
-        <input type="submit" id="boutonsubmit" value="Envoyer !" style="display: none;">
-        <button type="button" id="boutoncancel" onclick="efface()" style="display: none;">Annuler !</button>
-        <input type="hidden" id="TabToSend" value="" name="StudentTab">
-</form>
-<button type="button" onclick="validation()">CLIK</button>
-
-</div>
-
+    <div class="centrerPage">
+        </br>
+        <h4>Importez un fichier '.csv' afin d'ajouter vos étudiants.</h4>
+        </br>
+        <input type="file" id="myFile" name="fichier" accept=".csv" > </br></br>  <!-- si tu veux que ca filtre direct dans tes fichiers les csv possibles utilise accept=".csv"-->
+        <form name="FormAjout" action="" onsubmit="" method="post" required>     
+                <input type="submit" id="boutonsubmit" value="Envoyer !" style="display: none;">
+                <button type="button" id="boutoncancel" onclick="efface(0)" style="display: none;">Annuler !</button>
+                <input type="hidden" id="TabToSend" value="" name="StudentTab">
+        </form>
+        <div>
+            <h5> Ou Déposez-le ci-dessus</h5>
+        </div>
+    </br></br></br>
+        <button type="button" id="Soumettre" onclick="validation()" style="display: block;">SOUMETTRE</button>
+    </div>
 <div>
      <table id ="etudiant_ajt">
         
      </table>   
+</div>
+
 </div>
 
 <script src="{{ url_for('static', filename = 'jquery-csv.js') }}"></script>
