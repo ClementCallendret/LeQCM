@@ -11,7 +11,7 @@ from Login.connected import connect
 from GestionQuestions.editeur import editeur
 from GestionQuestions.mesQuestions import mesQuestions
 from GestionQuestions.creation import creation
-from questionLive import questionLive
+from Sessions.questionLive import questionLive
 from AjoutStudents import ajt_Stu
 
 #nom de la variable accueillant le BluePrint

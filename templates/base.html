@@ -34,8 +34,9 @@
             {% if isLogedP %} 
             <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mainPage') }}">Mes Questions</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('AjoutStudents.AjoutStudents') }}">Ajout d'élèves</a></li> <!--nom du fichier.nom de la fonction appelée-->
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Archives sessions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
 
             {% elif isLogedE %} 
             <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logout') }}">Se déconnecter</a></li>

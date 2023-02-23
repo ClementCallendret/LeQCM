@@ -46,8 +46,8 @@
 
 .sessionBut {
     position :absolute;
-    right:5px;
-    top:5px;
+    right:-20px;
+    top:-10px;
     padding: 10px;
     padding-top : 1px;
     padding-bottom : 1px;
