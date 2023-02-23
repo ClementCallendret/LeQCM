@@ -32,7 +32,6 @@ function validation() {
 }   
 
 function efface(){
-  console.log("G marché ")
   $('#boutonsubmit').css("display", "none")
 
   $('#boutoncancel').css("display", "none")
