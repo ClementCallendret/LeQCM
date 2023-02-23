@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Historique{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div style="margin-left: auto;padding : 20px; margin : 20px; position: relative; height:80vh; width:80vw;" class="borderedDiv">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const datas = [{date : "12-02-21", id: 0, nbRep: 12, nbGood: 10 }, { date : "25-02-21", id: 1, nbRep: 19, nbGood: 18 }, { date : "01-03-21", id: 2, nbRep: 10, nbGood: 10 }, { date : "09-03-21", id: 3, nbRep: 5, nbGood: 2 }];
+
+    config = {
+        type: 'bar',
+        data: {
+            datasets: [{
+                label: '# of Answers',
+                data: datas,
+                borderWidth: 1,
+                parsing: {
+                    xAxisKey: 'date',
+                    yAxisKey: 'nbRep'
+                },
+                borderColor: '#FF5733',
+                backgroundColor: '#CA2B09'
+            },
+            {
+                label: '# of Good Answers',
+                data: datas,
+                borderWidth: 1,
+                parsing: {
+                    xAxisKey: 'date',
+                    yAxisKey: 'nbGood'
+                },
+                borderColor: '#3FEFE7',
+                backgroundColor: '#28C2BB'
+            }],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive : true
+        }
+    };
+
+    const ctx = document.getElementById('myChart');
+    const myChart = new Chart(ctx, config);
+
+    function clickableScales(canvas, click) {
+        const height = myChart.scales.x.height;
+        const top = myChart.scales.x.top;
+        const bottom = myChart.scales.x.bottom;
+        const left = myChart.scales.x.left;
+        const right = myChart.scales.x.maxWidth / myChart.scales.x.ticks.length;
+
+        let resetCoordinates = canvas.getBoundingClientRect();
+
+        const x = click.clientX - resetCoordinates.left;
+        const y = click.clientY - resetCoordinates.top;
+
+        for(let i = 0; i < myChart.scales.x.ticks.length; i++) {
+            if(x >= left + (i * right) && x <= right + (i * right) && y >= top && y <= bottom ) {
+                window.open("/stats/" + myChart.config.data.datasets[0].data[i]['id']);
+            }
+        }
+
+    }
+
+    ctx.addEventListener('click', (e) => {
+        clickableScales(ctx, e);
+        myChart.resize();
+        myChart.update();
+    });
+    
+</script>
+
+{% endblock %}

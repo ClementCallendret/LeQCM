@@ -14,9 +14,20 @@ def init():
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.init'))
+    
+@archive.route('/archives/historique')
+def historique():
+    if "loginP" in session:
+        idProf = session['loginP']
+        #sessions = database.loadSessionByProf(idProf)
+        #print(session)
+        return render_template("StatsOverTime.html")
+    else:
+        flash("Vous devez être connecté pour acceder à cette page")
+        return redirect(url_for('login.init'))
 
 @archive.route('/stats/<idSession>')
-def stats():
+def stats(idSession):
     if "loginP" in session:
         idProf = session['loginP']
         idSession = request.args.get('idSession')

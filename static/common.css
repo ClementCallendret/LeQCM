@@ -16,7 +16,7 @@
 .questionCard {
     border-width: 2px;
     border-radius: 8px;
-    box-shadow: 24px 24px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 24px 24px 1px rgba(0, 0, 0, 0.5);
     position : relative;
     border-style: solid, 10px;
     border-color: black;
