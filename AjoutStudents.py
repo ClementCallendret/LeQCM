@@ -1,6 +1,7 @@
 from flask import Blueprint, request,session, render_template
 import database
 import json
+import encryption
 
 ajt_Stu = Blueprint('AjoutStudents',__name__)
 
@@ -15,7 +16,10 @@ def AjoutStudents():
         studentToAdd = json.loads(request.form["StudentTab"])
         print(studentToAdd)
         for e in studentToAdd:
-            database.addStudent(e[0], e[1], e[2], 0)
+            tab = encryption.encrypt(e[0])
+            password = tab[0]
+            sel = tab[1]
+            database.addStudent(e[0], e[1], e[2], password, sel)
 
     return render_template("AjoutStudents.html")
 

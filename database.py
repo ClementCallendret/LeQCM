@@ -63,9 +63,9 @@ def studentExist(idS) :
     else :
         return False
 
-def addStudent(idS, name, surname, sel) :
+def addStudent(idS, name, surname, password, sel) :
     if not studentExist(idS):
-        std = models.Student(id=idS, password=idS, name=name, surname=surname, sel=sel)
+        std = models.Student(id=idS, password=password, name=name, surname=surname, sel=sel)
         db.session.add(std)
         if dbCommit():
             return std.id
