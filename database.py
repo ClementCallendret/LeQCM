@@ -376,3 +376,8 @@ def saveStudentAnswer(idStudent, idSession, correct, indexInSerie = None):
     answer = models.StudentAnswer(idSession=idSession, idStudent=idStudent, correct=correct, indexInSeries=indexInSerie)
     db.session.add(answer)
     return dbCommit()
+
+def getSessionResults(idSession):
+    #retourner les résultats de la session
+    #{isSequence : bool, results : [{"idStudent":id, "correct":nbCorrect}, ...]}
+    pass
