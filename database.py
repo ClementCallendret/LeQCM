@@ -377,7 +377,7 @@ def saveStudentAnswer(idSession, idStudent, correct, idQuestion):
     db.session.add(answer)
     return dbCommit()
 
-def getSessionData(idSession):
+def loadSessionData(idSession):
     session = models.Session.query.filter_by(id=idSession).first()
     if session:
         sessionData = {}
@@ -397,10 +397,10 @@ def getSessionData(idSession):
     # pour afficher juste un apercu des sessions passés (un peu comme dans mes questions)
     # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int}
 
-def getSessionResults(idSession):
+def loadSessionResults(idSession):
     session = models.Session.query.filter_by(id=idSession).first()
     if session:
-        sessionData = getSessionData(idSession)
+        sessionData = loadSessionData(idSession)
         if sessionData["isSequence"]:
             sessionData["results"] = getAvgSequenceResults(idSession, sessionData["idSequence"])
         else:
