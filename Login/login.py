@@ -46,10 +46,9 @@ def loginE():
             rememberMe = True
         else:
             rememberMe = False
-        print("Etu :",login,password,rememberMe)
         #Rechercher si login dans base de données
         #rechercher si password correspond 
-        if (encryption.decrypt(login, password, 'E')):
+        if (encryption.decrypt(login, password, 'S')):
         #if(compteExisteEleve(login,password)):
             #ON VIDE LA SESSION AU CAS OU Y A UN PTIT MALIN(mais en temps normal ça sert à rien)
             session.pop('loginP',None)

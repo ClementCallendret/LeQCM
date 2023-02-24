@@ -39,7 +39,7 @@
             <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
 
             {% elif isLogedE %} 
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logout') }}">Se déconnecter</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
             {% else %}
             <li class="nav-item"><a class="nav-link" href="{{ url_for('login.init') }}">Connexion</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('register.init') }}">Inscription</a></li>
