@@ -3,9 +3,15 @@
 {% block title %}Historique{% endblock %}
 
 {% block content %}
+<style>
+    #canvasDiv {
+        margin: 20px;
+        width: 80vw;
+    }
+</style>
 
-<div class="container-fluid">
-    <div style="padding : 20px; margin : 20px; position: relative; height:80vh; width:80vw;" class="borderedDiv">
+<div class="d-flex align-items-center justify-content-center">
+    <div id="canvasDiv" class="borderedDiv ratio" style="--bs-aspect-ratio: 50%;">
         <canvas id="myChart"></canvas>
     </div>
 </div>
@@ -13,17 +19,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const datas = [{x : "12-02-21", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-21", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-21", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-21", id: 3, nbRep: 5, nbGood: 2 },
-    {x : "12-02-22", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-22", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-22", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-22", id: 3, nbRep: 5, nbGood: 2 },
-    {x : "12-02-23", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-23", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-23", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-23", id: 3, nbRep: 5, nbGood: 2 },
-    {x : "12-02-24", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-24", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-24", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-24", id: 3, nbRep: 5, nbGood: 2 },
-    {x : "12-02-25", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-25", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-25", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-25", id: 3, nbRep: 5, nbGood: 2 }];
+    const datas = [{ x: "12-02-21", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-21", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-21", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-21", id: 3, nbRep: 5, nbGood: 2 },
+    { x: "12-02-22", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-22", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-22", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-22", id: 3, nbRep: 5, nbGood: 2 },
+    { x: "12-02-23", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-23", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-23", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-23", id: 3, nbRep: 5, nbGood: 2 },
+    { x: "12-02-24", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-24", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-24", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-24", id: 3, nbRep: 5, nbGood: 2 },
+    { x: "12-02-25", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-25", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-25", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-25", id: 3, nbRep: 5, nbGood: 2 }];
 
     config = {
         type: 'bar',
         data: {
-            labels : ["12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-22", "25-02-22", "01-03-22", "09-03-22", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25"],
-            labelsLink : [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+            labels: ["12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-22", "25-02-22", "01-03-22", "09-03-22", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25"],
+            labelsLink: [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
             datasets: [{
                 label: 'Number of Answers',
                 data: [12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5],
@@ -42,13 +48,18 @@
         options: {
             scales: {
                 x: {
-                    min : 0,
-                    max : 6
+                    min: 0,
+                    max: 6
                 },
                 y: {
                     beginAtZero: true
                 }
-            }
+            },
+            layout: {
+                padding: 20
+            },
+            responsive: true,
+            maintainAspectRatio: true,
         }
     };
 
@@ -67,8 +78,8 @@
         const x = click.clientX - resetCoordinates.left;
         const y = click.clientY - resetCoordinates.top;
 
-        for(let i = 0; i < myChart.scales.x.ticks.length; i++) {
-            if(x >= left + (i * right) && x <= right + (i * right) && y >= top && y <= bottom ) {
+        for (let i = 0; i < myChart.scales.x.ticks.length; i++) {
+            if (x >= left + (i * right) && x <= right + (i * right) && y >= top && y <= bottom) {
                 window.open("/stats/" + myChart.config.data.labelsLink[i]);
             }
         }
@@ -81,9 +92,9 @@
         myChart.update();
     });
 
-    function scroller(scroll, chart){
-        if(scroll.deltaY > 0){
-            if(chart.config.options.scales.x.max >= chart.config.data.datasets[0].data.length){
+    function scroller(scroll, chart) {
+        if (scroll.deltaY > 0) {
+            if (chart.config.options.scales.x.max >= chart.config.data.datasets[0].data.length) {
                 chart.config.options.scales.x.max = chart.config.data.datasets[0].data.length - 1;
                 chart.config.options.scales.x.min = chart.config.data.datasets[0].data.length - 7;
             }
@@ -91,12 +102,12 @@
                 chart.config.options.scales.x.min += 1;
                 chart.config.options.scales.x.max += 1;
             }
-        } else if(scroll.deltaY < 0){
-            if(chart.config.options.scales.x.min <= 0){
+        } else if (scroll.deltaY < 0) {
+            if (chart.config.options.scales.x.min <= 0) {
                 chart.config.options.scales.x.min = 0;
                 chart.config.options.scales.x.max = 6;
             }
-            else{
+            else {
                 chart.config.options.scales.x.min -= 1;
                 chart.config.options.scales.x.max -= 1;
             }
@@ -109,7 +120,7 @@
     myChart.canvas.addEventListener("wheel", (e) => {
         scroller(e, myChart);
     })
-    
+
 </script>
 
 {% endblock %}
