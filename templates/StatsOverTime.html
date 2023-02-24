@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container-fluid">
-    <div style="margin-left: auto;padding : 20px; margin : 20px; position: relative; height:80vh; width:80vw;" class="borderedDiv">
+    <div style="padding : 20px; margin : 20px; position: relative; height:80vh; width:80vw;" class="borderedDiv">
         <canvas id="myChart"></canvas>
     </div>
 </div>
@@ -13,41 +13,42 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const datas = [{date : "12-02-21", id: 0, nbRep: 12, nbGood: 10 }, { date : "25-02-21", id: 1, nbRep: 19, nbGood: 18 }, { date : "01-03-21", id: 2, nbRep: 10, nbGood: 10 }, { date : "09-03-21", id: 3, nbRep: 5, nbGood: 2 }];
+    const datas = [{x : "12-02-21", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-21", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-21", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-21", id: 3, nbRep: 5, nbGood: 2 },
+    {x : "12-02-22", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-22", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-22", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-22", id: 3, nbRep: 5, nbGood: 2 },
+    {x : "12-02-23", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-23", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-23", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-23", id: 3, nbRep: 5, nbGood: 2 },
+    {x : "12-02-24", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-24", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-24", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-24", id: 3, nbRep: 5, nbGood: 2 },
+    {x : "12-02-25", id: 0, nbRep: 12, nbGood: 10 }, { x : "25-02-25", id: 1, nbRep: 19, nbGood: 18 }, { x : "01-03-25", id: 2, nbRep: 10, nbGood: 10 }, { x : "09-03-25", id: 3, nbRep: 5, nbGood: 2 }];
 
     config = {
         type: 'bar',
         data: {
+            labels : ["12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-22", "25-02-22", "01-03-22", "09-03-22", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25"],
+            labelsLink : [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
             datasets: [{
-                label: '# of Answers',
-                data: datas,
+                label: 'Number of Answers',
+                data: [12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5],
                 borderWidth: 1,
-                parsing: {
-                    xAxisKey: 'date',
-                    yAxisKey: 'nbRep'
-                },
                 borderColor: '#FF5733',
                 backgroundColor: '#CA2B09'
             },
             {
-                label: '# of Good Answers',
-                data: datas,
+                label: "Number of Good Answers",
+                data: [10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2],
                 borderWidth: 1,
-                parsing: {
-                    xAxisKey: 'date',
-                    yAxisKey: 'nbGood'
-                },
                 borderColor: '#3FEFE7',
                 backgroundColor: '#28C2BB'
-            }],
+            }]
         },
         options: {
             scales: {
+                x: {
+                    min : 0,
+                    max : 6
+                },
                 y: {
                     beginAtZero: true
                 }
-            },
-            responsive : true
+            }
         }
     };
 
@@ -68,7 +69,7 @@
 
         for(let i = 0; i < myChart.scales.x.ticks.length; i++) {
             if(x >= left + (i * right) && x <= right + (i * right) && y >= top && y <= bottom ) {
-                window.open("/stats/" + myChart.config.data.datasets[0].data[i]['id']);
+                window.open("/stats/" + myChart.config.data.labelsLink[i]);
             }
         }
 
@@ -79,6 +80,35 @@
         myChart.resize();
         myChart.update();
     });
+
+    function scroller(scroll, chart){
+        if(scroll.deltaY > 0){
+            if(chart.config.options.scales.x.max >= chart.config.data.datasets[0].data.length){
+                chart.config.options.scales.x.max = chart.config.data.datasets[0].data.length - 1;
+                chart.config.options.scales.x.min = chart.config.data.datasets[0].data.length - 7;
+            }
+            else {
+                chart.config.options.scales.x.min += 1;
+                chart.config.options.scales.x.max += 1;
+            }
+        } else if(scroll.deltaY < 0){
+            if(chart.config.options.scales.x.min <= 0){
+                chart.config.options.scales.x.min = 0;
+                chart.config.options.scales.x.max = 6;
+            }
+            else{
+                chart.config.options.scales.x.min -= 1;
+                chart.config.options.scales.x.max -= 1;
+            }
+        } else {
+            // rien
+        }
+        myChart.update();
+    }
+
+    myChart.canvas.addEventListener("wheel", (e) => {
+        scroller(e, myChart);
+    })
     
 </script>
 
