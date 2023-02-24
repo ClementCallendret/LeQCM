@@ -7,6 +7,11 @@
     #canvasDiv {
         margin: 20px;
         width: 80vw;
+        min-height: 500px;
+    }
+
+    canvas {
+        min-height: 500px;
     }
 </style>
 
@@ -14,6 +19,13 @@
     <div id="canvasDiv" class="borderedDiv ratio" style="--bs-aspect-ratio: 50%;">
         <canvas id="myChart"></canvas>
     </div>
+</div>
+<div id="options" class="d-flex align-items-center justify-content-center">
+    <button type="button" onclick="scrollButton(-1)" class="btn btn-primary">Précédent</button>
+    <label>Taille Intervalle<input type="number" onchange="changeTailleIntervalle(this)" min="1" max="40" step="1"
+            value="10"></label>
+    <button type="button" onclick="scrollButton(1)" class="btn btn-primary">Suivant</button>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -28,18 +40,18 @@
     config = {
         type: 'bar',
         data: {
-            labels: ["12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-22", "25-02-22", "01-03-22", "09-03-22", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25"],
-            labelsLink: [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+            labels: ["12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25", "12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25"],
+            labelsLink: [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
             datasets: [{
                 label: 'Number of Answers',
-                data: [12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5],
+                data: [12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5],
                 borderWidth: 1,
                 borderColor: '#FF5733',
                 backgroundColor: '#CA2B09'
             },
             {
                 label: "Number of Good Answers",
-                data: [10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2],
+                data: [10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2],
                 borderWidth: 1,
                 borderColor: '#3FEFE7',
                 backgroundColor: '#28C2BB'
@@ -49,17 +61,18 @@
             scales: {
                 x: {
                     min: 0,
-                    max: 6
+                    max: 9
                 },
                 y: {
                     beginAtZero: true
                 }
             },
+            tailleIntervale: 10,
             layout: {
                 padding: 20
             },
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
         }
     };
 
@@ -92,34 +105,92 @@
         myChart.update();
     });
 
-    function scroller(scroll, chart) {
-        if (scroll.deltaY > 0) {
-            if (chart.config.options.scales.x.max >= chart.config.data.datasets[0].data.length) {
-                chart.config.options.scales.x.max = chart.config.data.datasets[0].data.length - 1;
-                chart.config.options.scales.x.min = chart.config.data.datasets[0].data.length - 7;
+    function changeTailleIntervalle(input){
+        nbData = myChart.config.data.labels.length;
+        newSize = Math.min(input.value, nbData);
+        actualSize = myChart.config.options.tailleIntervale;
+        sizeGap = newSize - actualSize;
+        x = myChart.config.options.scales.x;
+
+        if(sizeGap < 0){
+            x.max += sizeGap;
+        }
+        else if(sizeGap > 0){
+            if(x.max + sizeGap >= nbData){
+                x.max = nbData - 1;
+                x.min = nbData - (newSize);
+            }
+            else{
+                x.max += sizeGap;
+            }
+        }
+        myChart.config.options.tailleIntervale = newSize;
+        myChart.update();
+    }
+
+    function scrollButton(sens) {
+        scrollSide(myChart, sens * myChart.config.options.tailleIntervale);
+    }
+
+    function scrollSide(chart, gap) {
+        x = chart.config.options.scales.x;
+        tailleIntervale = chart.config.options.tailleIntervale;
+        nbData = chart.config.data.labels.length;
+        if (gap > 0) {
+            if (x.max + gap >= nbData) {
+                x.max = nbData - 1;
+                x.min = nbData - (tailleIntervale);
             }
             else {
-                chart.config.options.scales.x.min += 1;
-                chart.config.options.scales.x.max += 1;
+                x.min += gap;
+                x.max += gap;
             }
-        } else if (scroll.deltaY < 0) {
-            if (chart.config.options.scales.x.min <= 0) {
-                chart.config.options.scales.x.min = 0;
-                chart.config.options.scales.x.max = 6;
+        } else if (gap < 0) {
+            if (x.min + gap <= 0) {
+                x.max = tailleIntervale - 1;
+                x.min = 0;
             }
             else {
-                chart.config.options.scales.x.min -= 1;
-                chart.config.options.scales.x.max -= 1;
+                x.max += gap;
+                x.min += gap;
             }
-        } else {
-            // rien
         }
         myChart.update();
     }
 
     myChart.canvas.addEventListener("wheel", (e) => {
-        scroller(e, myChart);
+        if (e.deltaY < 0) {
+            scrollSide(myChart, -1);
+        }
+        else if (e.deltaY > 0) {
+            scrollSide(myChart, 1);
+        }
     })
+
+    var lastTouchEnd = 0;
+    var lastScrollLeft = false; // sens du dernier scroll tactile
+
+    myChart.canvas.addEventListener('touchmove', (e) => {
+        // Iterate through the touch points that have moved and log each
+        // of the pageX/Y coordinates. The unit of each coordinate is CSS pixels.
+        for (let i = 0; i < e.changedTouches.length; i++) {
+            if (lastTouchEnd - e.changedTouches[i].pageX > 60) {
+                if (!lastScrollLeft) {
+                    scrollSide(myChart, 1);
+                }
+                lastTouchEnd = e.changedTouches[i].pageX;
+                lastScrollLeft = false;
+
+            }
+            else if (lastTouchEnd - e.changedTouches[i].pageX < -60) {
+                if (lastScrollLeft) {
+                    scrollSide(myChart, -1);
+                }
+                lastTouchEnd = e.changedTouches[i].pageX;
+                lastScrollLeft = true;
+            }
+        }
+    }, false);
 
 </script>
 
