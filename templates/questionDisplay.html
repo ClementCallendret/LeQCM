@@ -10,68 +10,98 @@
     <h2 class="">Code de session : <span id="codeQuestion">{{idS}}</span></h2>
 
     {% if isProf %}
-    <button data-bs-toggle="collapse" data-bs-target="#state" class="collapseBut"><h3>Enoncé ⌄</h3></button>
+    <button data-bs-toggle="collapse" data-bs-target="#state" class="collapseBut">
+        <h3>Enoncé ⌄</h3>
+    </button>
     {% else %}
     <h3>Enoncé</h3>
     {% endif %}
 
     <div id="state" class="collapse show borderedDiv">
-    {{question["state"]|safe}}
+        {{question["state"]|safe}}
     </div>
-    <hr/>
+    <hr />
 
     {% if isProf %}
-    <button data-bs-toggle="collapse" data-bs-target="#answers" class="collapseBut"><h3>Réponses ⌄</h3></button>
+    <button data-bs-toggle="collapse" data-bs-target="#answers" class="collapseBut">
+        <h3>Réponses ⌄</h3>
+    </button>
     {% else %}
     <h3>Réponses</h3>
     {% endif %}
 
     {% if not "numeralAnswer" in question %}
         {% if isProf %}
-        <div id="answers" class="collapse">
+        <div id="answers" class="collapse container-fluid">
         {% else %}
-        <div id="answers" class="collapse show">
+        <div id="answers" class="collapse show container-fluid">
         {% endif %}
-        {%for i in range(0, question['answers']|length)%} <!--Affichage des réponses formatés -->
-        <div class="divAnswer borderedDiv" id="divAnswer{{i}}">
-            {% if not isProf %}
-            <input type="checkbox" name="checkAnswer{{i}}" id="{{i}}" class="checkAnswer">
-            {% endif %}
-            <div class="col-sm-11" id="textAnswer">
-                {{question['answers'][i]['text']|safe}}
-            </div>
-        </div>
-        {%endfor%}
+            {%for i in range(0, question['answers']|length)%} <!--Affichage des réponses formatés -->
+            <div class="divAnswer borderedDiv row" id="divAnswer{{i}}">
+                {% if isProf %}
+                <div class="col-sm-12" id="textAnswer">
+                    {{question['answers'][i]['text']|safe}}
+                </div>
+                <div id="liveAnswer{{i}}" class="progress liveAnswer hidden">
+                    <div class="progress-bar" id="liveBar{{i}}" style="width:0">
+                        0%
+                    </div>
+                </div>
+                {% else %}
+                <input type="checkbox" name="checkAnswer{{i}}" id="{{i}}" class="col-sm-1 checkAnswer">
+                <div class="col-sm-11" id="textAnswer">
+                    {{question['answers'][i]['text']|safe}}
+                </div>
+                {% endif %}
+                </div>
+            {%endfor%}
         </div>
     {% else %}
-        {% if not isProf %}
-        <input type="number" step="0.01" id="numeralAnswer" class="form-control" placeholder="Entrez votre réponse">
+    <div id="correctionNumeral" class="borderedDiv hidden" style="text-align: center; border-color: green; border-width: 7px;"></div>
+        {% if isProf %}
+            {%for i in range(0, 5) %}
+            <div class="borderedDiv hidden liveAnswer row" id="divAnswer{{i}}">
+                <div class="col-sm-2" id="liveNumAns{{i}}">
+                </div>
+                <div id="liveAnswer{{i}}" class="col-sm-10 progress">
+                    <div class="progress-bar" id="liveBar{{i}}" style="width:0">
+                        0%
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        {%else%}
+            <input type="number" step="0.01" id="numeralAnswer" class="form-control" placeholder="Entrez votre réponse">
         {% endif %}
-        <div id="correctionNumeral"></div>
     {% endif %}
-    <hr/>
+
+    <hr />
 
     {% if isProf %}
-        <p>Nombre d'étudiants connectés : <span id="nbStudents">{{nbConnected}}</span><br/>
+    <p>Nombre d'étudiants connectés : <span id="nbStudents">{{nbConnected}}</span><br />
         Nombre de réponses : <span id="nbAnswers">{{nbAns}}</span></p>
     {% endif %}
-    
+
     <div class="d-flex flex-wrap justify-content-center">
-    {% if isProf %}
-        <button type="button" class="itemBut btn btn-primary" onclick="showLiveAnswers()">Montrer éponses Live</button>
+        {% if isProf %}
+        <button type="button" class="itemBut btn btn-primary" onclick="showLiveAnswers()">Montrer éponses
+            Live</button>
         <button type="button" class="itemBut btn btn-primary" onclick="stopAnswers()">Stop réponses</button>
         <button type="button" class="itemBut btn btn-primary" onclick="showCorrection()">Correction</button>
         {% if inSequence %}
         <button type="button" class="itemBut btn btn-primary" onclick="nextQuestion()">Suivante ></button>
         {% endif %}
         <button type="button" class="itemBut btn btn-danger" onclick="stopSession()">Quitter</button>
-    {% else %}
-        <button type="button" class="itemBut btn btn-success" id="validation" onclick="sendAnswers()">Valider Réponse(s)</button>
-    {% endif %}
+        {% else %}
+        <button type="button" class="itemBut btn btn-success" id="validation" onclick="sendAnswers()">Valider
+            Réponse(s)</button>
+        {% endif %}
     </div>
 
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-<script src="{{ url_for('static', filename = 'scriptLive.js') }}"></script>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename = 'scriptLive.js') }}"></script>
 
-{% endblock %}
+    {% endblock %}
