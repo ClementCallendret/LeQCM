@@ -134,13 +134,15 @@ def joinRoom(data):
             join_room(id)
             room["creatorSID"] = request.sid
             if(room["liveAnswersShown"]):
-                emit("showLiveAnswers", {"nbAnswers" : room["nbAns"], "typeAnswer" : (0 if not "numeralAnswer" in room["activeQuestion"] else 1), "answers" : room["totalAnswers"]})
+                emit("showLiveAnswers", {"nbAnswers" : room["nbAns"], "typeAnswer" : (0 if not "numeralAnswer" in room["activeQuestion"] else 1), "answers" : room["totalAnswers"]}, to=room["creatorSID"])
         elif "loginE" in session: # pour un élève
             join_room(id)
             if session["loginE"] not in room["connected"]:
                 room["connected"][session["loginE"]] = None #pour enregistrer ses reponses
                 room["nbConnected"] += 1
-                emit("addOneConnected", to=id)
+                emit("addOneConnected", to=room["creatorSID"])
+            elif room["connected"][session["loginE"]] != None:
+                emit("desactivateAnswers")
         else:
             flash("Vous devez être connecté pour acceder à cette page")
             return redirect(url_for('login.init'))
@@ -157,7 +159,7 @@ def quitSession(id):
             emit("stopSession", to=id)
         elif session.get("loginE") in room["connected"]:
             room["nbConnected"] -= 1
-            emit("rmOneConnected", to=id)
+            emit("rmOneConnected", to=room["creatorSID"])
             del room["connected"][session["loginE"]]
 
 ########################### GESTION DES REPONSES ####################################
@@ -196,6 +198,7 @@ def saveAnswers(data):
                     isCorrect = True
                 if room["liveAnswersShown"]:
                     emit("newAnswer", answers, to=room["creatorSID"])
+            emit("addOneAnswer", to=room["creatorSID"])
             database.saveStudentAnswer(room["archiveId"], login, isCorrect, room["activeQuestion"]["id"])
 
 @socketio.on("stopAnswers")
@@ -229,7 +232,7 @@ def sendLiveAnswers(id):
     if id in rooms:
         room = rooms[id]
         if session.get("loginP") == room["creator"] and not room["liveAnswersShown"]:
-            emit("showLiveAnswers", {"nbAnswers" : room["nbAns"], "typeAnswer" : (0 if not "numeralAnswer" in room["activeQuestion"] else 1), "answers" : room["totalAnswers"]})
+            emit("showLiveAnswers", {"nbAnswers" : room["nbAns"], "typeAnswer" : (0 if not "numeralAnswer" in room["activeQuestion"] else 1), "answers" : room["totalAnswers"]}, to=room["creatorSID"])
             room["liveAnswersShown"] = True
 
 ########################## MESSAGES ##########################

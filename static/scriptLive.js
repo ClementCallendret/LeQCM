@@ -18,13 +18,16 @@ socket.on('rmOneConnected', () => {
     console.log("Nouvelle Déconnexion")
     $("#nbStudents").html((parseInt($("#nbStudents").text()) - 1).toString());
 })
+socket.on("addOneAnswer", () => {
+    console.log("Nouvelle réponse")
+    $("#nbAnswers").html((parseInt($("#nbAnswers").text()) + 1).toString());
+});
 
 function getCurrentSId() {
     return window.location.href.split('/').slice(-1)[0]
 }
 
 socket.on('newAnswer', (data) => {
-    console.log("Nouvelle réponse")
     nbAnswers += 1;
     if (typeAnswer == 0) {
         for (a of data) {
@@ -39,7 +42,6 @@ socket.on('newAnswer', (data) => {
             totalAnswers[data] = 1;
         }
     }
-    $("#nbAnswers").html(nbAnswers.toString());
     calculatePercentAnswers();
     actualiseLiveAnswers();
 });
@@ -48,32 +50,39 @@ function calculatePercentAnswers() {
     if (typeAnswer == 0) {
         percentAnswers = [];
         for (let i = 0; i < totalAnswers.length; i++) {
-            percentAnswers[i] = totalAnswers[i] / nbAnswers * 100;
+            percentAnswers[i] = Math.round(totalAnswers[i] / nbAnswers * 100);
         }
     }
     else {
-        for (let i = 0; i < 5; i++) {
-            percentAnswers = {};
-            let max = 0;
-            let index;
-            max = 0;
-            if (i == 4) {
-                for (key in totalAnswers) {
-                    if (totalAnswers[key] > max && !key in percentAnswers) {
-                        max += totalAnswers[key];
-                    }
-                }
-                percentAnswers.autres = max / nbAnswers * 100;
+        percentAnswers = [];
+        if (Object.keys(totalAnswers).length <= 5) {
+            for (key in totalAnswers) {
+                percentAnswers.push([key, Math.round(totalAnswers[key] / nbAnswers * 100)]);
             }
-            else {
+            percentAnswers.sort(function (a, b) {
+                return b[1] - a[1];
+            });
+        }
+        else {
+            for (let i = 0; i < 4; i++) {
+                let max = 0;
+                let index;
+                max = 0;
                 for (key in totalAnswers) {
-                    if (totalAnswers[key] > max && !key in percentAnswers) {
+                    if (totalAnswers[key] > max && ![key, Math.round(totalAnswers[key] / nbAnswers * 100)] in percentAnswers) {
                         max = totalAnswers.key;
                         index = key;
                     }
                 }
-                percentAnswers[index] = max / nbAnswers * 100;
+                percentAnswers.push([index, Math.round(max / nbAnswers * 100)]);
             }
+            others = 0;
+            for (key in totalAnswers) {
+                if (![key, Math.round(totalAnswers[key] / nbAnswers * 100)] in percentAnswers) {
+                    others += totalAnswers[key] / nbAnswers * 100;
+                }
+            }
+            percentAnswers.autres = Math.round(max / nbAnswers * 100);
         }
     }
 }
@@ -84,8 +93,9 @@ function showLiveAnswers() {
 }
 
 socket.on("showLiveAnswers", (data) => {
-    console.log("Affichage des réponses lives")
-    $(".liveAnswer").removeClass("hidden");
+    console.log("Affichage des réponses lives");
+    if (typeAnswer == 0)
+        $(".liveAnswer").removeClass("hidden");
     //data = JSON.parse(data);
     totalAnswers = data.answers;
     nbAnswers = data.nbAnswers;
@@ -103,12 +113,11 @@ function actualiseLiveAnswers() {
         }
     }
     else {
-        let i = 0;
-        for (key in percentAnswers) {
-            $("#liveBar" + i).css("width", percentAnswers[key].toString() + "%");
-            $("#liveBar" + i).html(percentAnswers[key].toString() + "%");
-            $("#liveNumAns" + i).html(key.toString());
-            i++;
+        for (let i = 0; i < percentAnswers.length; i++) {
+            $("#divAnswer" + i).removeClass("hidden");
+            $("#liveNumAns" + i).html(percentAnswers[i][0].toString());
+            $("#liveBar" + i).css("width", percentAnswers[i][1].toString() + "%");
+            $("#liveBar" + i).html(percentAnswers[i][1].toString() + "%");
         }
     }
 }
