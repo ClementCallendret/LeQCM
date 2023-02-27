@@ -22,16 +22,16 @@ config = {
         datasets: [{
             label: 'Nb de réponses par question',
             data: nbParticipant[0],
-            borderWidth: 1,
-            borderColor: '#FF5733',
-            backgroundColor: '#CA2B09'
+            borderWidth: 2,
+            borderColor: 'rgba(40, 165, 175, 0.75)',
+            backgroundColor: "rgba(50, 197, 209, 0.6)"
         },
         {
             label: "Nb de bonnes réponses par question",
             data: nbParticipant[1],
-            borderWidth: 1,
-            borderColor: '#3FEFE7',
-            backgroundColor: '#28C2BB'
+            borderWidth: 2,
+            borderColor: "rgba(38, 145, 29, 0.75)",
+            backgroundColor: "rgba(47, 186, 35, 0.6)"
         }]
     },
     options: {
@@ -52,6 +52,8 @@ config = {
         maintainAspectRatio: false,
     }
 };
+Chart.defaults.color = '#424646';
+Chart.defaults.font.size = 14;
 const ctx = document.getElementById('myChart');
 const myChart = new Chart(ctx, config);
 
