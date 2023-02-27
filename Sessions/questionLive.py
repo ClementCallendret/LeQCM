@@ -25,7 +25,7 @@ def liveSessionRoute(id):
             return "La session est introuvable"
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="liveSession-"+id))
 
 ########################### GESTION SESSION ########################################
 
@@ -75,7 +75,7 @@ def createNew(mode, id):
             return redirect(url_for('mesQuestions.mainPage'))
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="MesQuestions"))
     
 @socketio.on("nextQuestion")
 def nextQuestion(id):

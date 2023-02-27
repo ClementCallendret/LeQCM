@@ -13,7 +13,7 @@ def init():
         return render_template("archives.html", sessions=sessions)
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="archives"))
     
 @archive.route('/archives/historique')
 def historique():
@@ -24,7 +24,7 @@ def historique():
         return render_template("StatsOverTime.html")
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="archives-historique"))
 
 @archive.route('/stats/<idSession>')
 def stats(idSession):
@@ -35,4 +35,4 @@ def stats(idSession):
         return render_template("stats.html",result)
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="stats-"+idSession))

@@ -46,7 +46,7 @@ def init(questionId):
         return render_template('EditeurDeQuestion.html', title="", isQcm=True, state="", stateFormated="", idAnswers="", answers=[], answersFormated=[], numeralAnswer=0, tags=allTag, selectedTag=[], newTags="")
   else:
     flash("Vous devez être connecté pour acceder à cette page")
-    return redirect(url_for('login.init'))
+    return redirect(url_for('login.initRedirect', redirection="editeur-" + questionId))
 
 
 # Cas ou l'on veut charger l'apercu ou sauvegarder
@@ -120,4 +120,4 @@ def editeurPOST(questionId):
 
   else:
     flash("Vous devez être connecté pour acceder à cette page")
-    return redirect(url_for('login.init'))
+    return redirect(url_for('login.initRedirect', redirection="editeur-" + questionId))
