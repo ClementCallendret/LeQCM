@@ -394,14 +394,16 @@ def loadSessionDataById(idSession):
         if session.idSequence != None:
             sessionData["idSequence"] = session.idSequence
             sessionData["isSequence"] = True
+            sessionData["nbAnswers"] = getSequenceAvgNbAnswers(idSession, sessionData["idSequence"])
         else :
-            sessionData["idQuestion"] = models.StudentAnswer.query.filter_by(idSession=idSession).firrst().idQuestion
+            sessionData["idQuestion"] = models.StudentAnswer.query.filter_by(idSession=idSession).first().idQuestion
             sessionData["isSequence"] = False
+            sessionData["nbAnswers"] = getQuestionNbAnswers(idSession, sessionData["idQuestion"])
         return sessionData
     else:
         return None
     # pour afficher juste un apercu des sessions passés (un peu comme dans mes questions)
-    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int}
+    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, nbAnswers : [nbAnswers/nbQuestions, nbGoodAnswers/nbQuestions]}
 
 def loadSessionDataByProf(idProf):
     sessions = []
@@ -422,11 +424,22 @@ def loadSessionResults(idSession):
     else:
         return None
     
-    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, results}
+    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, nbAnswers : [nbAnswers/nbQuestions, nbGoodAnswers/nbQuestions], results}
     # results si question unique: {idStudent1 : bool, idStudent2 : bool, ...}
     # results si séquence: {idStudent1 : float(pourcentage), idStudent2 : float, ...}
-    
-def getQuestionsResults(idSession, idQuestion=None): #intermediaire
+
+def getQuestionNbAnswers(idSession, idQuestion):
+    ans = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion).count()
+    goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
+    return [ans, goodAns]
+
+def getSequenceAvgNbAnswers(idSession, idSequence):
+    nbAnswers = models.StudentAnswer.query.filter_by(idSession=idSession).count()
+    nbGoodAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, correct=True).count()
+    nbQ = models.InSerie.query.filter_by(idS = idSequence).count()
+    return [nbAnswers / nbQ, nbGoodAnswers / nbQ]
+
+def getQuestionsResults(idSession, idQuestion): #intermediaire
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
     for row in allAnswers:

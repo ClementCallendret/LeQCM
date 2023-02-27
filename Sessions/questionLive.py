@@ -157,10 +157,6 @@ def quitSession(id):
         if session.get("loginP") == room["creator"]:
             del room
             emit("stopSession", to=id)
-        elif session.get("loginE") in room["connected"]:
-            room["nbConnected"] -= 1
-            emit("rmOneConnected", to=room["creatorSID"])
-            del room["connected"][session["loginE"]]
 
 ########################### GESTION DES REPONSES ####################################
 
