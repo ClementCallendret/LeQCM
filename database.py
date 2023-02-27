@@ -389,7 +389,7 @@ def loadSessionDataById(idSession):
     if session:
         sessionData = {}
         sessionData["id"] = session.id
-        sessionData["date"] = session.date
+        sessionData["date"] = session.date.strftime("%d/%m/%Y")
         sessionData["idProf"] = session.idP
         if session.idSequence != None:
             sessionData["idSequence"] = session.idSequence

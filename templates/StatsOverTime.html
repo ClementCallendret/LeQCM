@@ -6,7 +6,7 @@
 <style>
     #canvasDiv {
         margin: 20px;
-        width: 80vw;
+        width: 70vw;
         min-height: 500px;
     }
 
@@ -25,7 +25,7 @@
     <label>Taille Intervalle<input type="number" onchange="changeTailleIntervalle(this)" min="1" max="40" step="1"
             value="10"></label>
     <button type="button" onclick="scrollButton(1)" class="btn btn-primary">Suivant</button>
-
+    <input type="hidden" id="datasJson" value="{{mySessions}}">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
 import database
 import encryption
+import json
 archive = Blueprint('archive',__name__)
 
 
@@ -19,14 +20,14 @@ def init():
 def historique():
     if "loginP" in session:
         idProf = session['loginP']
-        #sessions = database.loadSessionByProf(idProf)
-        #print(session)
-        return render_template("StatsOverTime.html")
+        mySessions = database.loadSessionDataByProf(session["loginP"])
+        print(mySessions)
+        return render_template("StatsOverTime.html", mySessions=json.dumps(mySessions, indent=4))
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="archives-historique"))
 
-@archive.route('/stats/<idSession>')
+@archive.route('/archives/stats/<idSession>')
 def stats(idSession):
     if "loginP" in session:
         idProf = session['loginP']
