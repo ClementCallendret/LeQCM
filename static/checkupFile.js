@@ -17,8 +17,9 @@ function validation() {
 
   const reader = new FileReader();
   reader.addEventListener('load', (event) => {
-    console.log(event.target.result);
-    parsed_file = $.csv.toArrays(event.target.result);
+    fileContent = event.target.result.replaceAll(";", ",");
+    //console.log(fileContent);
+    parsed_file = $.csv.toArrays(fileContent);
     console.log(parsed_file[2])
     // parsed_file.splice(0, 1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
     //enfait non sinon ca oublie un etudiant si ya pas d'entete 
@@ -31,7 +32,7 @@ function validation() {
   // trouvé sur https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions afin de retournr l'exception
   window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
     efface(true); // afin de pouvoir re-essayer sans avoir a F5
-    alert("Il y a eu une erreur sur votre fichier csv..\nATTENTION au format (numEtu , prenom , nom)\nAvec le SEPARATEUR VIRGULE -->  ,  <-- \n\n" + errorMsg);
+    alert("Il y a eu une erreur sur votre fichier csv..\nATTENTION au format (numEtu , prenom , nom)\n\n" + errorMsg);
     return false;
   }
 
