@@ -20,13 +20,13 @@ function validation() {
     console.log(event.target.result);
     parsed_file = $.csv.toArrays(event.target.result);
     console.log(parsed_file[2])
-    parsed_file.splice(0, 1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
+    // parsed_file.splice(0, 1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
+    //enfait non sinon ca oublie un etudiant si ya pas d'entete 
     Verif_content(); // fonction qui va verifier que le fichier est en parfaite forme
   });
   reader.readAsText(z);
 
-  $('#boutonsubmit').css("display", "block")
-  $('#boutoncancel').css("display", "block")
+  $('#comfirmButtons').removeClass("hidden")
 
   // trouvé sur https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions afin de retournr l'exception
   window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
@@ -38,9 +38,7 @@ function validation() {
 }
 
 function efface(isError=false) {
-  $('#boutonsubmit').css("display", "none")
-
-  $('#boutoncancel').css("display", "none")
+  $('#comfirmButtons').addClass("hidden")
 
   $('#myFile').val("")
 
@@ -55,7 +53,7 @@ function Verif_content() {
   // Verification de la donnée qui est notre fichier parsé
   for (i in parsed_file) {
     line = parsed_file[i];
-    if (line.length != 3 || line[0].length != 8 || Number(line) == NaN || line[1].length == 0 || line[2].length == 0) { // verif des elements de chaque lignes
+    if (line.length != 3 || line[0].length != 8 || ! /^\d+$/.test(line[0]) || line[1].length == 0 || line[2].length == 0) { // verif des elements de chaque lignes
       index_invalide.push(i);
       console.log(line);
     }
