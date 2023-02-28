@@ -81,7 +81,11 @@
           <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}" class="sessionBut btn btn-success">live</a>
         </div>
         <div class="card-body">{{q['state']|safe}}</div>
-        <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
+        <div class="card-footer">
+          {%for t in q['tags']%}
+          <span class="etiquette">{{t}}</span>
+          {%endfor%}
+        </div>
       </div>
 
       {%endfor%}
