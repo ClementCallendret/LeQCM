@@ -13,7 +13,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mermaid@8.5.2/dist/mermaid.min.js"></script> <!--INDISPENSABLE pour pouvoir utiliser mermaid et afficher correctement les graphes en html-->
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> <!--INDISPENSABLE pour pouvoir utiliser LateX et bien afficher la variable provenant du code Python-->
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'switchButton.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'common.css') }}">
 
@@ -32,14 +31,14 @@
           <ul class="navbar-nav">
             <!--On affiche un menu different si l'utilisateur est connecté ou non     <h3>Login : {{login}}</h3>-->
             {% if isLogedP %} 
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('profil.mainPage') }}">Profil</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mainPage') }}">Mes Questions</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('AjoutStudents.AjoutStudents') }}">Ajout d'élèves</a></li> <!--nom du fichier.nom de la fonction appelée-->
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('archive.init') }}">Archives sessions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('archives.init') }}">Archives sessions</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
 
             {% elif isLogedE %} 
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('connected.connected', login='mettre login ici') }}">Profil</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('profil.mainPage') }}">Profil</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url_for('logout.logoutRoute') }}">Se déconnecter</a></li>
             {% else %}
             <li class="nav-item"><a class="nav-link" href="{{ url_for('login.init') }}">Connexion</a></li>

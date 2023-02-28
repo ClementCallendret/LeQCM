@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Profil{% endblock %}
 
 {% block content %}
-<div class="hello">
-    Bonjour {{login}}
+
+<div class="centerPage">
+    <h2>Bonjour {{identity[0] + " " + identity[1]}}</h2>
 </div>
 
 

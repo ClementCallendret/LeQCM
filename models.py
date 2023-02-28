@@ -3,6 +3,8 @@ from extension import db
 class Professor(db.Model):
     __tablename__ = "professor"
     username = db.Column(db.String(50), primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    surname = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     sel = db.Column(db.String(64))
 

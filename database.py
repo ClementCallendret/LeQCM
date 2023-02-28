@@ -27,8 +27,8 @@ def professorExist(username) :
     else :
         return False
 
-def addProfessor(username, password, sel) :
-    prof = models.Professor(username=username, password=password, sel=sel)
+def addProfessor(username, name, surname, password, sel) :
+    prof = models.Professor(username=username, name=name, surname=surname, password=password, sel=sel)
     db.session.add(prof)
     if dbCommit():
         return prof.username
@@ -45,7 +45,14 @@ def getProfessorSel(username):
     if prof :
         return prof.sel
     else:
-        return False
+        return None
+
+def getProfIdentity(username):
+    prof = models.Professor.query.filter_by(username=username).first()
+    if prof :
+        return [prof.name, prof.surname]
+    else:
+        return None
 
 ############### STUDENT LOGIN #######################
 
@@ -81,21 +88,14 @@ def getStudentSel(idS):
     if std :
         return std.sel
     else:
-        return False
+        return None
     
-def getStudentName(idS):
+def getStudentIdentity(idS):
     std = models.Student.query.filter_by(id=idS).first()
     if std :
-        return std.name
+        return [std.name, std.surname]
     else:
-        return False
-    
-def getStudentSurname(idS):
-    std = models.Student.query.filter_by(id=idS).first()
-    if std :
-        return std.surname
-    else:
-        return False
+        return None
 
 ####################### TAG ######################
 

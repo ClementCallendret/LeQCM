@@ -9,67 +9,57 @@ function validation() {
     alert("Choisir un fichier !");
     return false;
   }
-  if (name_file.split('.').pop() != 'csv'){
+  if (name_file.split('.').pop() != 'csv') {
     alert("Aie aie aie !! Ton fichier n'est pas un csv..");
     return false;
   }
 
-    
-    const reader = new FileReader();
-    reader.addEventListener('load', (event) => {
-      console.log(event.target.result);
-      parsed_file = $.csv.toArrays(event.target.result);
-      console.log(parsed_file[2])
-      parsed_file.splice(0,1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
-      Verif_content(); // fonction qui va verifier que le fichier est en parfaite forme
-    });
-    reader.readAsText(z);
 
-    $('#boutonsubmit').css("display", "block")
+  const reader = new FileReader();
+  reader.addEventListener('load', (event) => {
+    console.log(event.target.result);
+    parsed_file = $.csv.toArrays(event.target.result);
+    console.log(parsed_file[2])
+    parsed_file.splice(0, 1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
+    Verif_content(); // fonction qui va verifier que le fichier est en parfaite forme
+  });
+  reader.readAsText(z);
 
-    $('#boutoncancel').css("display", "block")
+  $('#boutonsubmit').css("display", "block")
+  $('#boutoncancel').css("display", "block")
 
-    // trouvé sur https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions afin de retournr l'exception
-    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
-      efface(69); // afin de pouvoir re-essayer sans avoir a F5
-      alert("Il y a eu une erreur sur votre fichier csv..\nATTENTION au format (numEtu , prenom , nom)\nAvec le SEPARATEUR VIRGULE -->  ,  <-- \n\n" + errorMsg);
-      return false;
+  // trouvé sur https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions afin de retournr l'exception
+  window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+    efface(true); // afin de pouvoir re-essayer sans avoir a F5
+    alert("Il y a eu une erreur sur votre fichier csv..\nATTENTION au format (numEtu , prenom , nom)\nAvec le SEPARATEUR VIRGULE -->  ,  <-- \n\n" + errorMsg);
+    return false;
   }
-  $('#Soumettre').css("display", "none");
 
-}   
+}
 
-function efface(x){
+function efface(isError=false) {
   $('#boutonsubmit').css("display", "none")
 
   $('#boutoncancel').css("display", "none")
-    
-  $('#Soumettre').css("display", "block");
 
   $('#myFile').val("")
 
   $('#TabToSend').val("")
 
   $('#etudiant_ajt').empty()
-
-  if(x != 69) // si on declenche efface avec 1 c'est qu'il y avait l'arreur de fichier 
-    alert("Etudiants ajoutés !");
 }
 
-
-
-
-function Verif_content(){
+function Verif_content() {
   index_invalide = []
   tableau_des_bons_etudiants = []
   // Verification de la donnée qui est notre fichier parsé
   for (i in parsed_file) {
-    line =parsed_file[i];
-    if(line.length !=3 || line[0].length != 8 || Number(line) == NaN || line[1].length == 0 || line[2].length == 0){ // verif des elements de chaque lignes
+    line = parsed_file[i];
+    if (line.length != 3 || line[0].length != 8 || Number(line) == NaN || line[1].length == 0 || line[2].length == 0) { // verif des elements de chaque lignes
       index_invalide.push(i);
       console.log(line);
     }
-    else{
+    else {
       tableau_des_bons_etudiants.push(line);
     }
   }
@@ -80,7 +70,7 @@ function Verif_content(){
   StudentTab.val(JSON.stringify(tableau_des_bons_etudiants)); // pour mettre dans mon html mon tableau à l'emplacmeent hidden
 }
 
-function affiche_etudiant_a_ajouter(){
+function affiche_etudiant_a_ajouter() {
   // on declare notre tableau et on le vide au cas ou
   tableau = $('#etudiant_ajt');
   tableau.empty();
@@ -101,13 +91,13 @@ function affiche_etudiant_a_ajouter(){
   </tr>
   `
   tableau.append(html);
-  for (i in parsed_file){
-    if(index_invalide.includes(i))
+  for (i in parsed_file) {
+    if (index_invalide.includes(i))
       style = "background-color : red;"
-    else{
-      style=""
+    else {
+      style = ""
     }
-  html =  `
+    html = `
   <tr style="${style}"> 
   <td>
     ${parsed_file[i][0]}
@@ -120,7 +110,7 @@ function affiche_etudiant_a_ajouter(){
   </td>  
   </tr>
   `
-  tableau.append(html);
+    tableau.append(html);
   }
 
 }

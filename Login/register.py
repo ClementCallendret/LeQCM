@@ -13,12 +13,14 @@ def registerRoute():
     if (request.method == 'POST'):
         login = request.form.get('login')
         password = request.form.get('password')
+        name = request.form.get('name')
+        surname = request.form.get('surname')
         cpassword = request.form.get('cpassword')
         if (password == cpassword):
             tab = encryption.encrypt(password)
             password = tab[0]
             sel = tab[1]
-            if (database.addProfessor(login,password,sel) != False):
+            if (database.addProfessor(login, name, surname, password, sel)):
                 return redirect(url_for('login.init'))
             else :
                 flash('Utilisateur déjà enregistré')

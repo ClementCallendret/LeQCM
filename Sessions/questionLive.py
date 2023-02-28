@@ -22,7 +22,8 @@ def liveSessionRoute(id):
             isProf = "loginP" in session
             return render_template("questionDisplay.html", idS=id, question=room["activeQuestion"], nbConnected=room["nbConnected"], nbAns=room["nbAns"], inSequence=room["inSequence"], isProf=isProf)
         else:
-            return "La session est introuvable"
+            flash("La session "+ id +" est introuvable")
+            return redirect(url_for('accueil'))
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="liveSession-"+id))
