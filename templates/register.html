@@ -4,36 +4,71 @@
 
 {% block content %}
 <style>
+  .centerPage {
+    margin-top: 20px;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    background-color: rgba(238, 169, 85, 0.541);
+    border-color: rgba(151, 107, 54, 0.415) !important;
+  }
 
-.centerPage {
-  margin-top:20px;
-  padding-left: 40px !important;
-  padding-right: 40px !important;
-  background-color: rgba(238, 169, 85, 0.541);
-  border-color: rgba(151, 107, 54, 0.415) !important;
-}
-
-input[type=submit]{
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
+  input[type=submit] {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 </style>
 
 <div class="container-fluid" style="width:100%;">
-<div class="centerPage borderedDiv">
-  <h2>INSCRIPTION</h2>
-  <form action = "http://localhost:5000/register" method = "post">
-    <label for="login">Identifiant : </label><input type = "text" name = "login" placeholder="Identifiant" class="form-control" required/>
-    <label for="password">Mot de passe : </label><input type = "password" name = "password" id="password" placeholder="Entrer votre mot de passe" class="form-control" required/>
-    <input type = "password" name = "cpassword" id="cpassword" placeholder="Confirmer votre mot de passe" class="form-control" required/>
-    <label for="name">Prénom : </label><input type = "text" name = "name" placeholder="Prénom" class="form-control" required/>
-    <label for="surname">Nom : </label><input type = "text" name = "surname" placeholder="Nom" class="form-control" required/>
-    <input type = "submit" value = "Inscription" class="btn btn-success"/>
-   <!-- <span id = "message" style="color:red"> </span> <br><br>    messge a colorer en rouge et a afficher soit via la fonction PasswordVerif soit par bootstrap-->
- </form>
+  <div class="centerPage borderedDiv">
+    <h2>INSCRIPTION</h2>
+    <form action="http://localhost:5000/register" method="post" id="formRegister">
+      <label for="login">Identifiant : </label><input type="text" name="login" placeholder="Identifiant"
+        class="form-control" required />
+      <label for="name">Prénom : </label><input type="text" name="name" placeholder="Prénom" class="form-control"
+        required />
+      <label for="surname">Nom : </label><input type="text" name="surname" placeholder="Nom" class="form-control"
+        required />
+      <label for="password">Mot de passe : </label><input type="password" name="password" id="password"
+        placeholder="Entrer votre mot de passe" class="form-control" required />
+      <input type="password" name="cpassword" id="cpassword" placeholder="Confirmer votre mot de passe"
+        class="form-control" required />
+      <span id='message'></span>
+      <input type="submit" value="Inscription" class="btn btn-success" />
+      <!-- <span id = "message" style="color:red"> </span> <br><br>    messge a colorer en rouge et a afficher soit via la fonction PasswordVerif soit par bootstrap-->
+    </form>
+  </div>
 </div>
-</div>
+
+<script>
+  const password = $('#password');
+  const comfirmPassword = $('#cpassword');
+  const formR = $('#formRegister');
+
+  formR.submit( () => {
+    if (statutPassword()[1] == 'red') {
+      return false;
+    }
+  });
+
+  $('#password, #cpassword').on('keyup', function () {
+    verif = statutPassword();
+      $('#message').html(verif[0]).css('color', verif[1]);
+  });
+
+  function statutPassword(){
+    if (password.val().length > 15) {
+      return ["Trop long ( moins de 15 caractères)", "red"];
+    } else if (password.val().length < 5){
+      return ["Trop court ( plus de 5 caractères)", "red"];
+    }
+    else if (password.val() != comfirmPassword.val())
+      return ['Non identiques', 'red'];
+    else {
+      return ['Valide', 'green'];
+    }
+  }
+
+</script>
 
 {% endblock %}

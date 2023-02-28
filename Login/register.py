@@ -23,7 +23,7 @@ def registerRoute():
             if (database.addProfessor(login, name, surname, password, sel)):
                 return redirect(url_for('login.init'))
             else :
-                flash('Utilisateur déjà enregistré')
+                flash('Identifiant déjà utilisé')
         else:
             flash('Les deux mots de passes sont différent')
 

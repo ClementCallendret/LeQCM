@@ -35,11 +35,6 @@ def addProfessor(username, name, surname, password, sel) :
     else:
         return False
 
-def changeProfessorPassword(username, newPswd):
-    prof = models.Professor.query.filter_by(username=username).first()
-    prof.password = newPswd
-    return dbCommit()
-
 def getProfessorSel(username):
     prof = models.Professor.query.filter_by(username=username).first()
     if prof :
@@ -53,6 +48,17 @@ def getProfIdentity(username):
         return [prof.name, prof.surname]
     else:
         return None
+    
+def updateProfessorPassword(username, newPswd, newSel):
+    prof = models.Professor.query.filter_by(username=username).first()
+    if prof :
+        print("ok")
+        prof.password = newPswd
+        prof.sel = newSel
+        return dbCommit()
+    else:
+        print("non")
+        return False
 
 ############### STUDENT LOGIN #######################
 
@@ -78,11 +84,6 @@ def addStudent(idS, name, surname, password, sel) :
             return std.id
     return False
 
-def changeStudentPassword(idS, newPswd):
-    std = models.Student.query.filter_by(id=idS).first()
-    stdpassword = newPswd
-    return dbCommit()
-
 def getStudentSel(idS):
     std = models.Student.query.filter_by(id=idS).first()
     if std :
@@ -96,6 +97,15 @@ def getStudentIdentity(idS):
         return [std.name, std.surname]
     else:
         return None
+    
+def updateStudentPassword(id, newPswd, newSel):
+    std = models.Student.query.filter_by(id=id).first()
+    if std :
+        std.password = newPswd
+        std.sel = newSel
+        return dbCommit()
+    else:
+        return False
 
 ####################### TAG ######################
 

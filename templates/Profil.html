@@ -4,9 +4,65 @@
 
 {% block content %}
 
+<style>
+    input[type=submit] {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  form{
+    padding:15px !important;
+  }
+
+</style>
 <div class="centerPage">
     <h2>Bonjour {{identity[0] + " " + identity[1]}}</h2>
+    <form action="/profil/password" method="post" id="changePassword" class="borderedDiv">
+        <h4>Changer votre mot de passe</h4>
+        <label for="newPassword">Nouveau mot de passe : </label>
+        <input type="password" name="newPassword" id="newPassword" placeholder="Nouveau mot de passe"
+            class="form-control" required />
+        <input type="password" name="confirmNewPassword" id="confirmNewPassword"
+            placeholder="Confirmer nouveau mot de passe" class="form-control" required />
+        <span id='message'></span>
+        <label for="password">Mot de passe actuel : </label><input type="password" name="password" id="password"
+            placeholder="Mot de passe actuel" class="form-control" required />
+        <input type="submit" value="Changer de mot de passe" class="btn btn-success" />
+    </form>
 </div>
+
+<script>
+    const password = $('#newPassword');
+    const comfirmPassword = $('#confirmNewPassword');
+    const formR = $('#formRegister');
+
+    formR.submit(() => {
+        return false
+        if (statutPassword()[1] == 'red') {
+            return false;
+        }
+    });
+
+    $('#newPassword, #confirmNewPassword').on('keyup', function () {
+        verif = statutPassword();
+        $('#message').html(verif[0]).css('color', verif[1]);
+    });
+
+    function statutPassword() {
+        if (password.val().length > 15) {
+            return ["Trop long ( moins de 15 caractères)", "red"];
+        } else if (password.val().length < 5) {
+            return ["Trop court ( au moins 5 caractères)", "red"];
+        }
+        else if (password.val() != comfirmPassword.val())
+            return ['Non identiques', 'red'];
+        else {
+            return ['Valide', 'green'];
+        }
+    }
+
+</script>
 
 
 <!--

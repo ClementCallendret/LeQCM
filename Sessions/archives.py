@@ -9,8 +9,8 @@ archives = Blueprint('archives',__name__)
 def init():
     if "loginP" in session:
         idProf = session['loginP']
-        sessions = database.loadSessionByProf(idProf)
-        print(session)
+        sessions = database.loadSessionDataByProf(idProf)
+        print(sessions)
         return render_template("archives.html", sessions=sessions)
     else:
         flash("Vous devez être connecté pour acceder à cette page")
@@ -30,9 +30,8 @@ def historique():
 @archives.route('/archives/stats/<idSession>')
 def stats(idSession):
     if "loginP" in session:
-        idProf = session['loginP']
         idSession = request.args.get('idSession')
-        result = database.getSessionResults(idSession)
+        result = database.loadSessionResults(idSession)
         return render_template("stats.html",result)
     else:
         flash("Vous devez être connecté pour acceder à cette page")

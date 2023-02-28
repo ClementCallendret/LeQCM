@@ -3,29 +3,32 @@
 }
 
 .centerPage {
-    position : relative;
+    position: relative;
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
     padding: 20px;
 }
-.centerPage > * {
-    width:fit-content;
+
+.centerPage>* {
+    width: fit-content;
     position: relative;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.centerPage > form > *{
+
+.centerPage>form>* {
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
-  }
-  .centerPage > form > label{
+}
+
+.centerPage>form>label {
     display: block;
     margin-top: 15px;
-  }
+}
 
 .itemBut {
     margin: 5px;
