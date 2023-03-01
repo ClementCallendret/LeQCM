@@ -244,6 +244,7 @@ def deleteQuestion(idQuestion):
         deleteHasTag(idQuestion, row.idT)
 
     deleteQuestionFromSquences(idQuestion)
+    deleteQuestionSessions(idQuestion)
 
     q = models.Question.query.filter_by(id=idQuestion).first()
     db.session.delete(q)
@@ -320,19 +321,40 @@ def deleteQuestionFromSquences(idQ):
     inSeries = models.InSerie.query.filter_by(idQ=idQ)
     for row in inSeries:
         pos = row.posQ
+        idSeq = row.idS
         questionsAfter = models.InSerie.query.filter(models.InSerie.idS == row.idS, models.InSerie.posQ>pos)
         for q in questionsAfter:
             q.posQ -= 1
         db.session.delete(row)
+        deleteSequenceQuestionAnswers(idSeq, idQ)
+        if not models.InSerie.query.filter_by(idS=idSeq).first():
+            deleteSequence(idSeq)
     return dbCommit()
 
 def deleteSequence(idSequence):
+    deleteSequenceSessions(idSequence)
     inSeries = models.InSerie.query.filter_by(idS=idSequence)
     for row in inSeries:
         db.session.delete(row)
-    
     serie = models.Serie.query.filter_by(id=idSequence).first()
     db.session.delete(serie)
+    return dbCommit()
+
+def updateSequence(id, idList, title):
+    seq = models.Serie.query.filter_by(id=id).first()
+    if not seq:
+        return False
+    
+    seq.title = title
+    for row in models.InSerie.query.filter_by(idS=id):
+        if row.idQ not in idList:
+            db.session.delete(row)
+    for i in range(0, len(idList)):
+        q = models.InSerie.query.filter_by(idS=id, idQ=idList[i]).first()
+        if q:
+            q.posQ = i
+        else:
+            addQuestionToSerie(id, idList[i], i)
     return dbCommit()
 
 ######################### REQUETES SEQUENCES ############################
@@ -395,18 +417,18 @@ def possedeSession(idS, idProf):
         return False
 
 def loadSessionDataById(idSession):
-    session = models.Session.query.filter_by(id=idSession).first()
-    if session:
+    mySession = models.Session.query.filter_by(id=idSession).first()
+    if mySession:
         sessionData = {}
-        sessionData["id"] = session.id
-        sessionData["date"] = session.date.strftime("%d/%m/%Y")
-        sessionData["idProf"] = session.idP
-        if session.idSequence != None:
-            sessionData["idSequence"] = session.idSequence
+        sessionData["id"] = mySession.id
+        sessionData["date"] = mySession.date.strftime("%d/%m/%Y")
+        sessionData["idProf"] = mySession.idP
+        if mySession.idSequence != None:
+            sessionData["idSequence"] = mySession.idSequence
             sessionData["isSequence"] = True
             sessionData["nbAnswers"] = getSequenceAvgNbAnswers(idSession, sessionData["idSequence"])
         else :
-            sessionData["idQuestion"] = models.StudentAnswer.query.filter_by(idSession=idSession).first().idQuestion
+            sessionData["idQuestion"] = mySession.idQuestion
             sessionData["isSequence"] = False
             sessionData["nbAnswers"] = getQuestionNbAnswers(idSession, sessionData["idQuestion"])
         return sessionData
@@ -474,3 +496,25 @@ def avgResults(results): #intermediaire
                 avgResults[student] += 100.0 / n
 
     return avgResults
+
+def deleteQuestionAnswers(idQuestion):
+    models.StudentAnswer.query.filter_by(idQuestion=idQuestion).delete()
+    return dbCommit()
+
+def deleteSequenceQuestionAnswers(idS, idQ):
+    for row in models.Session.query.filter_by(idSequence=idS):
+        models.StudentAnswer.query.filter_by(idQuestion=idQ, idSession=row.id).delete()
+    return dbCommit()
+
+def deleteQuestionSessions(idQuestion):
+    for row in models.Session.query.filter_by(idQuestion=idQuestion):
+        models.StudentAnswer.query.filter_by(idSession=row.id).delete()
+        db.session.delete(row)
+    return dbCommit()
+
+def deleteSequenceSessions(idS):
+    for row in models.Session.query.filter_by(idSequence=idS):
+        models.StudentAnswer.query.filter_by(idSession=row.id).delete()
+        db.session.delete(row)
+    return dbCommit()
+

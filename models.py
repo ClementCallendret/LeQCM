@@ -58,6 +58,7 @@ class Session(db.Model):
     idP = db.Column(db.Integer, db.ForeignKey("professor.username"), nullable=False)
     date = db.Column(db.Date, nullable=False)
     idSequence = db.Column(db.Integer, db.ForeignKey("serie.id"), nullable=True)
+    idQuestion = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=True)
 
 class StudentAnswer(db.Model):
     __tablename__ = "studentAnswer"

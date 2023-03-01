@@ -14,24 +14,6 @@
     background-color:rgb(169, 177, 177)
 }
 
-.collapseTitles > * {
-    display: inline;
-}
-
-.collapseTitles{
-    margin-left: 20px;
-}
-
-.collapseBut {
-    background:none;
-    border:none;
-    margin-left: 10px;
-}
-
-.collapseBut > h3 {
-    text-decoration: underline;
-}
-
 #questionsCollapse {
     margin-bottom: 25px;
 }
@@ -42,29 +24,4 @@
 
 .card-header > input{
     margin-right: 5px;
-}
-
-.etiquette {
-    font-size: small;
-    margin-left: 10px;
-    padding: 4px;
-    padding-left: 7px;
-    padding-right: 7px;
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgba(221, 185, 132, 1);
-    background-color: rgba(221, 185, 132, 0.7);
-}
-
-.sessionBut {
-    position :absolute;
-    right:-20px;
-    top:-10px;
-    padding: 10px;
-    padding-top : 1px;
-    padding-bottom : 1px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: rgb(53, 53, 53);
 }

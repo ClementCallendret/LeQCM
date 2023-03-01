@@ -10,15 +10,43 @@
     <input type="hidden" name="orderedId" id="orderedId" />
     <div class="d-flex flex-wrap justify-content-center navBar">
         <a href="{{url_for( 'mesQuestions.mainPage' )}}" class="btn btn-danger itemBut">Annuler</a>
-        <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/PageQCM')">Creer une Page</button>
-        <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/CreerSequence')">Creer une Séquence</button>
-        <input type="text" id="titleInput" class="form-control" name="title" placeHolder="Titre" value="">
+        <button type="button" class="btn btn-dark itemBut" onclick="submitForm('/MesQuestions/PageQCM')">Creer une
+            Page</button>
+        <button type="button" class="btn btn-dark itemBut"
+            onclick="submitForm('/MesQuestions/CreerSequence')">{{button}}</button>
+        <input type="text" id="titleInput" class="form-control" name="title" placeHolder="Titre" value="{{title}}">
     </div>
     <ul class="d-flex flex-wrap justify-content-around draggable-list" id="draggable-list">
     </ul>
+    <input type="hidden" name="id" value="{{id}}">
 </form>
-
 <input type="hidden" id="questionJson" value="{{questions}}">
+
+<div class="collapseTitles">
+    <button type="button" data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut">
+        <h3>Toutes vos questions ⌄</h3>
+    </button>
+</div>
+
+<div id="questionsCollapse" class="collapse show">
+    <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
+        {%for q in allQuestions%}
+        <div class="card questionCard" id="questionCard{{q['id']}}">
+            <div class="card-header">
+                <span>{{q['title']}}</span>
+                <button type="button" onclick="addtoSequence({{q['id']}})" class="topRightBut btn btn-success">+</button>
+            </div>
+            <div class="card-body">{{q['state']|safe}}</div>
+            <div class="card-footer">
+                {%for t in q['tags']%}
+                <span class="etiquette">{{t}}</span>
+                {%endfor%}
+            </div>
+        </div>
+
+        {%endfor%}
+    </div>
+</div>
 
 <script src="{{ url_for('static', filename = 'sorting.js') }}"></script>
 {% endblock %}

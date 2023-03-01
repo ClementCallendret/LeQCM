@@ -14,7 +14,7 @@ var inputT = document.getElementById('titleInput'); // get the input element
 inputT.addEventListener('input', resizeInputT);
 resizeInputT();
 
-function resizeInputT(){
+function resizeInputT() {
     inputT.style.width = inputT.value.length + "ch";
 }
 
@@ -23,16 +23,17 @@ form.addEventListener("submit", (e) => {
     e.preventDefault();
 });
 
-function submitForm(destination){
+function submitForm(destination) {
     orderedId = [];
-    for(ele of listItems){
+    for (ele of listItems) {
         orderedId.push(parseInt(ele.querySelector('div').getAttribute("id")));
     }
 
     $("#orderedId").val(JSON.stringify(orderedId))
 
     form.action = destination;
-    form.submit()
+    if (orderedId.length > 0)
+        form.submit()
 }
 
 // Insert list items into DOM
@@ -40,20 +41,21 @@ function createList() {
     jsonQuestions = $("#questionJson").val();
     questions = JSON.parse(jsonQuestions);
     for (let index = 0; index < questions.length; index++) {
-        const listItem = document.createElement('li');
+        $("#questionCard" + questions[index]["id"]).css("display", "none")
 
+        const listItem = document.createElement('li');
         listItem.setAttribute('data-index', index);
 
         tagStr = ""
-        for (t in questions[index]["tags"]) {
-            tagStr += t + ";"
+        for (t of questions[index]["tags"]) {
+            tagStr += "<span class='etiquette'>" + t + "</span>"
         }
 
         listItem.innerHTML = `
         <div class="draggable card questionCard" id="${questions[index]["id"]}" draggable="true">
             <div class="card-header" >
                 <span>${questions[index]["title"]}</span>
-                <button type="button" onclick="removeQ(${questions[index]["id"]})" class="deleteBut btn btn-danger">X</button>
+                <button type="button" onclick="removeQ(${questions[index]["id"]})" class="topRightBut btn btn-danger">X</button>
             </div>
             <div class="card-body">${questions[index]["state"]}</div>
             <div class="card-footer" style="color:blue">${tagStr}</div>
@@ -76,6 +78,34 @@ function removeQ(i) {
     }
     listItems.splice(listItems.indexOf(parent), 1);
     parent.remove();
+    $("#questionCard" + i).css("display", "block")
+}
+
+function addtoSequence(id) {
+    $("#questionCard" + id).css("display", "none")
+
+    index = listItems[listItems.length - 1].getAttribute('data-index') + 1;
+    const listItem = document.createElement('li');
+    listItem.setAttribute('data-index', index);
+    
+    tagStr = $("#questionCard" + id).find(".card-footer").html();
+    state = $("#questionCard" + id).find(".card-body").html();
+    title = $("#questionCard" + id).find(".card-header").find("span").html();
+
+    listItem.innerHTML = `
+        <div class="draggable card questionCard" id="${id}" draggable="true">
+            <div class="card-header" >
+                <span>${title}</span>
+                <button type="button" onclick="removeQ(${id})" class="topRightBut btn btn-danger">X</button>
+            </div>
+            <div class="card-body">${state}</div>
+            <div class="card-footer" style="color:blue">${tagStr}</div>
+        </div>
+      `;
+
+    listItems.push(listItem);
+
+    draggable_list.appendChild(listItem);
 }
 
 function dragStart() {

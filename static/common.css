@@ -32,9 +32,18 @@
 
 .itemBut {
     margin: 5px;
+}
+
+.topRightBut {
+    position :absolute;
+    right:-20px;
+    top:-10px;
+    padding: 10px;
+    padding-top : 1px;
+    padding-bottom : 1px;
     border-style: solid;
     border-width: 2px;
-    border-color: black;
+    border-color: rgb(53, 53, 53);
 }
 
 .borderedDiv {
@@ -71,6 +80,10 @@
     max-height: 40px;
 }
 
+a {
+    color: black;
+}
+
 .card-body {
     padding-top: 5px;
     word-wrap: break-word;
@@ -91,6 +104,37 @@
     border-bottom-left-radius: 6px !important;
     border-bottom-right-radius: 6px !important;
     bottom: 1.55px;
+}
+
+.collapseTitles > * {
+    display: inline;
+}
+
+.collapseTitles{
+    margin-left: 20px;
+}
+
+.collapseBut {
+    background:none;
+    border:none;
+    margin-left: 10px;
+}
+
+.collapseBut > h3 {
+    text-decoration: underline;
+}
+
+.etiquette {
+    font-size: small;
+    margin-left: 10px;
+    padding: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(221, 185, 132, 1);
+    background-color: rgba(221, 185, 132, 0.7);
 }
 
 /* maxi code css pour pygments pour Markdown fonctionne avec le code coloré il est généré par Pygmentize  utilisé et recupéré sur internet */
