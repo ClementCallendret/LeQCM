@@ -3,63 +3,59 @@
 {% block title %}Connexion{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-<div class="centrerPage">
 
+<style>
+
+.centerPage {
+  margin-top:20px;
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+  background-color: rgba(238, 169, 85, 0.541);
+  border-color: rgba(151, 107, 54, 0.415) !important;
+}
+
+input[type=submit]{
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+input[type=checkbox]{
+  margin-right: 10px;
+}
+</style>
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col justify-content-md-center">
-            <form  method = "POST" action = "/loginP">
-                <div>
-                    <p>Connexion professeur</p>
-                    <p>Entrer votre nom:</p>
-                </div>
-                <div class="login">
-                    <p><input type = "text" placeholder = "Login" name = "loginP" required aria-required = "true" /></p>
-                </div>
-                <div>
-                    <p>Entrer votre mot de passe:</p>
-                </div>
-                <div class="passP">
-                    <p><input type = "password" placeholder = "Mot de passe" name = "passwordP" required aria-required=  "true" /></p>
-                </div>
-                <div class="checkboxP">
-                    <input type = "checkbox" id = "rememberMeP" name = "rememberMeP">
-                    <label for = "rememberMeP">Se souvenir de moi</label>
-                    <input type="reset" value="Reset">
-                </div>
-                <div class="submitP">
-                    <p><input type = "submit" value = "submit" /></p>
-                </div>
-                <span></span>
-             </form>        
-            </div>
-        <div class="col">
-            <form  method = "POST" action = "/loginE">
-                <div>
-                    <p>Connexion</p>
-                    <p>Entrer votre numéro étudiant:</p>
-                </div>
-                <div class="login">
-                    <p><input type = "text" placeholder = "Numéro etudiant" name = "loginE" required aria-required = "true" /></p>
-                </div>
-                <div>
-                    <p>Entrer votre mot de passe:</p>
-                </div>
-                <div class="passE">
-                    <p><input type = "password" placeholder = "Mot de passe" name = "passwordE" required aria-required=  "true" /></p>
-                </div>
-                <div class="checkboxE">
-                    <input type = "checkbox" id = "rememberMeE" name = "rememberMeE">
-                    <label for = "rememberMeE">Se souvenir de moi</label>
-                    <input type="reset" value="Reset">
-                </div>
-                <div class="submitE">
-                    <p><input type = "submit" value = "submit" /></p>
-                </div>
-                <span></span>
-             </form>        
-            </div>      
-          </div>
+        <div class="col-sm-6 centerPage borderedDiv">
+            <h2>Professeur</h2>
+            <form method="POST" action="/loginP">
+                <label for="loginP">Entrer votre identifiant :</label>
+                <input class="form-control" type="text" placeholder="Identifiant" name="loginP" required aria-required="true" />
+
+                <label for="passwordP">Entrer votre mot de passe:</label>
+                <input class="form-control" type="password" placeholder="Mot de passe" name="passwordP" required aria-required="true" />
+
+                <label for="rememberMeP"><input type="checkbox" id="rememberMeP" name="rememberMeP">Se souvenir de
+                    moi</label>
+
+                <input type="submit" value="Connexion" class="btn btn-success"/>
+                <input type="hidden" name="url" value="{{redirection}}">
+            </form>
+        </div>
+        <div class="col-sm-6 centerPage borderedDiv">
+            <h2>Élève</h2>
+            <form method="POST" action="/loginE">
+                <label for="loginE">Entrer votre numéro étudiant:</label>
+                <input class="form-control" type="text" placeholder="Numéro etudiant" name="loginE" required aria-required="true" />
+
+                <label for="passwordE">Entrer votre mot de passe:</label>
+                <input class="form-control" type="password" placeholder="Mot de passe" name="passwordE" required aria-required="true" />
+
+                <label for="rememberMeE"><input type="checkbox" id="rememberMeE" name="rememberMeE">Se souvenir de moi</label>
+                <input type="submit" value="Connexion" class="btn btn-success"/>
+                <input type="hidden" name="url" value="{{redirection}}">
+            </form>
+        </div>
     </div>
 
 
@@ -68,4 +64,4 @@
 
 </div>
 
-  {% endblock %}
+{% endblock %}

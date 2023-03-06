@@ -27,24 +27,37 @@ def professorExist(username) :
     else :
         return False
 
-def addProfessor(username, password, sel) :
-    prof = models.Professor(username=username, password=password, sel=sel)
+def addProfessor(username, name, surname, password, sel) :
+    prof = models.Professor(username=username, name=name, surname=surname, password=password, sel=sel)
     db.session.add(prof)
     if dbCommit():
         return prof.username
     else:
         return False
 
-def changeProfessorPassword(username, newPswd):
-    prof = models.Professor.query.filter_by(username=username).first()
-    prof.password = newPswd
-    return dbCommit()
-
 def getProfessorSel(username):
     prof = models.Professor.query.filter_by(username=username).first()
     if prof :
         return prof.sel
     else:
+        return None
+
+def getProfIdentity(username):
+    prof = models.Professor.query.filter_by(username=username).first()
+    if prof :
+        return [prof.name, prof.surname]
+    else:
+        return None
+    
+def updateProfessorPassword(username, newPswd, newSel):
+    prof = models.Professor.query.filter_by(username=username).first()
+    if prof :
+        print("ok")
+        prof.password = newPswd
+        prof.sel = newSel
+        return dbCommit()
+    else:
+        print("non")
         return False
 
 ############### STUDENT LOGIN #######################
@@ -71,29 +84,26 @@ def addStudent(idS, name, surname, password, sel) :
             return std.id
     return False
 
-def changeStudentPassword(idS, newPswd):
-    std = models.Student.query.filter_by(id=idS).first()
-    stdpassword = newPswd
-    return dbCommit()
-
 def getStudentSel(idS):
     std = models.Student.query.filter_by(id=idS).first()
     if std :
         return std.sel
     else:
-        return False
+        return None
     
-def getStudentName(idS):
+def getStudentIdentity(idS):
     std = models.Student.query.filter_by(id=idS).first()
     if std :
-        return std.name
+        return [std.name, std.surname]
     else:
-        return False
+        return None
     
-def getStudentSurname(idS):
-    std = models.Student.query.filter_by(id=idS).first()
+def updateStudentPassword(id, newPswd, newSel):
+    std = models.Student.query.filter_by(id=id).first()
     if std :
-        return std.surname
+        std.password = newPswd
+        std.sel = newSel
+        return dbCommit()
     else:
         return False
 
@@ -234,6 +244,7 @@ def deleteQuestion(idQuestion):
         deleteHasTag(idQuestion, row.idT)
 
     deleteQuestionFromSquences(idQuestion)
+    deleteQuestionSessions(idQuestion)
 
     q = models.Question.query.filter_by(id=idQuestion).first()
     db.session.delete(q)
@@ -310,19 +321,40 @@ def deleteQuestionFromSquences(idQ):
     inSeries = models.InSerie.query.filter_by(idQ=idQ)
     for row in inSeries:
         pos = row.posQ
+        idSeq = row.idS
         questionsAfter = models.InSerie.query.filter(models.InSerie.idS == row.idS, models.InSerie.posQ>pos)
         for q in questionsAfter:
             q.posQ -= 1
         db.session.delete(row)
+        deleteSequenceQuestionAnswers(idSeq, idQ)
+        if not models.InSerie.query.filter_by(idS=idSeq).first():
+            deleteSequence(idSeq)
     return dbCommit()
 
 def deleteSequence(idSequence):
+    deleteSequenceSessions(idSequence)
     inSeries = models.InSerie.query.filter_by(idS=idSequence)
     for row in inSeries:
         db.session.delete(row)
-    
     serie = models.Serie.query.filter_by(id=idSequence).first()
     db.session.delete(serie)
+    return dbCommit()
+
+def updateSequence(id, idList, title):
+    seq = models.Serie.query.filter_by(id=id).first()
+    if not seq:
+        return False
+    
+    seq.title = title
+    for row in models.InSerie.query.filter_by(idS=id):
+        if row.idQ not in idList:
+            db.session.delete(row)
+    for i in range(0, len(idList)):
+        q = models.InSerie.query.filter_by(idS=id, idQ=idList[i]).first()
+        if q:
+            q.posQ = i
+        else:
+            addQuestionToSerie(id, idList[i], i)
     return dbCommit()
 
 ######################### REQUETES SEQUENCES ############################
@@ -365,10 +397,10 @@ def getQuestionFromSequence(id, index):
 ####################### ARCHIVAGE SESSIONS ###############################
 
 def saveSession(idProf, idSequence=None):
-    session = models.Session(idP=idProf, idSequence=idSequence, date=datetime.now())
-    db.session.add(session)
+    newSession = models.Session(idP=idProf, idSequence=idSequence, date=datetime.now())
+    db.session.add(newSession)
     if dbCommit():
-        return session.id
+        return newSession.id
     else:
         return None
 
@@ -385,23 +417,25 @@ def possedeSession(idS, idProf):
         return False
 
 def loadSessionDataById(idSession):
-    session = models.Session.query.filter_by(id=idSession).first()
-    if session:
+    mySession = models.Session.query.filter_by(id=idSession).first()
+    if mySession:
         sessionData = {}
-        sessionData["id"] = session.id
-        sessionData["date"] = session.date
-        sessionData["idProf"] = session.idP
-        if session.idSequence != None:
-            sessionData["idSequence"] = session.idSequence
+        sessionData["id"] = mySession.id
+        sessionData["date"] = mySession.date.strftime("%d/%m/%Y")
+        sessionData["idProf"] = mySession.idP
+        if mySession.idSequence != None:
+            sessionData["idSequence"] = mySession.idSequence
             sessionData["isSequence"] = True
+            sessionData["nbAnswers"] = getSequenceAvgNbAnswers(idSession, sessionData["idSequence"])
         else :
-            sessionData["idQuestion"] = models.StudentAnswer.query.filter_by(idSession=idSession).firrst().idQuestion
+            sessionData["idQuestion"] = mySession.idQuestion
             sessionData["isSequence"] = False
+            sessionData["nbAnswers"] = getQuestionNbAnswers(idSession, sessionData["idQuestion"])
         return sessionData
     else:
         return None
     # pour afficher juste un apercu des sessions passés (un peu comme dans mes questions)
-    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int}
+    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, nbAnswers : [nbAnswers/nbQuestions, nbGoodAnswers/nbQuestions]}
 
 def loadSessionDataByProf(idProf):
     sessions = []
@@ -422,11 +456,22 @@ def loadSessionResults(idSession):
     else:
         return None
     
-    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, results}
+    # retour : {id : int, date : date(jspTrop), idProf : string, isSequence : bool, (idSequence ou idQuestion) : int, nbAnswers : [nbAnswers/nbQuestions, nbGoodAnswers/nbQuestions], results}
     # results si question unique: {idStudent1 : bool, idStudent2 : bool, ...}
     # results si séquence: {idStudent1 : float(pourcentage), idStudent2 : float, ...}
-    
-def getQuestionsResults(idSession, idQuestion=None): #intermediaire
+
+def getQuestionNbAnswers(idSession, idQuestion):
+    ans = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion).count()
+    goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
+    return [ans, goodAns]
+
+def getSequenceAvgNbAnswers(idSession, idSequence):
+    nbAnswers = models.StudentAnswer.query.filter_by(idSession=idSession).count()
+    nbGoodAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, correct=True).count()
+    nbQ = models.InSerie.query.filter_by(idS = idSequence).count()
+    return [nbAnswers / nbQ, nbGoodAnswers / nbQ]
+
+def getQuestionsResults(idSession, idQuestion): #intermediaire
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
     for row in allAnswers:
@@ -451,3 +496,25 @@ def avgResults(results): #intermediaire
                 avgResults[student] += 100.0 / n
 
     return avgResults
+
+def deleteQuestionAnswers(idQuestion):
+    models.StudentAnswer.query.filter_by(idQuestion=idQuestion).delete()
+    return dbCommit()
+
+def deleteSequenceQuestionAnswers(idS, idQ):
+    for row in models.Session.query.filter_by(idSequence=idS):
+        models.StudentAnswer.query.filter_by(idQuestion=idQ, idSession=row.id).delete()
+    return dbCommit()
+
+def deleteQuestionSessions(idQuestion):
+    for row in models.Session.query.filter_by(idQuestion=idQuestion):
+        models.StudentAnswer.query.filter_by(idSession=row.id).delete()
+        db.session.delete(row)
+    return dbCommit()
+
+def deleteSequenceSessions(idS):
+    for row in models.Session.query.filter_by(idSequence=idS):
+        models.StudentAnswer.query.filter_by(idSession=row.id).delete()
+        db.session.delete(row)
+    return dbCommit()
+

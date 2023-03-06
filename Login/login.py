@@ -4,10 +4,16 @@ import encryption
 login = Blueprint('login',__name__)
 
 
-
 @login.route('/login')
 def init():
-    return render_template('login.html')
+    url = url_for('accueil')
+    return render_template('login.html', redirection=url)
+
+@login.route('/login/<redirection>')
+def initRedirect(redirection):
+    url = "/"+redirection
+    url = url.replace("-","/")
+    return render_template('login.html', redirection=url)
 
 @login.route('/loginP',methods = ['POST'])
 def loginP():
@@ -28,11 +34,11 @@ def loginP():
             session.pop('loginE',None)
             session['loginP']=login
             session.permanent = rememberMe
-            return redirect(url_for('accueil'))
+            return redirect(request.form.get('url'))
         else :
             print("mauvais login ou mdp")
             flash("Erreur mauvais identifiant ou mot de passe")
-            return render_template('login.html') 
+            return render_template('login.html', redirection=request.form.get('url')) 
 
 
 @login.route('/loginE',methods = ['POST'])
@@ -55,8 +61,8 @@ def loginE():
             session.pop('loginE',None)
             session['loginE']=login
             session.permanent = rememberMe
-            return redirect(url_for('accueil'))
+            return redirect(request.form.get('url'))
         else :
             print("mauvais login ou mdp")
             flash("Erreur mauvais identifiant ou mot de passe")
-            return render_template('login.html') 
+            return render_template('login.html', url=request.form.get('url')) 

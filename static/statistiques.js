@@ -1,27 +1,37 @@
-const datas = [{ x: "12-02-21", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-21", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-21", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-21", id: 3, nbRep: 5, nbGood: 2 },
-{ x: "12-02-22", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-22", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-22", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-22", id: 3, nbRep: 5, nbGood: 2 },
-{ x: "12-02-23", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-23", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-23", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-23", id: 3, nbRep: 5, nbGood: 2 },
-{ x: "12-02-24", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-24", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-24", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-24", id: 3, nbRep: 5, nbGood: 2 },
-{ x: "12-02-25", id: 0, nbRep: 12, nbGood: 10 }, { x: "25-02-25", id: 1, nbRep: 19, nbGood: 18 }, { x: "01-03-25", id: 2, nbRep: 10, nbGood: 10 }, { x: "09-03-25", id: 3, nbRep: 5, nbGood: 2 }];
+var myLabels = [];
+var myLabelsLink = [];
+var nbParticipant = [[], []];
+
+function getDatas(){
+    mySessions = JSON.parse(document.getElementById("datasJson").value);
+    for(myS of mySessions){
+        myLabels.push(myS.date);
+        myLabelsLink.push(myS.id);
+        nbParticipant[0].push(myS.nbAnswers[0]);
+        nbParticipant[1].push(myS.nbAnswers[1]);
+    }
+}
+
+getDatas();
 
 config = {
     type: 'bar',
     data: {
-        labels: ["12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25", "12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-21", "25-02-21", "01-03-21", "09-03-21", "12-02-23", "25-02-23", "01-03-23", "09-03-23", "12-02-24", "25-02-24", "01-03-24", "09-03-24", "12-02-25", "25-02-25", "01-03-25", "09-03-25"],
-        labelsLink: [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+        labels: myLabels,
+        labelsLink: myLabelsLink,
         datasets: [{
-            label: 'Number of Answers',
-            data: [12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5, 12, 19, 10, 5],
-            borderWidth: 1,
-            borderColor: '#FF5733',
-            backgroundColor: '#CA2B09'
+            label: 'Nb de réponses par question',
+            data: nbParticipant[0],
+            borderWidth: 2,
+            borderColor: 'rgba(40, 165, 175, 0.75)',
+            backgroundColor: "rgba(50, 197, 209, 0.6)"
         },
         {
-            label: "Number of Good Answers",
-            data: [10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2, 10, 18, 10, 2],
-            borderWidth: 1,
-            borderColor: '#3FEFE7',
-            backgroundColor: '#28C2BB'
+            label: "Nb de bonnes réponses par question",
+            data: nbParticipant[1],
+            borderWidth: 2,
+            borderColor: "rgba(38, 145, 29, 0.75)",
+            backgroundColor: "rgba(47, 186, 35, 0.6)"
         }]
     },
     options: {
@@ -42,7 +52,8 @@ config = {
         maintainAspectRatio: false,
     }
 };
-
+Chart.defaults.color = '#424646';
+Chart.defaults.font.size = 14;
 const ctx = document.getElementById('myChart');
 const myChart = new Chart(ctx, config);
 

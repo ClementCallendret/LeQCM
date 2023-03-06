@@ -19,7 +19,7 @@ def mainPage():
     return render_template("MesQuestions.html", questions=questions, tags=tags, sequences=sequences)
   else:
     flash("Vous devez être connecté pour acceder à cette page")
-    return redirect(url_for('login.init'))
+    return redirect(url_for('login.initRedirect', redirection="MesQuestions"))
 
 @mesQuestions.route('/MesQuestions/Delete', methods=['POST'])
 def deleteQuestions():
@@ -36,4 +36,4 @@ def deleteQuestions():
     return redirect(url_for('mesQuestions.mainPage'))
   else:
     flash("Vous devez être connecté pour acceder à cette page")
-    return redirect(url_for('login.init'))
+    return redirect(url_for('login.initRedirect', redirection="MesQuestions"))

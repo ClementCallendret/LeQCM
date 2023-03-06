@@ -20,7 +20,7 @@
           <form action="" method="GET" id="tagForm">
             <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
             <div class="dropdown">
-              <button type="button" class="btn btn-primary dropdown-toggle itemBut" data-bs-toggle="dropdown">
+              <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
                 Tags
               </button>
 
@@ -37,16 +37,16 @@
           </form>
         </li>
         <li class="nav-item">
-          <button type="button" class="btn btn-primary itemBut" onclick="filterByTags()">Filtrer par tag</button>
+          <button type="button" class="btn btn-dark itemBut" onclick="filterByTags()">Filtrer par tag</button>
         </li>
 
 
         <li class="nav-item">
-          <a class="btn btn-primary itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une
+          <a class="btn btn-dark itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une
             question</a>
         </li>
         <li class="nav-item">
-          <button type="button" class="btn btn-primary itemBut" onclick="submitForm('/MesQuestions/Sorting')">Ordonner
+          <button type="button" class="btn btn-dark itemBut" onclick="submitForm('/MesQuestions/Sorting')">Ordonner
             la sélection</button>
         </li>
         <li class="nav-item">
@@ -78,10 +78,14 @@
         <div class="card-header">
           <input type="checkbox" name="{{q['id']}}" class="checkQuestion" onchange="checkQ(this)">
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
-          <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}" class="sessionBut btn btn-success">live</a>
+          <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}" class="topRightBut btn btn-success">live</a>
         </div>
         <div class="card-body">{{q['state']|safe}}</div>
-        <div class="card-footer" style="color:blue">{%for t in q['tags']%}{{t}};{%endfor%}</div>
+        <div class="card-footer">
+          {%for t in q['tags']%}
+          <span class="etiquette">{{t}}</span>
+          {%endfor%}
+        </div>
       </div>
 
       {%endfor%}
@@ -104,8 +108,8 @@
       <div class="card questionCard">
         <div class="card-header">
           <input type="checkbox" name="{{s['id']}}" class="checkSequence" onchange="checkS(this)">
-          {{s['title']}}
-          <a href="{{url_for('questionLive.createNew', mode='Sequence', id=s['id'])}}" class="sessionBut btn btn-success">live</a>
+          <a href="/MesQuestions/UpdateSequence/{{s['id']}}">{{s['title']}}</a>
+          <a href="{{url_for('questionLive.createNew', mode='Sequence', id=s['id'])}}" class="topRightBut btn btn-success">live</a>
         </div>
         <div class="card-body">
           <ul>{% for t in s['questionTitles'] %}<li>{{t}}</li>{%endfor%}</ul>

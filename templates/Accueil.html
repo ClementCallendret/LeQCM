@@ -3,15 +3,35 @@
 {% block title %}Le QCM{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="centrerPage">
+<style>
+    .centerPage > img{
+        margin-top: 30px;
+        display: block;
+        width:60%;
+    }
+</style>
+
+<div class="container-fluid"  style="width:100%;">
+    <div class="centerPage">
         <h1>Bienvenue sur le site du QCM</h1>
-    </br>
-        <h4>
+    {% if isLogedP %} 
+        <h2>
             Vous pouvez créer des QCM <a href="{{url_for('editeur.init', questionId='createNew')}}" style="color:black">ici</a>
-        </h4>
-        </br></br></br>
+        </h2>
         <img src="/static/qcm.jpeg" alt="Ceci est censé être une image d'un QCM">
+    {% elif isLogedE %}
+        <h2>Vous pouvez rejoindre une session :</h2>
+        <input type="text" id="sessionCode" placeholder="Code de la session">
+        <button type="button" onclick="goToSession()">Rejoindre</button>
+    {% else %}
+        <h2><a href="{{url_for('login.init')}}" style="color:black">Connectez vous</a> pour utiliser toutes les fonctionalités</h2>
+    {% endif %}
     </div>
 </div>
+
+<script>
+    function goToSession(){
+        window.location.href = "/liveSession/" + document.getElementById("sessionCode").value;
+    }
+</script>
 {% endblock %}

@@ -22,7 +22,7 @@ function filterByTags() {
     else {
         questions.each(function () {
             q = $(this)
-            tags = q.find(".card-footer").text().split(";");
+            tags = getTags(q.find(".card-footer"));
             hasTag = false
             for (let i = 0; i < tags.length - 1; i++) {
                 if (selectedTags.includes(tags[i])) {
@@ -37,6 +37,15 @@ function filterByTags() {
             }
         })
     }
+}
+
+function getTags(cardFooter){
+    tagsJQ = cardFooter.find("span")
+    tags = []
+    tagsJQ.each((i, v) => {
+        tags.push(v.innerText)
+    })
+    return tags
 }
 
 function selectAllTag(c) {

@@ -16,16 +16,17 @@ rooms = {}
 
 @questionLive.route('/liveSession/<id>')
 def liveSessionRoute(id):
-    if "loginP" in session or "loginS" in session:
+    if "loginP" in session or "loginE" in session:
         if id in rooms:
             room = rooms[id]
             isProf = "loginP" in session
             return render_template("questionDisplay.html", idS=id, question=room["activeQuestion"], nbConnected=room["nbConnected"], nbAns=room["nbAns"], inSequence=room["inSequence"], isProf=isProf)
         else:
-            return "La session est introuvable"
+            flash("La session "+ id +" est introuvable")
+            return redirect(url_for('accueil'))
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="liveSession-"+id))
 
 ########################### GESTION SESSION ########################################
 
@@ -36,6 +37,7 @@ def createNew(mode, id):
             roomId = generateSessionId()
             newRoom = {}
             newRoom["creator"] = session["loginP"]
+            newRoom["creatorSID"] = ""
             newRoom["connected"] = {}
             newRoom["nbConnected"] = 0
             newRoom["nbAns"] = 0
@@ -64,7 +66,8 @@ def createNew(mode, id):
                 newRoom["totalAnswers"] = {} #nb de personne ayant proposé chaque rep
 
             newRoom["activeQuestion"] = question
-            archiveId = database.saveSession(session["loginP"], id, newRoom["inSequence"])
+            archiveId = database.saveSession(session["loginP"], (id if mode == "Sequence" else None))
+            print(archiveId)
             newRoom["archiveId"] = archiveId
             rooms[roomId] = newRoom
             return redirect(url_for('questionLive.liveSessionRoute', id=roomId))
@@ -73,7 +76,7 @@ def createNew(mode, id):
             return redirect(url_for('mesQuestions.mainPage'))
     else:
         flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.init'))
+        return redirect(url_for('login.initRedirect', redirection="MesQuestions"))
     
 @socketio.on("nextQuestion")
 def nextQuestion(id):
@@ -128,22 +131,25 @@ def joinRoom(data):
     id = data["rId"]
     if id in rooms:
         room = rooms[id]
-        if "loginP" in session and session["loginP"] == room["creator"]: # pour un prof
+        if "loginP" in session and session["loginP"] == room["creator"]: # pour le prof
             join_room(id)
-        elif "loginS" in session: # pour un élève
+            room["creatorSID"] = request.sid
+            if(room["liveAnswersShown"]):
+                emit("showLiveAnswers", {"nbAnswers" : room["nbAns"], "typeAnswer" : (0 if not "numeralAnswer" in room["activeQuestion"] else 1), "answers" : room["totalAnswers"]}, to=room["creatorSID"])
+        elif "loginE" in session: # pour un élève
             join_room(id)
-            if session["loginS"] not in room["connected"]:
-                room["connected"][session["loginS"]] = None #pour enregistrer ses reponses
+            if session["loginE"] not in room["connected"]:
+                room["connected"][session["loginE"]] = None #pour enregistrer ses reponses
                 room["nbConnected"] += 1
-                emit("addOneConnected", to=id)
+                emit("addOneConnected", to=room["creatorSID"])
+            elif room["connected"][session["loginE"]] != None:
+                emit("desactivateAnswers")
         else:
             flash("Vous devez être connecté pour acceder à cette page")
             return redirect(url_for('login.init'))
 
-        if room["liveAnswersShown"]:
-            emit("showLiveAnswers", getLiveAnswers(id))
         if room["corrected"]:
-            emit("showCorrection", getCorrection(id))
+            emit("showCorrection", getCorrection(room))
 
 @socketio.on("quitSession")
 def quitSession(id):
@@ -152,23 +158,19 @@ def quitSession(id):
         if session.get("loginP") == room["creator"]:
             del room
             emit("stopSession", to=id)
-        elif session.get("loginS") in room["connected"]:
-            room["nbConnected"] -= 1
-            emit("rmOneConnected", to=id)
-            del room["connected"][session["loginS"]]
 
 ########################### GESTION DES REPONSES ####################################
 
 @socketio.on("sendAnswers")
 def saveAnswers(data):
-    data = json.loads(data)
+    #data = json.loads(data)
     answers = data["answers"]
     id = data["rId"]
     login = ""
     if id in rooms :
         room = rooms[id]
-        if session.get("loginS") in room["connected"] :
-            login = session["loginS"]
+        if session.get("loginE") in room["connected"] :
+            login = session["loginE"]
             emit("desactivateAnswers")
         else:
             return
@@ -182,6 +184,8 @@ def saveAnswers(data):
                     room["totalAnswers"][a] += 1
                 if set(room["correction"]) == set(answers):
                     isCorrect = True
+                if room["liveAnswersShown"]:
+                    emit("newAnswer", answers, to=room["creatorSID"])
             else:
                 if answers in room["totalAnswers"]:
                     room["totalAnswers"][answers] += 1
@@ -189,10 +193,10 @@ def saveAnswers(data):
                     room["totalAnswers"][answers] = 1
                 if answers == room["activeQuestion"]["numeralAnswer"]:
                     isCorrect = True
-            if room["inSequence"]:
-                database.saveStudentAnswer(login, room["archiveId"], isCorrect, room["indexQ"])
-            else:
-                database.saveStudentAnswer(login, room["archiveId"], isCorrect)
+                if room["liveAnswersShown"]:
+                    emit("newAnswer", answers, to=room["creatorSID"])
+            emit("addOneAnswer", to=room["creatorSID"])
+            database.saveStudentAnswer(room["archiveId"], login, isCorrect, room["activeQuestion"]["id"])
 
 @socketio.on("stopAnswers")
 def stopAnswers(id):
@@ -214,9 +218,9 @@ def sendCorrection(id):
 
 def getCorrection(room):
     if "numeralAnswer" in room["activeQuestion"]:
-        return json.dumps(room["activeQuestion"]["numeralAnswer"], indent=4)
+        return room["activeQuestion"]["numeralAnswer"]
     else:
-        return json.dumps(room["correction"], indent=4)
+        return room["correction"]
 
 ########################## REPONSES LIVE ##########################
 
@@ -225,45 +229,16 @@ def sendLiveAnswers(id):
     if id in rooms:
         room = rooms[id]
         if session.get("loginP") == room["creator"] and not room["liveAnswersShown"]:
-            emit("showLiveAnswers", getLiveAnswers(room), to=id)
+            emit("showLiveAnswers", {"nbAnswers" : room["nbAns"], "typeAnswer" : (0 if not "numeralAnswer" in room["activeQuestion"] else 1), "answers" : room["totalAnswers"]}, to=room["creatorSID"])
             room["liveAnswersShown"] = True
-
-def getLiveAnswers(room):
-    nbAns = room["nbAns"]
-    if "numeralAnswer" in room["activeQuestion"]:
-        fiveMostAnswered = ["None"]*5
-        fiveMostAnsweredQuant = [0]*5
-        if nbAns == 0 :
-            return json.dumps([fiveMostAnswered, fiveMostAnsweredQuant], indent=4)
-        for key, value in room["totalAnswers"]:
-            for i in range(0, 4):
-                if value > fiveMostAnsweredQuant[i]:
-                    fiveMostAnsweredQuant.insert(i, value)
-                    fiveMostAnswered.insert(i, key)
-                    fiveMostAnsweredQuant.pop()
-                    fiveMostAnswered.pop()
-                    break
-        for e in fiveMostAnsweredQuant:
-            e = (e/nbAns)*100
-        fiveMostAnswered[4] = "Autres"
-        fiveMostAnsweredQuant[4] = ((nbAns - sum(fiveMostAnsweredQuant[:-1])) / nbAns)*100
-        return json.dumps([fiveMostAnswered, fiveMostAnsweredQuant], indent=4)
-    else:
-        givenAnswers = room["totalAnswers"]
-        percents = []
-        if nbAns == 0 :
-            return json.dumps([0]*len(givenAnswers), indent=4)
-        for a in givenAnswers:
-            percents.append((a/nbAns)*100)
-        return json.dumps(percents, indent=4)
 
 ########################## MESSAGES ##########################
 
 @socketio.on('message')
 def handle_message(data):
-    print("######################################################################################################")
+    print("#####################################################################")
     print('received message: ' + data["m"] + " from " + session.get("loginP"))
-    print("######################################################################################################")
+    print("#####################################################################")
 
 
 
