@@ -14,7 +14,7 @@
     <h1 id="titre">{{title}}</h1>
 
     {% for i in range(0, questions|length)%}
-    <h3 class="questionIndex">Question {{i}} :</h3>
+    <h3 class="questionIndex">Question {{i+1}} :</h3>
     <div class="state">
         <state>{{ questions[i].state|safe }}</state>
     </div>
