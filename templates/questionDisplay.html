@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename = 'questionDisplay.css') }}">
 
 <div class="container-fluid" id="main">
+    <audio controls autoplay hidden >
+        <source src="/static/qui-veut-gagner-des-millions-stressant.mp3" type="audio/mpeg">
+    </audio>
     <h2 class="">Code de session : <span id="codeQuestion">{{idS}}</span></h2>
 
     {% if isProf %}
