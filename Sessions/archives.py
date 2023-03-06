@@ -8,7 +8,7 @@ archive = Blueprint('archive',__name__)
 def init():
     if "loginP" in session:
         idProf = session['loginP']
-        sessions = database.loadSessionByProf(idProf)
+        sessions = database.loadSessionDataByProf(idProf)
         print(session)
         return render_template("archives.html", sessions=sessions)
     else:
@@ -19,8 +19,8 @@ def init():
 def historique():
     if "loginP" in session:
         idProf = session['loginP']
-        #sessions = database.loadSessionByProf(idProf)
-        #print(session)
+        sessions = database.loadSessionDataByProf(idProf) 
+        print(session)
         return render_template("StatsOverTime.html")
     else:
         flash("Vous devez être connecté pour acceder à cette page")
