@@ -6,22 +6,32 @@
 {% if isLogedP %}
 
 <div class="container-fluid">
-    <div class="sequence">
-        {{session.title}}
-        <div class="tabStat">
-            <table>
-            {% for eleve in session %}
-                <div class="resEleves">
+    <div class="stats">
+        <div class ="stats-titre">
+            Titre de la séquence : {{res['id']}} <!--REMPLACER ID PAR TITRE -->
+        </div>
+        <div class="stats-date">
+            Date de la séquence :
+            {{res['date']}}
+        </div>
+        <div class="stats-tab">
+            <table class = table>
+                <thead>
                     <tr>
-                        <td>
-                            {{ eleve.nom }}               
-                        </td>
-                        <td>
-                            {{ eleve.pourcentage }}
-                        </td>
+                        <th>Numéro Etudiant</th>
+                        <th>Pourcentage de bonne(s) réponse(s)</th>
                     </tr>
-                </div>
-            {% endfor %}
+                </thead>
+                <tbody>
+                    {% for key in res['results'] %}
+                        <tr>
+                            <th>{{ key }}</th>
+                            <th>{{ res['results'][key] }}%</th>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
             </table>
         </div>
     </div>

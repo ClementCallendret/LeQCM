@@ -30,10 +30,8 @@ def historique():
 @archives.route('/archives/stats/<idSession>')
 def stats(idSession):
     if "loginP" in session:
-        idSession = request.args.get('idSession')
-        print("ID SESSION :",idSession)
-        result = database.loadSessionResults(idSession)
-        return render_template("stats.html",result)
+        res = database.loadSessionResults(idSession)
+        return render_template("stats.html",res=res)
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="stats-"+idSession))
