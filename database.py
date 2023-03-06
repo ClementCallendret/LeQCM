@@ -400,8 +400,11 @@ def getQuestionFromSequence(id, index):
     
 ####################### ARCHIVAGE SESSIONS ###############################
 
-def saveSession(idProf, idSequence=None):
-    newSession = models.Session(idP=idProf, idSequence=idSequence, date=datetime.now())
+def saveSession(idProf, id, mode):
+    if mode == "Question":
+        newSession = models.Session(idP=idProf, idQuestion=id, date=datetime.now())
+    else:
+        newSession = models.Session(idP=idProf, idSequence=id, date=datetime.now())
     db.session.add(newSession)
     if dbCommit():
         return newSession.id
