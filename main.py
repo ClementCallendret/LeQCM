@@ -1,6 +1,7 @@
 from flask import render_template, request, Blueprint, session
 from flask_sqlalchemy import SQLAlchemy
 import models
+import database
 
 from extension import db, socketio, app # fichier a part pour éviter les circular imports
 
@@ -46,11 +47,21 @@ def accueil():
 
 @app.context_processor
 def isLogedP():
+    result = ""
+    if database.studentExist(session.get('loginE')):
+        result = session.get('loginE')
+    else:
+        result = False
     return dict(isLogedP = session.get('loginP'))
 
 @app.context_processor
 def isLogedE():
-    return dict(isLogedE = session.get('loginE'))
+    result = ""
+    if database.studentExist(session.get('loginE')):
+        result = session.get('loginE')
+    else:
+        result = False
+    return dict(isLogedE = result)
 
 @app.context_processor
 def getLogin():

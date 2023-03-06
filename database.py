@@ -342,9 +342,11 @@ def deleteSequence(idSequence):
 
 def updateSequence(id, idList, title):
     seq = models.Serie.query.filter_by(id=id).first()
+    print("1")
     if not seq:
         return False
     
+    print("2")
     seq.title = title
     for row in models.InSerie.query.filter_by(idS=id):
         if row.idQ not in idList:
@@ -355,6 +357,8 @@ def updateSequence(id, idList, title):
             q.posQ = i
         else:
             addQuestionToSerie(id, idList[i], i)
+
+    print("3")
     return dbCommit()
 
 ######################### REQUETES SEQUENCES ############################

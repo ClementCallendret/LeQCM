@@ -24,7 +24,7 @@ function filterByTags() {
             q = $(this)
             tags = getTags(q.find(".card-footer"));
             hasTag = false
-            for (let i = 0; i < tags.length - 1; i++) {
+            for (let i = 0; i < tags.length; i++) {
                 if (selectedTags.includes(tags[i])) {
                     hasTag = true;
                 }
@@ -40,7 +40,7 @@ function filterByTags() {
 }
 
 function getTags(cardFooter){
-    tagsJQ = cardFooter.find("span")
+    tagsJQ = cardFooter.find(".etiquette")
     tags = []
     tagsJQ.each((i, v) => {
         tags.push(v.innerText)

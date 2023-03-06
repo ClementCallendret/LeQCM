@@ -94,9 +94,9 @@ function showLiveAnswers() {
 
 socket.on("showLiveAnswers", (data) => {
     console.log("Affichage des réponses lives");
-    if (typeAnswer == 0)
+    console.log(data)
+    if (data.typeAnswer == 0)
         $(".liveAnswer").removeClass("hidden");
-    //data = JSON.parse(data);
     totalAnswers = data.answers;
     nbAnswers = data.nbAnswers;
     typeAnswer = data.typeAnswer;
