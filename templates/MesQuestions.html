@@ -80,7 +80,7 @@
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
           <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}" class="topRightBut btn btn-success">live</a>
         </div>
-        <div class="card-body">{{q['state']|safe}}</div>
+        <div class="card-body" ><div style="scale:50%;">{{q['state']|safe}}</div></div>
         <div class="card-footer">
           {%for t in q['tags']%}
           <span class="etiquette">{{t}}</span>
