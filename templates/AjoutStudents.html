@@ -67,17 +67,18 @@
                         style="display: block;">SOUMETTRE</button> -->
                     <input type="hidden" id="TabToSend" value="" name="StudentTab">
                     <div id="comfirmButtons" class="d-flex flex-wrap justify-content-center hidden">
-                        <button class="btn btn-danger" type="button" id="boutoncancel" onclick="efface()">Annuler
+                        <button class="btn btn-danger" type="button" id="boutoncancel" onclick="efface()">Annuler <!-- class btn-danger pour le mettre en rouge-->
                             !</button>
                         <input class="btn btn-success" type="submit" form="FormAjout" id="boutonsubmit"
-                            value="Comfirmer !">
+                            value="Confirmer !"> <!-- class btn-success pour le mettre en vert-->
                     </div>
                 </form>
             </div>
         </div>
         <div class="col-md-6">
             <div class="centerPage">
-                <h4>Aperçue</h4>
+                <h4>Aperçu des étudiants</h4>
+                <h5>(en rouge ceux qui ne seront pas enregistrés)</h5>
                 <div id="scrollableDiv" class="overflow-auto">
                     <table id="etudiant_ajt"></table>
                 </div>
