@@ -4,14 +4,31 @@
 
 {% block content %}
 {% if isLogedP %}
-
 <div class="container-fluid">
     <div class="sequence">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Date</th>
+                    <th>Taux Participation</th>
+                    <th>Taux bonne(s) réponse(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                <tr>
+                   <th><a href="/stats/{{session['id']}}">{{session['id']}}</a></th> 
+                    <!--<th>{{session['title']}}</th> REMPLACER ID PAR TITLE-->
+                    <th>{{session['date']}}</th>
+                    <th>{{session['nbAnswers'][0]}}</th>   
+                    <th>{{session['nbAnswers'][1]}}</th>
 
-        {% for session in sessions %}
-            <a href="{{url_for('archives.stats', idSession=session['id'])}}">{{session.title}}</a>
-   
-        {% endfor %}
+                </tr>       
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
 </div>
 

@@ -72,8 +72,7 @@ def decrypt(login,password,statut):
         salt = database.getProfessorSel(login)
     elif (statut == 'S'):
         salt = database.getStudentSel(login)
-        
-    if (salt == False):
+    if (salt == None):
         return False
     listHashPotentiels = unpepper(password, salt)
 

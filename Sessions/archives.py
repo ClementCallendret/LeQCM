@@ -31,6 +31,7 @@ def historique():
 def stats(idSession):
     if "loginP" in session:
         idSession = request.args.get('idSession')
+        print("ID SESSION :",idSession)
         result = database.loadSessionResults(idSession)
         return render_template("stats.html",result)
     else:
