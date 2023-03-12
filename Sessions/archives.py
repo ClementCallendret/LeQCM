@@ -11,26 +11,16 @@ def init():
         idProf = session['loginP']
         sessions = database.loadSessionDataByProf(idProf)
         print(sessions)
-        return render_template("archives.html", sessions=sessions)
+        return render_template("archives.html", sessions=sessions, sessionsJSon=json.dumps(sessions, indent=4))
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="archives"))
-    
-@archives.route('/archives/historique')
-def historique():
-    if "loginP" in session:
-        idProf = session['loginP']
-        mySessions = database.loadSessionDataByProf(session["loginP"])
-        print(mySessions)
-        return render_template("StatsOverTime.html", mySessions=json.dumps(mySessions, indent=4))
-    else:
-        flash("Vous devez être connecté pour acceder à cette page")
-        return redirect(url_for('login.initRedirect', redirection="archives-historique"))
 
 @archives.route('/archives/stats/<idSession>')
 def stats(idSession):
     if "loginP" in session:
         res = database.loadSessionResults(idSession)
+        print(res)
         return render_template("stats.html",res=res)
     else:
         flash("Vous devez être connecté pour acceder à cette page")

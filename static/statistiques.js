@@ -1,6 +1,7 @@
 var myLabels = [];
 var myLabelsLink = [];
 var nbParticipant = [[], []];
+var maxNbAnswers = 0;
 
 function getDatas(){
     mySessions = JSON.parse(document.getElementById("datasJson").value);
@@ -9,6 +10,9 @@ function getDatas(){
         myLabelsLink.push(myS.id);
         nbParticipant[0].push(myS.nbAnswers[0]);
         nbParticipant[1].push(myS.nbAnswers[1]);
+        if (myS.nbAnswers[0] > maxNbAnswers){
+            maxNbAnswers = myS.nbAnswers[0];
+        }
     }
 }
 
@@ -41,7 +45,8 @@ config = {
                 max: 9
             },
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                max: maxNbAnswers
             }
         },
         tailleIntervale: 10,

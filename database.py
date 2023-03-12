@@ -434,10 +434,12 @@ def loadSessionDataById(idSession):
             sessionData["idSequence"] = mySession.idSequence
             sessionData["isSequence"] = True
             sessionData["nbAnswers"] = getSequenceAvgNbAnswers(idSession, sessionData["idSequence"])
+            sessionData["title"] = models.Serie.query.filter_by(id=mySession.idSequence).first().title
         else :
             sessionData["idQuestion"] = mySession.idQuestion
             sessionData["isSequence"] = False
             sessionData["nbAnswers"] = getQuestionNbAnswers(idSession, sessionData["idQuestion"])
+            sessionData["title"] = models.Question.query.filter_by(id=mySession.idQuestion).first().title
         return sessionData
     else:
         return None
@@ -446,7 +448,7 @@ def loadSessionDataById(idSession):
 
 def loadSessionDataByProf(idProf):
     sessions = []
-    for row in models.Session.query.filter_by(idP=idProf):
+    for row in models.Session.query.filter_by(idP=idProf).order_by(models.Session.date.desc()):
         sessions.append(loadSessionDataById(row.id))
     return sessions
     #pareil mais par prof
@@ -482,7 +484,7 @@ def getQuestionsResults(idSession, idQuestion): #intermediaire
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
     for row in allAnswers:
-        results[row.idStudent] = row.correct
+        results[str(row.idStudent)] = row.correct
     return results
 
 def getAvgSequenceResults(idSession, idSequence): #intermediaire
