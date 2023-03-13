@@ -68,7 +68,7 @@ function clickHandler(click) {
     if (points.length) {
         const firstPoint = points[0];
         const value = myChart.data.labelsLink[firstPoint.index];
-        window.open("/stats/" + value.toString());
+        window.open("/archives/stats/" + value.toString());
     }
 }
 ctx.onclick = clickHandler;
