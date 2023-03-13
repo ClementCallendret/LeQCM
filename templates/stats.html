@@ -8,11 +8,11 @@
 <div class="container-fluid">
     <div class="stats">
         <div class ="stats-titre">
-            Titre de la séquence : {{res['id']}} <!--REMPLACER ID PAR TITRE -->
+            Titre de la séquence : {{resultats['id']}} <!--REMPLACER ID PAR TITRE -->
         </div>
         <div class="stats-date">
             Date de la séquence :
-            {{res['date']}}
+            {{resultats['date']}}
         </div>
         <div class="stats-tab">
             <table class = table>
@@ -20,13 +20,14 @@
                     <tr>
                         <th>Numéro Etudiant</th>
                         <th>Pourcentage de bonne(s) réponse(s)</th>
+                        {% for nbQuestions %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% for key in res['results'] %}
+                    {% for numEtu in resultats['results'] %}
                         <tr>
-                            <th>{{ key }}</th>
-                            <th>{{ res['results'][key] }}%</th>
+                            <th>{{ numEtu }}</th>
+                            <th>{{ resultats['results'][numEtu] }}%</th>
                         </tr>
 
                     {% endfor %}
