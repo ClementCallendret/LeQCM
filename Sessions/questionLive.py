@@ -66,7 +66,7 @@ def createNew(mode, id):
                 newRoom["totalAnswers"] = {} #nb de personne ayant proposé chaque rep
 
             newRoom["activeQuestion"] = question
-            archiveId = database.saveSession(session["loginP"], (id if mode == "Sequence" else None))
+            archiveId = database.saveSession(session["loginP"], id, mode)
             print(archiveId)
             newRoom["archiveId"] = archiveId
             rooms[roomId] = newRoom

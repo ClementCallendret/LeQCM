@@ -342,9 +342,11 @@ def deleteSequence(idSequence):
 
 def updateSequence(id, idList, title):
     seq = models.Serie.query.filter_by(id=id).first()
+    print("1")
     if not seq:
         return False
     
+    print("2")
     seq.title = title
     for row in models.InSerie.query.filter_by(idS=id):
         if row.idQ not in idList:
@@ -355,6 +357,8 @@ def updateSequence(id, idList, title):
             q.posQ = i
         else:
             addQuestionToSerie(id, idList[i], i)
+
+    print("3")
     return dbCommit()
 
 ######################### REQUETES SEQUENCES ############################
@@ -396,8 +400,11 @@ def getQuestionFromSequence(id, index):
     
 ####################### ARCHIVAGE SESSIONS ###############################
 
-def saveSession(idProf, idSequence=None):
-    newSession = models.Session(idP=idProf, idSequence=idSequence, date=datetime.now())
+def saveSession(idProf, id, mode):
+    if mode == "Question":
+        newSession = models.Session(idP=idProf, idQuestion=id, date=datetime.now())
+    else:
+        newSession = models.Session(idP=idProf, idSequence=id, date=datetime.now())
     db.session.add(newSession)
     if dbCommit():
         return newSession.id
@@ -427,10 +434,12 @@ def loadSessionDataById(idSession):
             sessionData["idSequence"] = mySession.idSequence
             sessionData["isSequence"] = True
             sessionData["nbAnswers"] = getSequenceAvgNbAnswers(idSession, sessionData["idSequence"])
+            sessionData["title"] = models.Serie.query.filter_by(id=mySession.idSequence).first().title
         else :
             sessionData["idQuestion"] = mySession.idQuestion
             sessionData["isSequence"] = False
             sessionData["nbAnswers"] = getQuestionNbAnswers(idSession, sessionData["idQuestion"])
+            sessionData["title"] = models.Question.query.filter_by(id=mySession.idQuestion).first().title
         return sessionData
     else:
         return None
@@ -439,7 +448,7 @@ def loadSessionDataById(idSession):
 
 def loadSessionDataByProf(idProf):
     sessions = []
-    for row in models.Session.query.filter_by(idP=idProf):
+    for row in models.Session.query.filter_by(idP=idProf).order_by(models.Session.date.desc()):
         sessions.append(loadSessionDataById(row.id))
     return sessions
     #pareil mais par prof
@@ -475,7 +484,7 @@ def getQuestionsResults(idSession, idQuestion): #intermediaire
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
     for row in allAnswers:
-        results[row.idStudent] = row.correct
+        results[str(row.idStudent)] = row.correct
     return results
 
 def getAvgSequenceResults(idSession, idSequence): #intermediaire

@@ -26,8 +26,8 @@ def updateSequence(id):
     if "loginP" in session and database.possedeSequence(id,session["loginP"]):
         seq = database.loadSequenceById(id)
         questions = []
-        for id in seq["idList"]:
-            q = database.loadQuestionById(id)
+        for it in seq["idList"]:
+            q = database.loadQuestionById(it)
             q["state"] = formatage.formatageMD(q["state"])
             questions.append(q)
         jsoned = json.dumps(questions, indent=4)
@@ -36,6 +36,7 @@ def updateSequence(id):
         for q in allQuestions :
             q["state"] = formatage.formatageMD(q["state"])
 
+        print(id)
         return render_template("Sorting.html", questions=jsoned, id=id, title=seq["title"], button="Sauvegarder les modifications", allQuestions=allQuestions)
     else:
         return redirect(url_for('mesQuestions.mainPage'))
@@ -66,6 +67,7 @@ def creationSequence():
         if request.form["id"] == "new":
             database.saveSequence(idList, session["loginP"], title)
         else:
+            print(request.form["id"])
             database.updateSequence(request.form["id"], idList, title)
     return redirect(url_for('mesQuestions.mainPage'))
 
