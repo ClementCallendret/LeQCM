@@ -5,6 +5,35 @@
 {% block content %}
 {% if isLogedP %}
 
+<style>
+    .stats {
+        margin-top: 20px;
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+    }
+
+    .stats-titre {
+        font-size: 20px;
+        font-weight: bold;
+
+    }
+
+    .stats-date {
+        font-size: 15px;
+        font-weight: bold;
+
+    }
+
+    .stats-tab {
+        margin-top: 20px;
+    }
+    #numEtuCss {
+        width: 40%;
+    }
+</style>
+
+
+
 <div class="container-fluid">
     <div class="stats">
         <div class ="stats-titre">
@@ -15,19 +44,18 @@
             {{res['date']}}
         </div>
         <div class="stats-tab">
-            <table class = table>
+            <table class = "table">
                 <thead>
                     <tr>
-                        <th>Numéro Etudiant</th>
+                        <th id="numEtuCss">Numéro Etudiant</th>
                         <th>Pourcentage de bonne(s) réponse(s)</th>
-                        {% for nbQuestions %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% for numEtu in resultats['results'] %}
+                    {% for numEtu in res['results'] %}
                         <tr>
                             <th>{{ numEtu }}</th>
-                            <th>{{ resultats['results'][numEtu] }}%</th>
+                            <th>{{ res['results'][numEtu] }}%</th>
                         </tr>
 
                     {% endfor %}
