@@ -9,7 +9,7 @@ function validation() {
     alert("Choisir un fichier !");
     return false;
   }
-  if (name_file.split('.').pop() != 'csv') {
+  if (name_file.split('.').pop() != 'csv') {$('#scrollableDiv').removeClass("hidden");
     alert("Aie aie aie !! Ton fichier n'est pas un csv..");
     return false;
   }
@@ -42,7 +42,7 @@ function efface(isError=false) {
   $('#comfirmButtons').addClass("hidden")
 
   $('#myFile').val("")
-
+$('#scrollableDiv').removeClass("hidden");
   $('#TabToSend').val("")
 
   $('#etudiant_ajt').empty()
@@ -111,5 +111,6 @@ function affiche_etudiant_a_ajouter() {
   `
     tableau.append(html);
   }
+  $('#scrollableDiv').removeClass("hidden");
 
 }
