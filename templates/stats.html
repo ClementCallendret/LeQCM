@@ -55,7 +55,11 @@
                     {% for numEtu in res['results'] %}
                         <tr>
                             <th>{{ numEtu }}</th>
+                            {% if res['results'][numEtu] == False %}
+                            <th>0%</th>
+                            {% else %}
                             <th>{{ res['results'][numEtu] }}%</th>
+                            {% endif %}
                         </tr>
 
                     {% endfor %}

@@ -22,11 +22,7 @@ def stats(idSession):
         res = database.loadSessionResults(idSession)
         print(res)
         return render_template("stats.html",res=res)
-        resultats = database.loadSessionResults(idSession)
-        responses = database.getResponsesById(idSession)        
-        print(resultats)
-        print(responses)
-        return render_template("stats.html",resultats=resultats,responses=responses )
+
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="stats-"+idSession))

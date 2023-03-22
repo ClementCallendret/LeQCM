@@ -53,24 +53,15 @@
     </div>
 
     <hr />
-
-    <div class="alert alert-danger" style="width: fit-content; margin : auto">
-        A mon avis c'est important de donner au moins le nombre de participants
-        sinon les pourcentages veulent pas dire grand chose.<br/>
-        Ou alors donner direct nombre de participant et nombre de bonne réponse<br/>
-        Pareil sur la page stat<br/>
-        Aussi chuis pas un génie des maths mais *100 ca cacule pas un pourcentage <3 (c'est le nombre de reponse par question dans session['nbAnswers']) <br/>
-        Pour les clef du dictionaire j'ai remplacé par des strings
-    </div>
-
+    <h2>Historique des sessions</h2>
     <div class="archives-tab">
         <table class="table">
             <thead>
                 <tr>
                     <th>Titre</th>
                     <th>Date</th>
-                    <th>Taux Participation</th>
-                    <th>Taux bonne(s) réponse(s)</th>
+                    <th>Nombre de participants par question(s)</th>
+                    <th>Nombre de bonnes réponses par question(s)</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,8 +69,13 @@
                 <tr>
                     <td><a href="/archives/stats/{{session['id']}}">{{session['title']}}</a></td>
                     <td>{{session['date']}}</td>
-                    <td>{{session['nbAnswers'][0]*100}} %</td>
-                    <td>{{session['nbAnswers'][1]*100}}%</td>
+                    <td>{{session['nbAnswers'][0]|round }}</td>
+
+                    {% if session['nbAnswers'][0] == 0 %}  
+                    <td>  {{(100 *session['nbAnswers'][0])|round}}%</td>
+                    {% else %}
+                    <td>  {{(100 *session['nbAnswers'][1] / session['nbAnswers'][0]) | round}}%</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
