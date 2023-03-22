@@ -54,7 +54,7 @@ function Verif_content() {
   // Verification de la donnée qui est notre fichier parsé
   for (i in parsed_file) {
     line = parsed_file[i];
-    if (line.length != 3 || line[0].length != 8 || ! /^\d+$/.test(line[0]) || line[1].length == 0 || line[2].length == 0) { // verif des elements de chaque lignes
+    if (line.length != 3 || line[0].length != 8 || ! /^\d+$/.test(line[0]) || line[1].length == 0 || line[2].length == 0 || alreadyInTab(line, tableau_des_bons_etudiants)) { // verif des elements de chaque lignes
       index_invalide.push(i);
       console.log(line);
     }
@@ -64,9 +64,17 @@ function Verif_content() {
   }
   affiche_etudiant_a_ajouter();
 
-
   StudentTab = $('#TabToSend');
   StudentTab.val(JSON.stringify(tableau_des_bons_etudiants)); // pour mettre dans mon html mon tableau à l'emplacmeent hidden
+}
+
+function alreadyInTab(line, tab){
+  for(l of tab){
+    if(l[0] == line[0]){
+      return true;
+    }
+  }
+  return false;
 }
 
 function affiche_etudiant_a_ajouter() {
