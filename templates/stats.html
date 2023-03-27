@@ -58,7 +58,7 @@
                             {% if res['results'][numEtu] == False %}
                             <th>0%</th>
                             {% else %}
-                            <th>{{ res['results'][numEtu] }}%</th>
+                            <th>{{ res['results'][numEtu] | round}}%</th>
                             {% endif %}
                         </tr>
 
