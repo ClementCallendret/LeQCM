@@ -166,11 +166,11 @@ def deleteAnswer(idA):
 
 ###################### MODIFICATIONS QUESTIONS ####################
 
-def saveQuestion(idProf, title, state, answers, tags):
-    if isinstance(answers, list):
-        question = models.Question(title=title, state=state, idP=idProf)
-    else:
-        question = models.Question(title=title, state=state, idP=idProf, numeralAnswer=answers)
+def saveQuestion(idProf, title, state, tags, mode, answers = None):
+    question = models.Question(title=title, state=state, idP=idProf, mode=mode)
+
+    if mode == 1:
+        question.numeralAnswer = answers
 
     db.session.add(question)
     if not dbCommit():
@@ -181,19 +181,19 @@ def saveQuestion(idProf, title, state, answers, tags):
     for t in tags:
         addHasTag(questionId, t)
     
-    if isinstance(answers, list):
+    if mode == 0:
         for rep in answers:
             if not addAnswer(rep, questionId):
                 return False
 
     return questionId
 
-def updateQuestion(idQuestion, idProf, title, state, answers, tags):
+def updateQuestion(idQuestion, idProf, title, state, tags, mode, answers = None):
     dataAnswers = models.Answer.query.filter_by(idQ=idQuestion)
     dataTags = models.HasTag.query.filter_by(idQ=idQuestion)
     dataQuestion = models.Question.query.filter_by(id=idQuestion).first()
 
-    if isinstance(answers, list):
+    if mode == 0:
         #Suppression des réponses qui ne sont plus présentes
         for row in dataAnswers:
             if {"val": row.solution, "text" : row.text} not in answers:
@@ -207,6 +207,7 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
 
         #On s'assure que la réponse numérique soit Null
         dataQuestion.numeralAnswer = None
+        dataQuestion.mode = 0
 
     else:
         #Suppression des réponse QCM si jamais on a changé de mode
@@ -215,8 +216,12 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
             db.session.commit()
         
         #Maj de la réponse numérique
-        dataQuestion.numeralAnswer = answers
-
+        if mode == 1:
+            dataQuestion.mode = 1
+            dataQuestion.numeralAnswer = answers
+        else :
+            dataQuestion.mode = 2
+            dataQuestion.numeralAnswer = None
 
     #suppression des tags qui ne sont plus présents
     for row in dataTags:
@@ -253,23 +258,25 @@ def deleteQuestion(idQuestion):
 ######################### REQUETES QUESTIONS ############################
 
 def parseQuestionData(dataQuestion, dataAnswers, dataTags): #(fct intermédiaire)
-    question = {"id":None, "owner" : "", "title" : "", "state":"", "tags":[]}
+    question = {}
     
-    if not question:
+    if not dataQuestion:
         return None
 
     question["id"] = dataQuestion.id
     question["title"] = dataQuestion.title
     question["state"] = dataQuestion.state
     question["owner"] = dataQuestion.idP
+    question["mode"] = dataQuestion.mode
 
-    if dataQuestion.numeralAnswer is None:
+    if dataQuestion.mode == 0:
         question["answers"] = []
         for row in dataAnswers:
             question["answers"].append({"val": row.solution, "text" : row.text})
-    else:
+    elif dataQuestion.mode == 1:
         question["numeralAnswer"] = dataQuestion.numeralAnswer
     
+    question["tags"] = []
     for row in dataTags:
         question["tags"].append(row.idT)
 

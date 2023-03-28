@@ -2,17 +2,23 @@ const idAnswers = JSON.parse($("#idAnswers").val());
 const form = document.getElementById("questionForm");
 const newTags = JSON.parse($("#newTags").val());
 
-function changeQuestionMode(checkboxElem) {
-    if (checkboxElem.checked) {
+function changeQuestionMode(mode) {
+    if (mode == 0) {
         document.getElementById("answerList").setAttribute("style", "");
         document.getElementById("addAnswerBut").setAttribute("style", "");
         document.getElementById("numeralAnswer").setAttribute("style", "display : None");
     }
-    else {
+    else if (mode == 1) {
         document.getElementById("answerList").setAttribute("style", "display : None");
         document.getElementById("addAnswerBut").setAttribute("style", "display : None");
         document.getElementById("numeralAnswer").setAttribute("style", "");
     }
+    else {
+        document.getElementById("answerList").setAttribute("style", "display : None");
+        document.getElementById("addAnswerBut").setAttribute("style", "display : None");
+        document.getElementById("numeralAnswer").setAttribute("style", "display : None");
+    }
+    //console.log("mode : " + mode);
 }
 
 function maxOfTab(tab) {
@@ -38,8 +44,8 @@ function addAnswer() {
     // Ajout de la nouvelle réponse au HTML avec le bon id
     let html = `
         <div id="divAnswer${newId}" class="divAnswer row align-items-center">
-            <div class="col-sm-1">
-                <input type="checkbox" name="checkAnswer${newId}" id="checkAnswer${newId}">
+            <div class="col-1 form-check form-switch">
+                <input type="checkbox" name="checkAnswer${newId}" id="checkAnswer${newId}" class="form-check-input">
             </div>
             <div class="col-sm-9">
                 <textarea class="inputAnswer form-control" name="textAnswer${newId}" id="textAnswer${newId}" value="" placeholder="Réponse"></textarea>

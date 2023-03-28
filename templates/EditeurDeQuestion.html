@@ -27,18 +27,22 @@
 
                 <h1 style="font-size: large;">Réponses :</h1>
                 
-                Mode réponse numérique
-                <label class="switch">
-                    <input type="checkbox" name="isQcm" id="isQcmCheck" onchange="changeQuestionMode(this)">
-                    <span class="slider round"></span>
-                </label>
-                Mode choix multiples
+                <div class="d-flex flex-wrap justify-content-around">
+                    <input type="radio" class="btn-check" name="questionMode" id="mode0" autocomplete="off" value="0" onchange="changeQuestionMode(0)" {% if mode == 0 %} checked {%endif%}>
+                    <label class="btn btn-secondary" for="mode0">Choix multiples</label>
+
+                    <input type="radio" class="btn-check" name="questionMode" id="mode1" autocomplete="off" value="1" onchange="changeQuestionMode(1)" {% if mode == 1 %} checked {%endif%}>
+                    <label class="btn btn-secondary" for="mode1">Réponse numérique</label>
+
+                    <input type="radio" class="btn-check" name="questionMode" id="mode2" autocomplete="off" value="2" onchange="changeQuestionMode(2)" {% if mode == 3 %} checked {%endif%}>
+                    <label class="btn btn-secondary" for="mode2">Réponses ouvertes</label>
+                </div>
 
                 <div id="answerList" class="container-fluid">
                     {%for i in range(0, answers|length)%} <!--Replacement des réponses après un rechargement-->
                     <div id="divAnswer{{i}}" class="divAnswer row align-items-center">
-                        <div class="col-1">
-                            <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}">
+                        <div class="col-1 form-check form-switch">
+                            <input type="checkbox" name="checkAnswer{{i}}" id="checkAnswer{{i}}" class="form-check-input">
                         </div>
                         <div class="col-9">
                             <textarea class="inputAnswer form-control" name="textAnswer{{i}}" id="textAnswer{{i}}"
@@ -114,7 +118,7 @@
             </br>
 
             
-            {%if isQcm%}
+            {%if mode == 0%}
             <h1 style="font-size: large;">Réponses :</h1>
             <div id="previewAnswerList" class="container-fluid">
                 {%for i in range(0, answersFormated|length)%} <!--Affichage des réponses formatés -->
@@ -128,7 +132,7 @@
                 </div>
                 {%endfor%}
             </div>
-            {%else%}
+            {%elif mode == 1 %}
                 {{numeralAnswer}}
             {%endif%}
         </div>
@@ -137,13 +141,8 @@
             mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
         </script>
         <script src="{{ url_for('static', filename = 'scriptEditeur.js') }}"></script>
-        {% if isQcm %}
         <script>
-            document.getElementById("isQcmCheck").checked = true;
-        </script>
-        {%endif%}
-        <script>
-            changeQuestionMode(document.getElementById("isQcmCheck"))
+            changeQuestionMode({{mode}})
         </script>
     </div>
 </div>
