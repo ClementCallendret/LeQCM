@@ -50,7 +50,6 @@ def init(questionId):
 # Cas ou l'on veut charger l'apercu ou sauvegarder
 @editeur.route('/editeur/<questionId>', methods=['POST'])
 def editeurPOST(questionId):
-  print(request.form["questionMode"])
   if 'loginP' in session:
     # Récupération de l'énoncé et calcul du rendu
     state = request.form["state"]

@@ -478,20 +478,28 @@ def loadSessionResults(idSession):
 
 def getQuestionNbAnswers(idSession, idQuestion):
     ans = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion).count()
-    goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
+    if models.Question.query.filter_by(id=idQuestion).first().mode == 2:
+        goodAns = ans
+    else:
+        goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
     return [ans, goodAns]
 
 def getSequenceAvgNbAnswers(idSession, idSequence):
-    nbAnswers = models.StudentAnswer.query.filter_by(idSession=idSession).count()
-    nbGoodAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, correct=True).count()
+    subQuery = models.Question.query.filter_by(id= models.StudentAnswer.idQuestion).first().mode
+    nbAnswers = models.StudentAnswer.query.filter(models.StudentAnswer.idSession==idSession, subQuery != 2).count()
+    nbGoodAnswers = models.StudentAnswer.query.filter(models.StudentAnswer.idSession==idSession, models.StudentAnswer.correct==True, subQuery != 2).count()
     nbQ = models.InSerie.query.filter_by(idS = idSequence).count()
     return [nbAnswers / nbQ, nbGoodAnswers / nbQ]
 
 def getQuestionsResults(idSession, idQuestion): #intermediaire
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
-    for row in allAnswers:
-        results[str(row.idStudent)] = row.correct
+    if models.Question.query.filter_by(id=idQuestion).first().mode == 2:
+        for row in allAnswers:
+            results[str(row.idStudent)] = True
+    else:
+        for row in allAnswers:
+            results[str(row.idStudent)] = row.correct
     return results
 
 def getAvgSequenceResults(idSession, idSequence): #intermediaire
@@ -512,10 +520,6 @@ def avgResults(results): #intermediaire
                 avgResults[student] += 100.0 / n
 
     return avgResults
-
-def deleteQuestionAnswers(idQuestion):
-    models.StudentAnswer.query.filter_by(idQuestion=idQuestion).delete()
-    return dbCommit()
 
 def deleteSequenceQuestionAnswers(idS, idQ):
     for row in models.Session.query.filter_by(idSequence=idS):

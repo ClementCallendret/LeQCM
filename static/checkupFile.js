@@ -20,7 +20,7 @@ function validation() {
     fileContent = event.target.result.replaceAll(";", ",");
     //console.log(fileContent);
     parsed_file = $.csv.toArrays(fileContent);
-    console.log(parsed_file[2])
+    //console.log(parsed_file[2])
     // parsed_file.splice(0, 1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
     //enfait non sinon ca oublie un etudiant si ya pas d'entete 
     Verif_content(); // fonction qui va verifier que le fichier est en parfaite forme

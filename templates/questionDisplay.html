@@ -6,6 +6,8 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename = 'questionDisplay.css') }}">
 
+<input type="hidden" id="questionType" value="{{question.mode}}">
+
 <div class="container-fluid" id="main">
     <audio controls autoplay hidden >
         <source src="/static/qui-veut-gagner-des-millions-stressant.mp3" type="audio/mpeg">
@@ -33,7 +35,7 @@
     <h3>Réponses</h3>
     {% endif %}
 
-    {% if not "numeralAnswer" in question %}
+    {% if question.mode == 0 %}
         {% if isProf %}
         <div id="answers" class="collapse container-fluid">
         {% else %}
@@ -59,7 +61,7 @@
                 </div>
             {%endfor%}
         </div>
-    {% else %}
+    {% elif question.mode == 1 %}
     <div id="correctionNumeral" class="borderedDiv hidden" style="text-align: center; border-color: green; border-width: 7px;"></div>
         {% if isProf %}
             {%for i in range(0, 5) %}
@@ -74,10 +76,15 @@
             </div>
             {%endfor%}
         {%else%}
-            <input type="number" step="0.01" id="numeralAnswer" class="form-control" placeholder="Entrez votre réponse">
+            <input type="number" step="0.01" id="inputAnswer" class="form-control" placeholder="Entrez votre réponse">
+        {% endif %}
+    {% else %}
+        {% if isProf %}
+            <div id="wordCloud" class="hidden liveAnswer d-flex d-flex flex-wrap justify-content-around"></div>
+        {% else %}
+            <input type="text" id="inputAnswer" class="form-control" placeholder="Entrez votre réponse">
         {% endif %}
     {% endif %}
-
     <hr />
 
     {% if isProf %}
@@ -87,10 +94,11 @@
 
     <div class="d-flex flex-wrap justify-content-center">
         {% if isProf %}
-        <button type="button" class="itemBut btn btn-primary" onclick="showLiveAnswers()">Montrer réponses
-            Live</button>
+        <button type="button" class="itemBut btn btn-primary" onclick="showLiveAnswers()">Montrer réponses live</button>
         <button type="button" class="itemBut btn btn-primary" onclick="stopAnswers()">Stop réponses</button>
+        {% if question.mode != 2 %}
         <button type="button" class="itemBut btn btn-primary" onclick="showCorrection()">Correction</button>
+        {% endif %}
         {% if inSequence %}
         <button type="button" class="itemBut btn btn-primary" onclick="nextQuestion()">Suivante ></button>
         {% endif %}
@@ -102,6 +110,11 @@
     </div>
 
     </div>
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <!-- Load d3-cloud -->
+    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
         integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
         crossorigin="anonymous"></script>

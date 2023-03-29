@@ -20,7 +20,7 @@
 
                 <hr />
 
-<!---------------------------------------REPONSES---------------------------------------------->
+<!---------------------------------------REPONSES-------------------------------------------->
                 
                 <!-- idAnswers contient les ids des réponses présentent -->
                 <input type="hidden" name="idAnswers" id="idAnswers" value="{{idAnswers}}">
@@ -34,7 +34,7 @@
                     <input type="radio" class="btn-check" name="questionMode" id="mode1" autocomplete="off" value="1" onchange="changeQuestionMode(1)" {% if mode == 1 %} checked {%endif%}>
                     <label class="btn btn-secondary" for="mode1">Réponse numérique</label>
 
-                    <input type="radio" class="btn-check" name="questionMode" id="mode2" autocomplete="off" value="2" onchange="changeQuestionMode(2)" {% if mode == 3 %} checked {%endif%}>
+                    <input type="radio" class="btn-check" name="questionMode" id="mode2" autocomplete="off" value="2" onchange="changeQuestionMode(2)" {% if mode == 2 %} checked {%endif%}>
                     <label class="btn btn-secondary" for="mode2">Réponses ouvertes</label>
                 </div>
 
