@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Creation de Sujets{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+        </br></br>
+        <label for="nbr_sujets">Nombres de sujets voulus :</label>
+
+        <input type="number" id="nbr_sujets" name="nbr_sujets" min="0" max="500">
+        </br></br></br>
+
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckChecked">Anonymat</label>
+            <input class="form-check-input" type="checkbox" id="button_anonymat" checked>
+        </div>
+        </br>
+
+
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
+            <input class="form-check-input" type="checkbox" id="button_tags">
+        </div>
+
+        <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
+        <div class="dropdown">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Tags voulus dans vos sujets
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark" id="tagList" aria-labelledby="dropdownMenuButton2">
+                <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
+                            onchange="selectAllTag(this)">Tout sélectionner</label></li>
+                <hr />
+                {%for t in tags%}
+                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
+                            onchange="checkTag(this)">{{t}}</label></li>
+                {%endfor%}
+            </ul>
+
+        </div>
+
+
+</div>
+
+<script src="{{ url_for('static', filename = 'mesQuestions.js') }}"></script>
+
+{% endblock %}
