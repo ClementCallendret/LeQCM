@@ -1,22 +1,26 @@
 const idAnswers = JSON.parse($("#idAnswers").val());
 const form = document.getElementById("questionForm");
 const newTags = JSON.parse($("#newTags").val());
+const tagInput = $("#newTagName");
+const answerList = $("#answerList");
+const addAnswerBut = $("#addAnswerBut");
+const numeralAnswer = $("#numeralAnswer");
 
 function changeQuestionMode(mode) {
     if (mode == 0) {
-        document.getElementById("answerList").setAttribute("style", "");
-        document.getElementById("addAnswerBut").setAttribute("style", "");
-        document.getElementById("numeralAnswer").setAttribute("style", "display : None");
+        answerList.css("display", "block");
+        addAnswerBut.css("display", "block");
+        numeralAnswer.css("display", "None");;
     }
     else if (mode == 1) {
-        document.getElementById("answerList").setAttribute("style", "display : None");
-        document.getElementById("addAnswerBut").setAttribute("style", "display : None");
-        document.getElementById("numeralAnswer").setAttribute("style", "");
+        answerList.css("display", "None");;
+        addAnswerBut.css("display", "None");;
+        numeralAnswer.css("display", "block");
     }
     else {
-        document.getElementById("answerList").setAttribute("style", "display : None");
-        document.getElementById("addAnswerBut").setAttribute("style", "display : None");
-        document.getElementById("numeralAnswer").setAttribute("style", "display : None");
+        answerList.css("display", "None");;
+        addAnswerBut.css("display", "None");;
+        numeralAnswer.css("display", "None");;
     }
     //console.log("mode : " + mode);
 }
@@ -38,7 +42,6 @@ function deleteAnswer(numR) {
 }
 
 function addAnswer() {
-    let answerContainer = $("#answerList");
     let newId = maxOfTab(idAnswers) + 1;
 
     // Ajout de la nouvelle réponse au HTML avec le bon id
@@ -55,13 +58,12 @@ function addAnswer() {
             </div>
         </div>
     `
-    answerContainer.append(html);
+    answerList.append(html);
     idAnswers.push(newId);
 }
 
 //ajout d'un tag non existant
 function addTag() {
-    let tagInput = $("#newTagName");
     let tagName = tagInput.val().trim();
 
     if (tagName != "") {
