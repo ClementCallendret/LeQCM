@@ -87,14 +87,14 @@ function groupSimilars(answers) {
             if (similarity > 80) {
                 if (answers[mostUsedSimilar] >= answers[word2]) {
                     answers[mostUsedSimilar] += answers[word2];
-                    delete answers.word2;
+                    delete answers[word2];
                     words.splice(j, 1);
                     j--;
                     console.log(mostUsedSimilar + " <---- " + word2)
                 }
                 else{
                     answers[word2] += answers[mostUsedSimilar];
-                    delete answers.mostUsedSimilar;
+                    delete answers[mostUsedSimilar];
                     words.splice(words.indexOf(mostUsedSimilar), 1);
                     i--;j--;
                     console.log(word2 + " <---- " + mostUsedSimilar)
@@ -104,6 +104,16 @@ function groupSimilars(answers) {
         }
     }
     return answers;
+}
+
+function addWord(word, answers) {
+    for(let key in answers){
+        if(ressemblance(word, key) > 80){
+            answers[key]++;
+            return
+        }
+    }
+    answers[word] = 1;
 }
 
 mySet = {"pithon" : 5, "javascript" : 10, "java script" : 9, "python" : 25, "java" : 15, "c++" : 12, "pyhton" : 1}

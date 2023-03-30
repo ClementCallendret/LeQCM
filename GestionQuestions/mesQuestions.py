@@ -9,7 +9,7 @@ mesQuestions = Blueprint('mesQuestions',__name__)
 def mainPage():
   if "loginP" in session:
     #on charge les question de l'utilisateur et tous les tags pour le filtrage 
-    tags = database.allTags()
+    tags = database.allTagsByProf(session["loginP"])
     questions = database.loadQuestionsByProf(session["loginP"])
     for q in questions :
       q["state"] = formatage.formatageMD(q["state"])

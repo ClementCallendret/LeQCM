@@ -135,6 +135,13 @@ def allTags():
         tags.append(tag.name)
     return tags
 
+def allTagsByProf(idProf):
+    tags = []
+    for tag in models.Tag.query.join(models.HasTag, models.HasTag.idT == models.Tag.name).join(models.Question, models.Question.id == models.HasTag.idQ).with_entities(models.Tag.name.distinct()).filter(models.Question.idP == idProf):
+        tags.append(tag[0])
+    print(tags)
+    return tags
+
 ####################### HAS TAG ######################
   
 def addHasTag(idQ, idT):
@@ -306,6 +313,13 @@ def possedeQuestion(idQ, idProf):
     else:
         return False
 
+def loadQuestionsByProfTag(idProf, tag):
+    questions = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).with_entities(models.Question.id.distinct()).filter(models.Question.idP == idProf)
+    result = []
+    for row in questions:
+        result.append(row[0])
+    return result
+
 ###################### MODIFICATIONS SEQUENCE ############################
 
 def addQuestionToSerie(idSerie, idQuestion, posQ):
@@ -349,11 +363,9 @@ def deleteSequence(idSequence):
 
 def updateSequence(id, idList, title):
     seq = models.Serie.query.filter_by(id=id).first()
-    print("1")
     if not seq:
         return False
     
-    print("2")
     seq.title = title
     for row in models.InSerie.query.filter_by(idS=id):
         if row.idQ not in idList:
@@ -365,7 +377,6 @@ def updateSequence(id, idList, title):
         else:
             addQuestionToSerie(id, idList[i], i)
 
-    print("3")
     return dbCommit()
 
 ######################### REQUETES SEQUENCES ############################

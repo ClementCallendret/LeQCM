@@ -32,7 +32,7 @@ app.register_blueprint(crea_sujets)
 
 app.config['SECRET_KEY'] = "SamyLePlusBeauuuUwU"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///myQCM.db"
-#app.config["DEBUG"] = True
+app.config["DEBUG"] = True
 
 db.init_app(app)
 
