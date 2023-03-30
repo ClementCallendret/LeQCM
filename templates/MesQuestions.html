@@ -17,6 +17,9 @@
     <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar2">
       <ul class="navbar-nav">
         <li class="nav-item">
+          <a class="btn btn-warning itemBut" href="{{url_for('Création_Sujets.init')}}">Création de sujets</a>
+        </li>
+        <li class="nav-item">
           <form action="" method="GET" id="tagForm">
             <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
             <div class="dropdown">
@@ -26,7 +29,7 @@
 
               <ul class="dropdown-menu overflow-auto" id="tagList">
                 <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
-                      onchange="selectAllTag(this)">Tout sélectioner</label></li>
+                      onchange="selectAllTag(this)">Tout sélectionner</label></li>
                 <hr />
                 {%for t in tags%}
                 <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck" onchange="checkTag(this)">{{t}}</label></li>
