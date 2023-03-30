@@ -1,9 +1,9 @@
-var parsed_file;
-var index_invalide;
+let parsed_file;
+let index_invalide;
 
 function validation() {
-  var z = document.getElementById("myFile").files[0];
-  var name_file = document.getElementById("myFile").value;
+  const z = document.getElementById("myFile").files[0];
+  const name_file = document.getElementById("myFile").value;
 
   if (name_file == "" || z == null) {
     alert("Choisir un fichier !");

@@ -10,7 +10,7 @@ const listItems = [];
 let dragStartIndex;
 createList();
 
-var inputT = document.getElementById('titleInput'); // get the input element
+const inputT = document.getElementById('titleInput'); // get the input element
 inputT.addEventListener('input', resizeInputT);
 resizeInputT();
 

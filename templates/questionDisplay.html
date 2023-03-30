@@ -6,7 +6,9 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename = 'questionDisplay.css') }}">
 
-<input type="hidden" id="questionType" value="{{question.mode}}">
+<script>
+    const typeAnswer = {{question.mode}};
+</script>
 
 <div class="container-fluid" id="main">
     <audio controls autoplay hidden >

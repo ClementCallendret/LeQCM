@@ -1,15 +1,15 @@
 const socket = io();
-var nbAnswers;
-var totalAnswers;
-var percentAnswers;
-var typeAnswer = parseInt($("#typeAnswer").val());
-var myAnswer;
-var layout;
+let nbAnswers;
+let totalAnswers;
+let percentAnswers;
+let myAnswer;
+let layout;
+const colors = ['#F9801D', '#C74EBD', '#3AB3DA', '#FED83D', '#80C71F', '#ED6DAC', '#474F52', '#168B89', '#AA5DA1', '#3F4BA6', '#835432', '#5E7C16', '#B02E26', '#1D1D21']
 
 //totalAnswers = { caca : 10, pipi : 25, popo: 15, algerie : 8, baleine : 39, orchide : 28, pissenlit : 2, weed : 20, raviolits : 55}
 
 // append the svg object to the body of the page
-var svg = d3.select("#wordCloud").append("svg")
+let svg = d3.select("#wordCloud").append("svg")
     .attr("width", "100%")
     .attr("height", 500)
 
@@ -24,7 +24,7 @@ function draw(words) {
         .data(words)
         .enter().append("text")
         .style("font-size", function (d) { return d.size; })
-        .style("fill", function () { return "#00000"; })
+        .style("fill", function () { return colors[Math.floor(Math.random() * 14)]; })
         .attr("text-anchor", "middle")
         .style("font-family", "Impact")
         .attr("transform", function (d) {
@@ -42,6 +42,7 @@ function updateCloud() {
         .padding(5)        //space between words
         .rotate(function () { return 0; })
         .fontSize(function (d) { return 10*Math.sqrt(d.size); })      // font size of words
+        .canvas( function() { return document.createElement("canvas").attr("id", "myCanvas"); })
         .on("end", draw);
     layout.start();
 }
