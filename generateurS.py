@@ -1,3 +1,5 @@
+from database import loadQuestionsByProfTag, getProfIdentity
+from flask import session
 def generateurS(E=[[], int],nbSujet = int):
     #E est un tableau, contenant des sous de tableau de la forme [nbQuestionSouhaité,"Tag"]
     #E = [[2,"Java"],[3,"Compilation"],[6,"PHP"]]
@@ -81,11 +83,13 @@ def triBulles(tab):
 
 def tagMultiples(E=[[], int]):
     tab = []
+    idP = getProfIdentity(session['loginP'])
     for i in range (len(E)):
+         tab.append(loadQuestionsByProfTag(idP,E[i][0]))
          #requête BDD pour chaque tag E[i][1]
-         pass
+    print(tab)
     #trier les tabs de manière croissante en fonction de leur nb de questions
-    tab = [["java",[1,2,3]],["C",[3,4]],["Meynard",[4,5,6,7,8]]]
+    #tab = [["java",[1,2,3]],["C",[3,4]],["Meynard",[4,5,6,7,8]]]
     #tri bulles
     tab = triBulles(tab)
     print("tri", tab)
