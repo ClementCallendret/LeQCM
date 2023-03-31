@@ -22,6 +22,7 @@ class Question(db.Model):
     title = db.Column(db.String(50), nullable=False)
     state = db.Column(db.Text, nullable=False)
     numeralAnswer = db.Column(db.Float, nullable=True)
+    mode = db.Column(db.Integer, nullable=False) # 0: qcm, 1: numeral, 2: open
     idP = db.Column(db.Integer, db.ForeignKey("professor.username"))
     
 class Answer(db.Model) :

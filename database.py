@@ -135,6 +135,13 @@ def allTags():
         tags.append(tag.name)
     return tags
 
+def allTagsByProf(idProf):
+    tags = []
+    for tag in models.Tag.query.join(models.HasTag, models.HasTag.idT == models.Tag.name).join(models.Question, models.Question.id == models.HasTag.idQ).with_entities(models.Tag.name.distinct()).filter(models.Question.idP == idProf):
+        tags.append(tag[0])
+    print(tags)
+    return tags
+
 ####################### HAS TAG ######################
   
 def addHasTag(idQ, idT):
@@ -166,11 +173,11 @@ def deleteAnswer(idA):
 
 ###################### MODIFICATIONS QUESTIONS ####################
 
-def saveQuestion(idProf, title, state, answers, tags):
-    if isinstance(answers, list):
-        question = models.Question(title=title, state=state, idP=idProf)
-    else:
-        question = models.Question(title=title, state=state, idP=idProf, numeralAnswer=answers)
+def saveQuestion(idProf, title, state, tags, mode, answers = None):
+    question = models.Question(title=title, state=state, idP=idProf, mode=mode)
+
+    if mode == 1:
+        question.numeralAnswer = answers
 
     db.session.add(question)
     if not dbCommit():
@@ -181,19 +188,19 @@ def saveQuestion(idProf, title, state, answers, tags):
     for t in tags:
         addHasTag(questionId, t)
     
-    if isinstance(answers, list):
+    if mode == 0:
         for rep in answers:
             if not addAnswer(rep, questionId):
                 return False
 
     return questionId
 
-def updateQuestion(idQuestion, idProf, title, state, answers, tags):
+def updateQuestion(idQuestion, idProf, title, state, tags, mode, answers = None):
     dataAnswers = models.Answer.query.filter_by(idQ=idQuestion)
     dataTags = models.HasTag.query.filter_by(idQ=idQuestion)
     dataQuestion = models.Question.query.filter_by(id=idQuestion).first()
 
-    if isinstance(answers, list):
+    if mode == 0:
         #Suppression des réponses qui ne sont plus présentes
         for row in dataAnswers:
             if {"val": row.solution, "text" : row.text} not in answers:
@@ -207,6 +214,7 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
 
         #On s'assure que la réponse numérique soit Null
         dataQuestion.numeralAnswer = None
+        dataQuestion.mode = 0
 
     else:
         #Suppression des réponse QCM si jamais on a changé de mode
@@ -215,8 +223,12 @@ def updateQuestion(idQuestion, idProf, title, state, answers, tags):
             db.session.commit()
         
         #Maj de la réponse numérique
-        dataQuestion.numeralAnswer = answers
-
+        if mode == 1:
+            dataQuestion.mode = 1
+            dataQuestion.numeralAnswer = answers
+        else :
+            dataQuestion.mode = 2
+            dataQuestion.numeralAnswer = None
 
     #suppression des tags qui ne sont plus présents
     for row in dataTags:
@@ -253,23 +265,25 @@ def deleteQuestion(idQuestion):
 ######################### REQUETES QUESTIONS ############################
 
 def parseQuestionData(dataQuestion, dataAnswers, dataTags): #(fct intermédiaire)
-    question = {"id":None, "owner" : "", "title" : "", "state":"", "tags":[]}
+    question = {}
     
-    if not question:
+    if not dataQuestion:
         return None
 
     question["id"] = dataQuestion.id
     question["title"] = dataQuestion.title
     question["state"] = dataQuestion.state
     question["owner"] = dataQuestion.idP
+    question["mode"] = dataQuestion.mode
 
-    if dataQuestion.numeralAnswer is None:
+    if dataQuestion.mode == 0:
         question["answers"] = []
         for row in dataAnswers:
             question["answers"].append({"val": row.solution, "text" : row.text})
-    else:
+    elif dataQuestion.mode == 1:
         question["numeralAnswer"] = dataQuestion.numeralAnswer
     
+    question["tags"] = []
     for row in dataTags:
         question["tags"].append(row.idT)
 
@@ -298,6 +312,13 @@ def possedeQuestion(idQ, idProf):
         return question.idP == idProf
     else:
         return False
+
+def loadQuestionsByProfTag(idProf, tag):
+    questions = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).with_entities(models.Question.id.distinct()).filter(models.Question.idP == idProf)
+    result = []
+    for row in questions:
+        result.append(row[0])
+    return result
 
 ###################### MODIFICATIONS SEQUENCE ############################
 
@@ -342,11 +363,9 @@ def deleteSequence(idSequence):
 
 def updateSequence(id, idList, title):
     seq = models.Serie.query.filter_by(id=id).first()
-    print("1")
     if not seq:
         return False
     
-    print("2")
     seq.title = title
     for row in models.InSerie.query.filter_by(idS=id):
         if row.idQ not in idList:
@@ -358,7 +377,6 @@ def updateSequence(id, idList, title):
         else:
             addQuestionToSerie(id, idList[i], i)
 
-    print("3")
     return dbCommit()
 
 ######################### REQUETES SEQUENCES ############################
@@ -471,20 +489,28 @@ def loadSessionResults(idSession):
 
 def getQuestionNbAnswers(idSession, idQuestion):
     ans = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion).count()
-    goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
+    if models.Question.query.filter_by(id=idQuestion).first().mode == 2:
+        goodAns = ans
+    else:
+        goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
     return [ans, goodAns]
 
 def getSequenceAvgNbAnswers(idSession, idSequence):
-    nbAnswers = models.StudentAnswer.query.filter_by(idSession=idSession).count()
-    nbGoodAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, correct=True).count()
+    subQuery = models.Question.query.filter_by(id= models.StudentAnswer.idQuestion).first().mode
+    nbAnswers = models.StudentAnswer.query.filter(models.StudentAnswer.idSession==idSession, subQuery != 2).count()
+    nbGoodAnswers = models.StudentAnswer.query.filter(models.StudentAnswer.idSession==idSession, models.StudentAnswer.correct==True, subQuery != 2).count()
     nbQ = models.InSerie.query.filter_by(idS = idSequence).count()
     return [nbAnswers / nbQ, nbGoodAnswers / nbQ]
 
 def getQuestionsResults(idSession, idQuestion): #intermediaire
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
-    for row in allAnswers:
-        results[str(row.idStudent)] = row.correct
+    if models.Question.query.filter_by(id=idQuestion).first().mode == 2:
+        for row in allAnswers:
+            results[str(row.idStudent)] = True
+    else:
+        for row in allAnswers:
+            results[str(row.idStudent)] = row.correct
     return results
 
 def getAvgSequenceResults(idSession, idSequence): #intermediaire
@@ -505,10 +531,6 @@ def avgResults(results): #intermediaire
                 avgResults[student] += 100.0 / n
 
     return avgResults
-
-def deleteQuestionAnswers(idQuestion):
-    models.StudentAnswer.query.filter_by(idQuestion=idQuestion).delete()
-    return dbCommit()
 
 def deleteSequenceQuestionAnswers(idS, idQ):
     for row in models.Session.query.filter_by(idSequence=idS):

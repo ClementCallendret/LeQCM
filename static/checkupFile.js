@@ -1,9 +1,9 @@
-var parsed_file;
-var index_invalide;
+let parsed_file;
+let index_invalide;
 
 function validation() {
-  var z = document.getElementById("myFile").files[0];
-  var name_file = document.getElementById("myFile").value;
+  const z = document.getElementById("myFile").files[0];
+  const name_file = document.getElementById("myFile").value;
 
   if (name_file == "" || z == null) {
     alert("Choisir un fichier !");
@@ -20,7 +20,7 @@ function validation() {
     fileContent = event.target.result.replaceAll(";", ",");
     //console.log(fileContent);
     parsed_file = $.csv.toArrays(fileContent);
-    console.log(parsed_file[2])
+    //console.log(parsed_file[2])
     // parsed_file.splice(0, 1) // splice car on veut skip la première ligne (elle ne contient aucune donnée utile normalement)
     //enfait non sinon ca oublie un etudiant si ya pas d'entete 
     Verif_content(); // fonction qui va verifier que le fichier est en parfaite forme

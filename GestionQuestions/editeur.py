@@ -11,39 +11,37 @@ editeur = Blueprint('editeur',__name__)
 @editeur.route('/editeur/<questionId>')
 def init(questionId):
   if 'loginP' in session:
+    allTag = database.allTags()
 
     # Cas ou l'on veut créer une nouvelle question
-    newTags = json.dumps([], indent=4)
     if questionId == "createNew":
-
-    # Renvoie d'un template vide pour une nouvelle question
-      allTag = database.allTags()
-      idAnswers = json.dumps([], indent=4)
-      return render_template('EditeurDeQuestion.html', title="", isQcm=True, state="", stateFormated="", idAnswers=idAnswers, answers=[], answersFormated=[], numeralAnswer=0, tags=allTag, selectedTag=[], newTags=newTags)
+      # Renvoie d'un template vide pour une nouvelle question
+      return render_template('EditeurDeQuestion.html', title="", mode=0, state="", stateFormated="", idAnswers="[]", answers=[], answersFormated=[], numeralAnswer=0, tags=allTag, selectedTag=[], newTags="[]")
 
     # Cas ou l'on charge une question
     else:
-      allTag = database.allTags()
       # Chargement de la question depuis la BD
       question = database.loadQuestionById(questionId)
       # On accède a la page seulement si la question appartient bien au Professeur
       if question["owner"] == session["loginP"] :
-
-        if "numeralAnswer" in question :
-          idAnswers = json.dumps([], indent=4)
-          return render_template('EditeurDeQuestion.html', title=question["title"], isQcm=False, state=question["state"], stateFormated=formatage.formatageMD(question["state"]), idAnswers=idAnswers, answers=[], answersFormated=[], numeralAnswer=question["numeralAnswer"], tags=allTag, selectedTag=question["tags"], newTags=newTags)
-        else:
+        answers=[]
+        idAnswers="[]"
+        numeralAnswer=0
+        mode = question["mode"]
+        if mode == 0:
           # Calcule des id des réponses pour les conserver dans la page
           idAnswers = []
           for i in range(0, len(question["answers"])):
             idAnswers.append(i)
           idAnswers = json.dumps(idAnswers, indent=4)
-          return render_template('EditeurDeQuestion.html', title=question["title"], isQcm=True, state=question["state"], stateFormated=formatage.formatageMD(question["state"]), idAnswers=idAnswers, answers=question["answers"], answersFormated=formatage.formatAnswers(question["answers"]), numeralAnswer=0, tags=allTag, selectedTag=question["tags"], newTags=newTags)
-
-      # Cas ou l'on veut charger une question déjà créé
+          answers=question["answers"]
+        elif mode == 1 :
+          numeralAnswer = question["numeralAnswer"]
+        
+        return render_template('EditeurDeQuestion.html', title=question["title"], mode=mode, state=question["state"], stateFormated=formatage.formatageMD(question["state"]), idAnswers=idAnswers, answers=answers, answersFormated=formatage.formatAnswers(answers), numeralAnswer=numeralAnswer, tags=allTag, selectedTag=question["tags"], newTags="[]")
       else:
         flash("La question d'id " + questionId + " ne vous appartient pas !\nCréation d'une nouvelle question")
-        return render_template('EditeurDeQuestion.html', title="", isQcm=True, state="", stateFormated="", idAnswers="", answers=[], answersFormated=[], numeralAnswer=0, tags=allTag, selectedTag=[], newTags="")
+        return render_template('EditeurDeQuestion.html', title="", mode=0, state="", stateFormated="", idAnswers="", answers=[], answersFormated=[], numeralAnswer=0, tags=allTag, selectedTag=[], newTags="")
   else:
     flash("Vous devez être connecté pour acceder à cette page")
     return redirect(url_for('login.initRedirect', redirection="editeur-" + questionId))
@@ -62,9 +60,11 @@ def editeurPOST(questionId):
     answers = []
     newIdAnswers = []
     answersFormated = []
+    numeralAnswer = "0"
+    questionMode = (int)(request.form["questionMode"])
 
     # Récupération de chaque réponse si QCM
-    if request.form.get("isQcm"):
+    if questionMode == 0:
       for i in range(0, len(oldIdAnswers)) :
         newIdAnswers.append(i)
         n = str(oldIdAnswers[i])
@@ -73,8 +73,8 @@ def editeurPOST(questionId):
       # Formatage de chaque réponse
       answersFormated = formatage.formatAnswers(answers)
 
-    else: #Récupération de la réponse numérique si non QCM
-      answers = request.form.get("numeralAnswer")
+    elif questionMode == 1: #Récupération de la réponse numérique si numérique
+      numeralAnswer = request.form.get("numeralAnswer")
 
     newIdAnswers = json.dumps(newIdAnswers, indent=4)
 
@@ -101,22 +101,19 @@ def editeurPOST(questionId):
 
     # Enregistrement si demandé
     if request.form['action'] == "Enregistrer":
-      newTagsJson = json.dumps([], indent=4)
+      newTagsJson = "[]"
 
       if questionId == 'createNew' :
         # sauvegarde de la question et renvoie vers la page avec le bon identifiant pour savoir que la question est déjà dans un fichier
-        questionId = database.saveQuestion(session["loginP"], title, state, answers, selectedTags)
+        questionId = database.saveQuestion(session["loginP"], title, state, selectedTags, questionMode, answers if questionMode == 0 else numeralAnswer)
         return redirect(url_for('editeur.editeurPOST', questionId=questionId))
       
       else:
         # update de la question déjà existente
-        database.updateQuestion(questionId, session["loginP"], title, state, answers, selectedTags)
+        database.updateQuestion(questionId, session["loginP"], title, state, selectedTags, questionMode, answers if questionMode == 0 else numeralAnswer)
 
     # Renvoie de la template avec l'apercu
-    if request.form.get("isQcm") :
-      return render_template('EditeurDeQuestion.html', title=title, isQcm=True, state=state, stateFormated=stateFormated, idAnswers=newIdAnswers, answers=answers, answersFormated=answersFormated, numeralAnswer="0", tags=allTag, selectedTag=selectedTags, newTags=newTagsJson)
-    else:
-      return render_template('EditeurDeQuestion.html', title=title, isQcm=False, state=state, stateFormated=stateFormated, idAnswers=newIdAnswers, answers=[], answersFormated=[], numeralAnswer=str(answers), tags=allTag, selectedTag=selectedTags, newTags=newTagsJson)
+    return render_template('EditeurDeQuestion.html', title=title, mode=questionMode, state=state, stateFormated=stateFormated, idAnswers=newIdAnswers, answers=answers, answersFormated=answersFormated, numeralAnswer=numeralAnswer, tags=allTag, selectedTag=selectedTags, newTags=newTagsJson)
 
   else:
     flash("Vous devez être connecté pour acceder à cette page")

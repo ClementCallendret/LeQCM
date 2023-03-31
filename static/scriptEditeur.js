@@ -1,18 +1,28 @@
 const idAnswers = JSON.parse($("#idAnswers").val());
 const form = document.getElementById("questionForm");
 const newTags = JSON.parse($("#newTags").val());
+const tagInput = $("#newTagName");
+const answerList = $("#answerList");
+const addAnswerBut = $("#addAnswerBut");
+const numeralAnswer = $("#numeralAnswer");
 
-function changeQuestionMode(checkboxElem) {
-    if (checkboxElem.checked) {
-        document.getElementById("answerList").setAttribute("style", "");
-        document.getElementById("addAnswerBut").setAttribute("style", "");
-        document.getElementById("numeralAnswer").setAttribute("style", "display : None");
+function changeQuestionMode(mode) {
+    if (mode == 0) {
+        answerList.css("display", "block");
+        addAnswerBut.css("display", "block");
+        numeralAnswer.css("display", "None");;
+    }
+    else if (mode == 1) {
+        answerList.css("display", "None");;
+        addAnswerBut.css("display", "None");;
+        numeralAnswer.css("display", "block");
     }
     else {
-        document.getElementById("answerList").setAttribute("style", "display : None");
-        document.getElementById("addAnswerBut").setAttribute("style", "display : None");
-        document.getElementById("numeralAnswer").setAttribute("style", "");
+        answerList.css("display", "None");;
+        addAnswerBut.css("display", "None");;
+        numeralAnswer.css("display", "None");;
     }
+    //console.log("mode : " + mode);
 }
 
 function maxOfTab(tab) {
@@ -32,14 +42,13 @@ function deleteAnswer(numR) {
 }
 
 function addAnswer() {
-    let answerContainer = $("#answerList");
     let newId = maxOfTab(idAnswers) + 1;
 
     // Ajout de la nouvelle réponse au HTML avec le bon id
     let html = `
         <div id="divAnswer${newId}" class="divAnswer row align-items-center">
-            <div class="col-sm-1">
-                <input type="checkbox" name="checkAnswer${newId}" id="checkAnswer${newId}">
+            <div class="col-1 form-check form-switch">
+                <input type="checkbox" name="checkAnswer${newId}" id="checkAnswer${newId}" class="form-check-input">
             </div>
             <div class="col-sm-9">
                 <textarea class="inputAnswer form-control" name="textAnswer${newId}" id="textAnswer${newId}" value="" placeholder="Réponse"></textarea>
@@ -49,13 +58,12 @@ function addAnswer() {
             </div>
         </div>
     `
-    answerContainer.append(html);
+    answerList.append(html);
     idAnswers.push(newId);
 }
 
 //ajout d'un tag non existant
 function addTag() {
-    let tagInput = $("#newTagName");
     let tagName = tagInput.val().trim();
 
     if (tagName != "") {

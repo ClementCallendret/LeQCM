@@ -1,7 +1,7 @@
-var myLabels = [];
-var myLabelsLink = [];
-var nbParticipant = [[], []];
-var maxNbAnswers = 0;
+let myLabels = [];
+let myLabelsLink = [];
+let nbParticipant = [[], []];
+let maxNbAnswers = 0;
 
 function getDatas(){
     mySessions = JSON.parse(document.getElementById("datasJson").value);
@@ -135,8 +135,8 @@ myChart.canvas.addEventListener("wheel", (e) => {
     }
 })
 
-var lastTouchEnd = 0;
-var lastScrollLeft = false; // sens du dernier scroll tactile
+let lastTouchEnd = 0;
+let lastScrollLeft = false; // sens du dernier scroll tactile
 
 myChart.canvas.addEventListener('touchmove', (e) => {
     // Iterate through the touch points that have moved and log each
