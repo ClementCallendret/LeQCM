@@ -12,20 +12,29 @@ const listItems = [];
 let dragStartIndex;
 //createList();
 
-function intervalSetter(){
+function intervalSetter() {
 
     if (document.getElementById("intervalle").checked) { // si intervalle est checked, c'est que on veut les range
         console.log("Les intervalles sont demandées");
-        $('#inputRange').removeAttr("hidden");
-        $('#inputRange').addAttr("required");
-        $("#inputFixe").addAttr("hidden");
-        $("#inputFixe").removeAttr("required");
+        $('.inputRange').each((i, e) => {
+            $(e).removeAttr("hidden");
+            $(e).prop("required", true);
+        });
+        $(".inputFixe").each((i, e) => {
+            $(e).prop("hidden", true);
+            $(e).removeAttr("required");
+        });
     }
     else {
-        $('#inputFixe').removeAttr("hidden");
-        $('#inputFixe').addAttr("required");
-        $("#inputRange").addAttr("hidden");
-        $("#inputRange").removeAttr("required");
+        console.log("Les intervalles ne sont pas demandées");
+        $('.inputFixe').each((i, e) => {
+            $(e).removeAttr("hidden");
+            $(e).prop("required", true);
+        });
+        $(".inputRange").each((i, e) => {
+            $(e).prop("hidden", true);
+            $(e).removeAttr("required");
+        });
     }
 }
 
@@ -43,7 +52,7 @@ function removeTag(tag) {
 
 function addTag() {
     const tag = selectTag.value;
-    if(tag == "default"){
+    if (tag == "default") {
         return;
     }
     let index;
@@ -64,11 +73,9 @@ function addTag() {
                     <h4 style="padding-top: 38px;"> nombre de questions de ${tag}</h4> 
         
                     <div class="inputFix" style="position: auto;">
-                        <input type="number" min="1" class="inputQuantity form-control" name="${tag}" placeholder="quantité" style="width: 70px;">
-                    </div>
-                    <div class="inputRange" style="position: auto;">
-                        <label>min : <input type="number" min="1" class="inputQuantity form-control" name="${tag}min" placeholder="quantité" style="width: 70px;"><label>
-                        <label>max : <input type="number" min="1" class="inputQuantity form-control" name="${tag}max" placeholder="quantité" style="width: 70px;"><label>
+                        <label class="inputFixe">quantité : <input type="number" min="1" class="inputQuantity inputFixe form-control" name="${tag}" placeholder="quantité" style="width: 70px;"></label>
+                        <label class="inputRange">min : <input type="number" min="1" class="inputQuantity inputRange form-control" name="${tag}min" placeholder="quantité" style="width: 70px;"></label>
+                        <label class="inputRange">max : <input type="number" min="1" class="inputQuantity inputRange form-control" name="${tag}max" placeholder="quantité" style="width: 70px;"></label>
                     </div>
                     <button type="button" onclick="removeTag('${tag}')" class="btn btn-danger">supprimer</button>
                 </div>
