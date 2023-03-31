@@ -10,38 +10,59 @@
     <div class="printButton">
         <button onclick="window.print();" class="printButton">Imprimer le QCM</button>
     </div>
-
+    <!--
+        Boucle Pour chaque élèvre
+    -->
     <h1 id="titre">{{title}}</h1>
-
-    {% for i in range(0, questions|length)%}
-    <h3 class="questionIndex">Question {{i+1}} :</h3>
-    <div class="state">
-        <state>{{ questions[i].state|safe }}</state>
-    </div>
-
-    <div class="answers">
-    {% if questions[i].numeralAnswer %}
-    <div class="borderedDiv numberField"></div>
+    {% if anonyme == true %}
+        <!--
+            faire numEtu avec des box remplis et vide
+    -->
     {% else %}
-    {% for answer in questions[i].answers %}
-
-        <div class="caseacocher">
-            <img src="{{url_for('static', filename='caseacocher.png')}}" width="50" height="25" align="left" />
-        </div>
-
-        <div class="answer">
-            <answer>{{ answer.text|safe}}</answer>
-        </div>
-
-    {% endfor %}
+        <!--
+        faire 3 encadrés pour Nom, preonm, num etu
+    -->
     {% endif %}
-    </div>
-    {% endfor %}
+    <div class="eleve">
+    <!--
+        Boucle Pour chaque questions
+    -->
+        {% for i in range(0, questions|length)%}
+        <div class="EQ">
 
+            <h3 class="questionIndex">Question {{i+1}} :</h3>
+            <div class="state">
+                <state>{{ questions[i].state|safe }}</state>
+            </div>
+
+            <div class="answers">
+            {% if questions[i].numeralAnswer %}
+            <div class="borderedDiv numberField"></div>
+            {% else %}
+            {% for answer in questions[i].answers %}
+    
+                <div class="caseacocher">
+                    <img src="{{url_for('static', filename='caseacocher.png')}}" width="50" height="25" align="left" />
+                </div>
+                <div class="answer">
+                    <answer>{{ answer.text|safe}}</answer>
+                </div>
+            {% endfor %}
+            {% endif %}
+            </div>
+
+        </div>
+            {% endfor %}
+            <p style="page-break-after: always;">&nbsp;</p>
+
+    </div>
 </div>
+
+
 
 <script>
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
 </script>
 
 {% endblock %}
+    

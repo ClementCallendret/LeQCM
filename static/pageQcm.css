@@ -62,4 +62,9 @@
         display: none;
         visibility: hidden;
     }
+
+    div.EQ {
+        break-inside: avoid;
+    }
+      
 }

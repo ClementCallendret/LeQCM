@@ -52,7 +52,10 @@ def creationPageQCM():
     title = request.form.get("title")
     if title == "":
         title = "Sans Titre"
-    return render_template("PageQcm.html",questions = questions, title=title)
+    anonyme = request.form.get("anonyme")
+    if anonyme == "":
+        anonyme = False
+    return render_template("PageQcm.html",questions = questions, title=title, anonyme = anonyme)
 
 @creation.route('/MesQuestions/CreerSequence',methods = ['POST'])
 def creationSequence():

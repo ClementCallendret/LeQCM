@@ -1,4 +1,4 @@
-def basique(E,nbSuj):
+def creaSujet(E,nbSuj):
     #E est un tableau, contenant des sous de tableau de la forme [nbQuestionSouhaité,"Tag"]
     #E = [[2,"Java"],[3,"Compilation"],[6,"PHP"]]
 
@@ -64,4 +64,4 @@ def basique(E,nbSuj):
 
     return tabSujet
 
-print(basique([[3,"java"],[2,"compilation"]], 13))
+print(creaSujet([[3,"java"],[2,"compilation"]], 13))
