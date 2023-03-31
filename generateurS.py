@@ -99,4 +99,4 @@ def tagMultiples(E=[[], int]):
     #On donne le doublon à la liste qui a le moins de question
     return tab
 
-print(tagMultiples([[3,"java"],[2,"compilation"]]))
+#print(tagMultiples([[3,"java"],[2,"compilation"]]))
