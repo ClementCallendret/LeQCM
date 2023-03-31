@@ -9,7 +9,7 @@ crea_sujets = Blueprint('Création_Sujets',__name__)
 def init():
     if "loginP" in session:
         tags = database.allTags()
-        #print(generateurS.tagMultiples([[3,"java"],[2,"compilation"]]))
+        #print(generateurS.tagMultiples([[1,"a"],[2,"b"]]))
         return render_template("Création_Sujets.html", title="", tags=tags, state="", stateFormated="", idAnswers="[]", answers=[], answersFormated=[], numeralAnswer=0, selectedTag=[], newTags="[]")
     else:
         flash("Vous devez être connecté pour acceder à cette page")

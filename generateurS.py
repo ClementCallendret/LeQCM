@@ -49,6 +49,11 @@ def generateurS(E=[[], int],nbSujet = int):
 
     return tabSujet
 
+
+
+
+
+
 def doublon(tab):
     for i in range (len(tab)):
         j = 0
@@ -74,6 +79,10 @@ def doublon(tab):
             j += 1
     return tab
 #print(generateurS([[3,"java"],[2,"compilation"]],30))
+
+
+
+
 def triBulles(tab):
     for i in range (len(tab)):
          for j in range (len(tab)-i-1):
@@ -81,18 +90,23 @@ def triBulles(tab):
                    tab[j], tab[j+1] = tab[j+1], tab[i]
     return tab
 
+
+
+
+
 def tagMultiples(E=[[], int]):
     tab = []
     idP = getProfIdentity(session['loginP'])
+    print("IDP :::::::::::::::::::",idP)
     for i in range (len(E)):
-         tab.append(loadQuestionsByProfTag(idP,E[i][0]))
+         tab.append(loadQuestionsByProfTag(session['loginP'],E[i][1]))
          #requête BDD pour chaque tag E[i][1]
-    print(tab)
+    print("TABLEAU ",tab)
     #trier les tabs de manière croissante en fonction de leur nb de questions
     #tab = [["java",[1,2,3]],["C",[3,4]],["Meynard",[4,5,6,7,8]]]
     #tri bulles
     tab = triBulles(tab)
-    print("tri", tab)
+    print("triBulles Res", tab)
     tab = doublon(tab)
 
     #Suppression doublon
