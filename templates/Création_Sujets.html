@@ -19,13 +19,21 @@
             <input class="form-check-input" type="checkbox" id="button_anonymat">
         </div>
         </br>
-
-
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Questions mises aléatoirement OU</label>
+            <input class="form-check-input" type="checkbox" id="button_tags">
+            <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
+        </div>
+        </br>
         <div class="form-check form-switch">
             <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
             <input class="form-check-input" type="checkbox" id="button_tags">
         </div>
         </br>
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckChecked">Intervalle souhaité</label>
+            <input class="form-check-input" type="checkbox" id="button_tags">
+        </div>
         <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
 
 
@@ -88,29 +96,21 @@ function addAnswer() {
     // Ajout de la nouvelle réponse au HTML avec le bon id
     let html = `
         <div id="divAnswer${newId}" class="divAnswer row align-items-center">
-            <div class="col-5 form-check form-switch">
-                <input type="button" name="checkAnswer${newId}" id="checkAnswer${newId}" class="btn btn-secondary dropdown-toggle" 
-                data-bs-toggle="dropdown" aria-expanded="false" style="height:38px; width:265px;" value="Tag voulus dans vos sujets ▾">
-
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark" id="tagList" aria-labelledby="dropdownMenuButton2">
-                {%for t in tags%}
-                <li><label for="{{t}}"><input type="radio" name="${newId}" class="tagCheck" id="{{t}}"
-                            onchange="checkTag(this)">{{t}}</label></li>
-                {%endfor%}
-            </ul>
-
-                
-                </button>
-            </div>
+            </br>
+            
+                    {%for t in tags%}
+                    <h4 style="padding-top: 38px;">{{t}}</h4> 
+            
             <div class="col-5" position: auto;">
-                <input type="number" min="0" class="inputAnswer form-control" name="textAnswer${newId}" id="textAnswer${newId}" placeholder="Nombre de questions de ce tag" style="width: 300px;">
+                <input type="number" min="0" class="inputAnswer form-control" name="textAnswer${newId}" id="textAnswer${newId}" placeholder="Nbr voulu" style="width: 125px;">
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-danger deleteButton" onclick="deleteAnswer(${newId})" value="Supprimer"><img src="/static/trash.png"></button>
+                
             </div>
+            </br></br>
+            {%endfor%}
         </div>
-        
+  
     `
     answerContainer.append(html);
     idAnswers.push(newId);
