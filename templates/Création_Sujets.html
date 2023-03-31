@@ -8,74 +8,67 @@
 
 <div class="container-fluid">
     </br></br>
-    <label for="nbr_sujets">Nombres de sujets voulus :</label>
+    <form action="POST">
+            <label for="nbr_sujets">Nombres de sujets voulus :</label>
 
-    <input type="number" id="nbr_sujets" name="nbr_sujets" min="0" max="500">
-    </br></br></br>
+        <input type="number" id="nbr_sujets" name="nbr_sujets" min="0" max="500">
+        </br></br></br>
 
-    <div class="form-check form-switch">
-        <label class="form-check-label" for="flexSwitchCheckChecked">Anonymat</label>
-        <input class="form-check-input" type="checkbox" id="button_anonymat" checked>
-    </div>
-    </br>
-
-
-    <div class="form-check form-switch">
-        <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
-        <input class="form-check-input" type="checkbox" id="button_tags">
-    </div>
-</br>
-    <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
-    <div class="dropdown">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Tags voulus dans vos sujets
-        </button>
-        <ul class="dropdown-menu dropdown-menu-dark" id="tagList" aria-labelledby="dropdownMenuButton2">
-            {%for t in tags%}
-            <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
-                        onchange="checkTag(this)">{{t}}</label></li>
-            {%endfor%}
-        </ul>
-
-    </div>
-
-    <!-- idAnswers contient les ids des réponses présentent -->
-    <input type="hidden" name="idAnswers" id="idAnswers" value="{{idAnswers}}">
-
-    <div id="answerList" class="container-fluid">
-        {%for i in range(0, answers|length)%} <!--Replacement des réponses après un rechargement-->
-        <div id="divAnswer{{i}}" class="divAnswer row align-items-center">
-            <div class="col-4 form-check form-switch">
-                <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
-                Test
-                </button> 
-                <ul class="dropdown-menu dropdown-menu-dark" id="tagList" aria-labelledby="dropdownMenuButton2">
-                    {%for t in tags%}
-                    <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
-                                onchange="checkTag(this)">{{t}}</label></li>
-                    {%endfor%}
-                </ul>
-
-            </div>
-            <div class="col-4">
-                <button type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger deleteButton"
-                    value="Supprimer"><img src="{{ url_for('static', filename = 'trash.png') }}"></button>
-            </div>
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckChecked">Anonymat</label>
+            <input class="form-check-input" type="checkbox" id="button_anonymat">
         </div>
+        </br>
 
-        {%if answers[i]['val'] %} <!--Recheck des checkboxes si necessaires-->
-        <script>
-            document.getElementById("checkAnswer{{i}}").checked = true;
-        </script>
-        {%endif%}
 
-        {%endfor%}
-    </div>
-    <input type="button" class="btn btn-success middleButton mx-auto" id="addAnswerBut" onclick="addAnswer()"
-        value="Ajouter un type de questions" style="margin-top:20px;" />
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
+            <input class="form-check-input" type="checkbox" id="button_tags">
+        </div>
+        </br>
+        <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
 
+
+        <!-- idAnswers contient les ids des réponses présentent -->
+        <input type="hidden" name="idAnswers" id="idAnswers" value="{{idAnswers}}">
+
+        <div id="answerList" class="container-fluid">
+            {%for i in range(0, answers|length)%} <!--Replacement des réponses après un rechargement-->
+            <div id="divAnswer{{i}}" class="divAnswer row align-items-center">
+                <div class="col-4 form-check form-switch">
+                    <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
+                    Test
+                    </button> 
+                    <ul class="dropdown-menu dropdown-menu-dark" id="tagList" aria-labelledby="dropdownMenuButton2">
+                        {%for t in tags%}
+                        <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
+                                    onchange="checkTag(this)">{{t}}</label></li>
+                        {%endfor%}
+                    </ul>
+
+                </div>
+                <div class="col-4">
+                    <button type="button" onclick="deleteAnswer({{i}})" class="btn btn-danger deleteButton"
+                        value="Supprimer"><img src="{{ url_for('static', filename = 'trash.png') }}"></button>
+                </div>
+            </div>
+
+            {%if answers[i]['val'] %} <!--Recheck des checkboxes si necessaires-->
+            <script>
+                document.getElementById("checkAnswer{{i}}").checked = true;
+            </script>
+            {%endif%}
+
+            {%endfor%}
+        </div>
+        <input type="button" class="btn btn-success middleButton mx-auto" id="addAnswerBut" onclick="addAnswer()"
+            value="Ajouter un type de questions" style="margin-top:20px;" />
+
+            <button type="submit" onclick="verifPossible()"></button>
+    </form>
 
 </div>
+
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
 
 
@@ -97,12 +90,12 @@ function addAnswer() {
         <div id="divAnswer${newId}" class="divAnswer row align-items-center">
             <div class="col-5 form-check form-switch">
                 <input type="button" name="checkAnswer${newId}" id="checkAnswer${newId}" class="btn btn-secondary dropdown-toggle" 
-                data-bs-toggle="dropdown" aria-expanded="false" style="height:38px; width:265px;" value="Tag voulus dans vos sujet ▾">
+                data-bs-toggle="dropdown" aria-expanded="false" style="height:38px; width:265px;" value="Tag voulus dans vos sujets ▾">
 
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" id="tagList" aria-labelledby="dropdownMenuButton2">
                 {%for t in tags%}
-                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
+                <li><label for="{{t}}"><input type="radio" name="${newId}" class="tagCheck" id="{{t}}"
                             onchange="checkTag(this)">{{t}}</label></li>
                 {%endfor%}
             </ul>
@@ -121,6 +114,11 @@ function addAnswer() {
     `
     answerContainer.append(html);
     idAnswers.push(newId);
+    
+}
+
+
+function verifPossible() {
     
 }
 </script>
