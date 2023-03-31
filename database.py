@@ -139,7 +139,6 @@ def allTagsByProf(idProf):
     tags = []
     for tag in models.Tag.query.join(models.HasTag, models.HasTag.idT == models.Tag.name).join(models.Question, models.Question.id == models.HasTag.idQ).with_entities(models.Tag.name.distinct()).filter(models.Question.idP == idProf):
         tags.append(tag[0])
-    print(tags)
     return tags
 
 ####################### HAS TAG ######################

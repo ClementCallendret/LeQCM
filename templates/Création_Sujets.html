@@ -8,7 +8,7 @@
 
 <div class="container-fluid">
     </br></br>
-    <form action="POST">
+    <form method="POST" action="/CreaS">
             <label for="nbr_sujets">Nombres de sujets voulus :</label>
 
         <input type="number" id="nbr_sujets" name="nbr_sujets" min="0" max="500">
@@ -63,6 +63,7 @@
         </div>
         <input type="button" class="btn btn-success middleButton mx-auto" id="addAnswerBut" onclick="addAnswer()"
             value="Ajouter un type de questions" style="margin-top:20px;" />
+            <button type="submit">Envoyer</button>
 
             <button type="submit" onclick="verifPossible()">Envoyer</button>
     </form>
