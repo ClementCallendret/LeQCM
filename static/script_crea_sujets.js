@@ -4,42 +4,13 @@ const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('check');
 const form = document.getElementById("form");
 const tagList = JSON.parse(document.getElementById("allTags").value);
+const selectTag = document.getElementById("newTagSelect");
 
 // Store listitems
 const listItems = [];
 
 let dragStartIndex;
 //createList();
-
-// Insert list items into DOM
-function createList() {
-    $('#submitButton').removeAttr("hidden");
-    $('#viewButton').addClass("hidden");
-    for (let index = 0; index < tagList.length; index++) {
-        const listItem = document.createElement('li');
-        listItem.setAttribute('data-index', index);
-
-        listItem.innerHTML = `
-        <div id="divTag${tagList[index]}" class="draggable" draggable="true">
-            </br>
-                <div id="area"> 
-                
-                    <h4 style="padding-top: 38px;"> nombre de questions de ${tagList[index]}</h4> 
-        
-                    <div style="position: auto;">
-                        <input type="number" min="0" class="inputQuantity form-control" name="${tagList[index]}" placeholder="0" style="width: 70px;">
-                    </div>
-                </div>
-                </br></br>
-        </div>
-      `;
-
-        listItems.push(listItem);
-
-        draggable_list.appendChild(listItem);
-    }
-    addEventListeners();
-}
 
 function intervalSetter(){
 
@@ -58,9 +29,8 @@ function intervalSetter(){
     }
 }
 
-/*
-function removeQ(i) {
-    parent = document.getElementById(i).parentElement;
+function removeTag(tag) {
+    parent = document.getElementById("divTag" + tag).parentElement;
     for (ele of listItems) {
         if (ele.getAttribute('data-index') > parent.getAttribute('data-index')) {
             ele.setAttribute('data-index', ele.getAttribute('data-index') - 1)
@@ -68,41 +38,52 @@ function removeQ(i) {
     }
     listItems.splice(listItems.indexOf(parent), 1);
     parent.remove();
-    $("#questionCard" + i).css("display", "block")
+    document.getElementById("option" + tag).disabled = false
 }
 
-function addtoSequence(id) {
-    $("#questionCard" + id).css("display", "none")
-
-    if(listItems.length == 0)
+function addTag() {
+    const tag = selectTag.value;
+    if(tag == "default"){
+        return;
+    }
+    let index;
+    if (listItems.length == 0)
         index = 0;
     else
         index = parseInt(listItems[listItems.length - 1].getAttribute('data-index')) + 1;
+
     index = index.toString();
+
     const listItem = document.createElement('li');
     listItem.setAttribute('data-index', index);
-    
-    tagStr = $("#questionCard" + id).find(".card-footer").html();
-    state = $("#questionCard" + id).find(".card-body").html();
-    title = $("#questionCard" + id).find(".card-header").find("span").html();
 
     listItem.innerHTML = `
-        <div class="draggable card questionCard" id="${id}" draggable="true">
-            <div class="card-header" >
-                <span>${title}</span>
-                <button type="button" onclick="removeQ(${id})" class="topRightBut btn btn-danger">X</button>
-            </div>
-            <div class="card-body">${state}</div>
-            <div class="card-footer" style="color:blue">${tagStr}</div>
+        <div id="divTag${tag}" class="draggable borderedDiv" draggable="true">
+                <div id="area"> 
+                
+                    <h4 style="padding-top: 38px;"> nombre de questions de ${tag}</h4> 
+        
+                    <div class="inputFix" style="position: auto;">
+                        <input type="number" min="1" class="inputQuantity form-control" name="${tag}" placeholder="quantité" style="width: 70px;">
+                    </div>
+                    <div class="inputRange" style="position: auto;">
+                        <label>min : <input type="number" min="1" class="inputQuantity form-control" name="${tag}min" placeholder="quantité" style="width: 70px;"><label>
+                        <label>max : <input type="number" min="1" class="inputQuantity form-control" name="${tag}max" placeholder="quantité" style="width: 70px;"><label>
+                    </div>
+                    <button type="button" onclick="removeTag('${tag}')" class="btn btn-danger">supprimer</button>
+                </div>
         </div>
-      `;
+        `;
 
     listItems.push(listItem);
 
     draggable_list.appendChild(listItem);
     addEventListeners();
+    document.getElementById("option" + tag).disabled = true;
+    selectTag.value = "default";
+
+    intervalSetter();
 }
-*/
 
 function dragStart() {
     //console.log('Event: ', 'dragstart');

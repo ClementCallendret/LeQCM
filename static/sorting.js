@@ -84,10 +84,12 @@ function removeQ(i) {
 function addtoSequence(id) {
     $("#questionCard" + id).css("display", "none")
 
+    let index;
     if(listItems.length == 0)
         index = 0;
     else
         index = parseInt(listItems[listItems.length - 1].getAttribute('data-index')) + 1;
+        
     index = index.toString();
     const listItem = document.createElement('li');
     listItem.setAttribute('data-index', index);
