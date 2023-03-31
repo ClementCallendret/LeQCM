@@ -40,6 +40,24 @@ function createList() {
     }
     addEventListeners();
 }
+
+function intervalSetter(){
+
+    if (document.getElementById("intervalle").checked) { // si intervalle est checked, c'est que on veut les range
+        console.log("Les intervalles sont demandées");
+        $('#inputRange').removeAttr("hidden");
+        $('#inputRange').addAttr("required");
+        $("#inputFixe").addAttr("hidden");
+        $("#inputFixe").removeAttr("required");
+    }
+    else {
+        $('#inputFixe').removeAttr("hidden");
+        $('#inputFixe').addAttr("required");
+        $("#inputRange").addAttr("hidden");
+        $("#inputRange").removeAttr("required");
+    }
+}
+
 /*
 function removeQ(i) {
     parent = document.getElementById(i).parentElement;
