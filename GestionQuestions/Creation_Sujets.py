@@ -1,6 +1,7 @@
 from flask import Blueprint, request,session, render_template, redirect, url_for, flash
 import database
 import json
+import generateurS
 
 crea_sujets = Blueprint('Création_Sujets',__name__)
 
@@ -8,7 +9,8 @@ crea_sujets = Blueprint('Création_Sujets',__name__)
 def init():
     if "loginP" in session:
         tags = database.allTags()
-        return render_template("Création_Sujets.html", title="", tags=tags, state="", stateFormated="", idAnswers="[]", answers=[], answersFormated=[], numeralAnswer=0, selectedTag=[], newTags="[]"))
+        print(generateurS.tagMultiples([[3,"java"],[2,"compilation"]]))
+        return render_template("Création_Sujets.html", title="", tags=tags, state="", stateFormated="", idAnswers="[]", answers=[], answersFormated=[], numeralAnswer=0, selectedTag=[], newTags="[]")
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="Création_Sujets"))
