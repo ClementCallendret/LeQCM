@@ -24,6 +24,8 @@ function intervalSetter() {
             $(e).prop("hidden", true);
             $(e).removeAttr("required");
         });
+        $("#text_nbr_questions").removeAttr("hidden");
+        $("#nbr_questions").prop("required", true);
     }
     else {
         console.log("Les intervalles ne sont pas demandées");
@@ -35,6 +37,8 @@ function intervalSetter() {
             $(e).prop("hidden", true);
             $(e).removeAttr("required");
         });
+        $("#text_nbr_questions").prop("hidden", true);
+        $("#nbr_questions").removeAttr("required");
     }
 }
 
