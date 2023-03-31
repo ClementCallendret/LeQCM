@@ -314,7 +314,7 @@ def possedeQuestion(idQ, idProf):
         return False
 
 def loadQuestionsByProfTag(idProf, tag):
-    questions = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).with_entities(models.Question.id.distinct()).filter(models.Question.idP == idProf)
+    questions = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).with_entities(models.Question.id.distinct()).filter(models.Question.idP == idProf, models.HasTag.idT == tag)
     result = []
     for row in questions:
         result.append(row[0])
