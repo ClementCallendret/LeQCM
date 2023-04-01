@@ -43,6 +43,7 @@
             Date de la session :
             {{res['date']}}
         </div>
+        <a href="{{ url_for('archives.deleteSession', idSession=res['id']) }}" class="btn btn-danger">supprimer de l'historique</a>
         <div class="stats-tab">
             <table class = "table">
                 <thead>

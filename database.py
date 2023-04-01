@@ -313,7 +313,7 @@ def possedeQuestion(idQ, idProf):
         return False
 
 def loadQuestionsByProfTag(idProf, tag):
-    questions = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).with_entities(models.Question.id.distinct()).filter(models.Question.idP == idProf, models.HasTag.idT == tag)
+    questions = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).with_entities(models.Question.id.distinct()).filter(models.Question.idP == idProf, models.HasTag.idT == tag, models.Question.mode != 2)
     result = []
     for row in questions:
         result.append(row[0])
@@ -546,5 +546,10 @@ def deleteSequenceSessions(idS):
     for row in models.Session.query.filter_by(idSequence=idS):
         models.StudentAnswer.query.filter_by(idSession=row.id).delete()
         db.session.delete(row)
+    return dbCommit()
+
+def deleteSession(idSession):
+    models.StudentAnswer.query.filter_by(idSession=idSession).delete()
+    db.session.delete(models.Session.query.filter_by(id=idSession).first())
     return dbCommit()
 

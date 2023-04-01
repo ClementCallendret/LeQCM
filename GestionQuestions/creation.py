@@ -60,19 +60,17 @@ def creationPageQCM():
 @creation.route('/MesQuestions/CreerSequence',methods = ['POST'])
 def creationSequence():
     idList = json.loads(request.form["orderedId"])
-    if len(idList) == 0:
-        flash("Vous n'avez pas sélectionné de questions")
+    title = request.form.get("title")
+    if title == "":
+        title = "Sans Titre"
+    
+    id = 0
+    if request.form["id"] == "new":
+        id = database.saveSequence(idList, session["loginP"], title)
     else:
-        title = request.form.get("title")
-        if title == "":
-            title = "Sans Titre"
-
-        if request.form["id"] == "new":
-            database.saveSequence(idList, session["loginP"], title)
-        else:
-            print(request.form["id"])
-            database.updateSequence(request.form["id"], idList, title)
-    return redirect(url_for('mesQuestions.mainPage'))
+        id = (int)(request.form["id"])
+        database.updateSequence(request.form["id"], idList, title)
+    return redirect(url_for('creation.updateSequence', id=id))
 
 def union(list1,list2):
    result = list(set(list1 + list2))

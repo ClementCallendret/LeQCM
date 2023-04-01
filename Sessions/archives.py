@@ -26,3 +26,16 @@ def stats(idSession):
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="stats-"+idSession))
+    
+@archives.route("/archives/delete/<idSession>")
+def deleteSession(idSession):
+    if "loginP" in session:
+        if database.possedeSession(idSession, session['loginP']):
+            database.deleteSession(idSession)
+            flash("La session a bien été supprimée")
+        else :
+            flash("Vous ne pouvez pas supprimer cette session")
+        return redirect(url_for('archives.init'))
+    else:
+        flash("Vous devez être connecté pour acceder à cette page")
+        return redirect(url_for('login.initRedirect', redirection="archives"))

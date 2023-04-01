@@ -18,7 +18,6 @@ function resizeInputT() {
     inputT.style.width = inputT.value.length + "ch";
 }
 
-
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 });
