@@ -428,8 +428,8 @@ def saveSession(idProf, id, mode):
     else:
         return None
 
-def saveStudentAnswer(idSession, idStudent, correct, idQuestion):
-    answer = models.StudentAnswer(idSession=idSession, idStudent=idStudent, idQuestion=idQuestion, correct=correct)
+def saveStudentAnswer(idSession, idStudent, correct, idQuestion, openAnswer=None):
+    answer = models.StudentAnswer(idSession=idSession, idStudent=idStudent, idQuestion=idQuestion, correct=correct, openAnswer=openAnswer)
     db.session.add(answer)
     return dbCommit()
 
@@ -486,6 +486,7 @@ def loadSessionResults(idSession):
     # results si question unique: {idStudent1 : bool, idStudent2 : bool, ...}
     # results si séquence: {idStudent1 : float(pourcentage), idStudent2 : float, ...}
 
+#calcule le résultat moyen d'une question
 def getQuestionNbAnswers(idSession, idQuestion):
     ans = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion).count()
     if models.Question.query.filter_by(id=idQuestion).first().mode == 2:
@@ -494,32 +495,33 @@ def getQuestionNbAnswers(idSession, idQuestion):
         goodAns = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion, correct=True).count()
     return [ans, goodAns]
 
+# calcule le résultat moyen d'une séquence
 def getSequenceAvgNbAnswers(idSession, idSequence):
-    subQuery = models.Question.query.filter_by(id= models.StudentAnswer.idQuestion).first().mode
-    nbAnswers = models.StudentAnswer.query.filter(models.StudentAnswer.idSession==idSession, subQuery != 2).count()
-    nbGoodAnswers = models.StudentAnswer.query.filter(models.StudentAnswer.idSession==idSession, models.StudentAnswer.correct==True, subQuery != 2).count()
+    studentAnswers = models.StudentAnswer.query.join(models.Question, models.StudentAnswer.idQuestion == models.Question.id).filter_by(idSession = idSession)
+    nbAnswers = studentAnswers.count()
+    nbGoodAnswers = studentAnswers.filter_by(correct = True).count()
     nbQ = models.InSerie.query.filter_by(idS = idSequence).count()
     return [nbAnswers / nbQ, nbGoodAnswers / nbQ]
 
-def getQuestionsResults(idSession, idQuestion): #intermediaire
+# calcule les résultats d'une question pour chaque élève
+def getQuestionsResults(idSession, idQuestion):
     results = {}
     allAnswers = models.StudentAnswer.query.filter_by(idSession=idSession, idQuestion=idQuestion)
-    if models.Question.query.filter_by(id=idQuestion).first().mode == 2:
-        for row in allAnswers:
-            results[str(row.idStudent)] = True
-    else:
-        for row in allAnswers:
-            results[str(row.idStudent)] = row.correct
+    reponsesOuvertes = (models.Question.query.filter_by(id=idQuestion).first().mode == 2)
+    for row in allAnswers:
+            results[str(row.idStudent)] = (reponsesOuvertes or row.correct)
     return results
 
-def getAvgSequenceResults(idSession, idSequence): #intermediaire
+# calcule le pourcentage de bonne réponse pour chaque élève lors d'une séquence
+def getAvgSequenceResults(idSession, idSequence):
     results = []
     questions = models.InSerie.query.filter_by(idS=idSequence).order_by(models.InSerie.posQ)
     for row in questions:
         results.append(getQuestionsResults(idSession, row.idQ))
     return avgResults(results)
 
-def avgResults(results): #intermediaire
+# a partire des réponses a plusieurs questions, calcule le pourcentage de bonne réponse pour chaque élève
+def avgResults(results):
     avgResults = {}
     n = len(results)
     for i in range(0, n):
@@ -531,23 +533,27 @@ def avgResults(results): #intermediaire
 
     return avgResults
 
+#supprime toute les réponses données à une question (diffusé dans une séquence)
 def deleteSequenceQuestionAnswers(idS, idQ):
     for row in models.Session.query.filter_by(idSequence=idS):
         models.StudentAnswer.query.filter_by(idQuestion=idQ, idSession=row.id).delete()
     return dbCommit()
 
+#supprime toute les sessions relative à une question
 def deleteQuestionSessions(idQuestion):
     for row in models.Session.query.filter_by(idQuestion=idQuestion):
         models.StudentAnswer.query.filter_by(idSession=row.id).delete()
         db.session.delete(row)
     return dbCommit()
 
+#supprime toute les sessions relative à une séquence
 def deleteSequenceSessions(idS):
     for row in models.Session.query.filter_by(idSequence=idS):
         models.StudentAnswer.query.filter_by(idSession=row.id).delete()
         db.session.delete(row)
     return dbCommit()
 
+#supprime une session
 def deleteSession(idSession):
     models.StudentAnswer.query.filter_by(idSession=idSession).delete()
     db.session.delete(models.Session.query.filter_by(id=idSession).first())

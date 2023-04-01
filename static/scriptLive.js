@@ -41,8 +41,8 @@ function updateCloud() {
         .words(JSON.parse(JSON.stringify(percentAnswers)))
         .padding(5)        //space between words
         .rotate(function () { return 0; })
-        .fontSize(function (d) { return 10*Math.sqrt(d.size); })      // font size of words
-        .canvas( function() { return document.createElement("canvas").attr("id", "myCanvas"); })
+        .fontSize(function (d) { return d.size; })      // font size of words
+        .canvas(function () { return document.createElement("canvas"); })
         .on("end", draw);
     layout.start();
 }
@@ -88,53 +88,6 @@ socket.on('newAnswer', (data) => {
     actualiseLiveAnswers();
 });
 
-function calculatePercentAnswers() {
-    if (typeAnswer == 0) {
-        percentAnswers = [];
-        for (let i = 0; i < totalAnswers.length; i++) {
-            percentAnswers[i] = Math.round(totalAnswers[i] / nbAnswers * 100);
-        }
-    }
-    else if (typeAnswer == 1){
-        percentAnswers = [];
-        if (Object.keys(totalAnswers).length <= 5) {
-            for (key in totalAnswers) {
-                percentAnswers.push([key, Math.round(totalAnswers[key] / nbAnswers * 100)]);
-            }
-            percentAnswers.sort(function (a, b) {
-                return b[1] - a[1];
-            });
-        }
-        else {
-            for (let i = 0; i < 4; i++) {
-                let max = 0;
-                let index;
-                max = 0;
-                for (key in totalAnswers) {
-                    if (totalAnswers[key] > max && ![key, Math.round(totalAnswers[key] / nbAnswers * 100)] in percentAnswers) {
-                        max = totalAnswers.key;
-                        index = key;
-                    }
-                }
-                percentAnswers.push([index, Math.round(max / nbAnswers * 100)]);
-            }
-            others = 0;
-            for (key in totalAnswers) {
-                if (![key, Math.round(totalAnswers[key] / nbAnswers * 100)] in percentAnswers) {
-                    others += totalAnswers[key] / nbAnswers * 100;
-                }
-            }
-            percentAnswers.autres = Math.round(max / nbAnswers * 100);
-        }
-    }
-    else {
-        n = Object.values(totalAnswers).reduce((a, b) => a + b, 0);;
-        percentAnswers = [];
-        for (key in totalAnswers)
-            percentAnswers.push({text : key, size : totalAnswers[key] / n * 1000})
-    }
-}
-
 function showLiveAnswers() {
     console.log("Demande des réponses lives")
     socket.emit("showLiveAnswers", getCurrentSId())
@@ -150,6 +103,57 @@ socket.on("showLiveAnswers", (data) => {
     calculatePercentAnswers();
     actualiseLiveAnswers();
 })
+
+function calculatePercentAnswers() {
+    if (typeAnswer == 0) {
+        percentAnswers = [];
+        for (let i = 0; i < totalAnswers.length; i++) {
+            percentAnswers[i] = Math.round(totalAnswers[i] / nbAnswers * 100);
+        }
+    }
+    else if (typeAnswer == 1) {
+        percentAnswers = [];
+        if (Object.keys(totalAnswers).length <= 5) {
+            for (key in totalAnswers) {
+                percentAnswers.push([key, Math.round(totalAnswers[key] / nbAnswers * 100)]);
+            }
+            percentAnswers.sort(function (a, b) {
+                return b[1] - a[1];
+            });
+        }
+        else {
+            fourFirst = [];
+            for (let i = 0; i < 4; i++){
+                let indexMax = -1;
+                for (key in totalAnswers){
+                    if ((indexMax == -1 || totalAnswers[key] > totalAnswers[indexMax]) && !fourFirst.includes(key)){
+                        indexMax = key;
+                    }
+                }
+                fourFirst.push(indexMax);
+                percentAnswers.push([indexMax.toString(), Math.round(totalAnswers[indexMax] / nbAnswers * 100)]);
+            }
+
+            percentAnswers.sort(function (a, b) {
+                return b[1] - a[1];
+            });
+
+            others = 0;
+            for (key in totalAnswers) {
+                if (!fourFirst.includes(key)) {
+                    others += (totalAnswers[key] / nbAnswers * 100);
+                }
+            }
+            percentAnswers.push( ["Autres", Math.round(others)]);
+        }
+    }
+    else {
+        n = Object.values(totalAnswers).reduce((a, b) => a + b, 0);;
+        percentAnswers = [];
+        for (key in totalAnswers)
+            percentAnswers.push({ text: key, size: totalAnswers[key] / n * 250 })
+    }
+}
 
 function actualiseLiveAnswers() {
     if (typeAnswer == 0) {
