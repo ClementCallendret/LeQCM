@@ -497,10 +497,14 @@ def getQuestionNbAnswers(idSession, idQuestion):
 
 # calcule le résultat moyen d'une séquence
 def getSequenceAvgNbAnswers(idSession, idSequence):
-    studentAnswers = models.StudentAnswer.query.join(models.Question, models.StudentAnswer.idQuestion == models.Question.id).filter_by(idSession = idSession)
+    studentAnswers = models.StudentAnswer.query.join(models.Question, models.StudentAnswer.idQuestion == models.Question.id).filter(models.StudentAnswer.idSession == idSession)
     nbAnswers = studentAnswers.count()
-    nbGoodAnswers = studentAnswers.filter_by(correct = True).count()
+    nbGoodAnswers = studentAnswers.filter(models.StudentAnswer.correct == True).count()
     nbQ = models.InSerie.query.filter_by(idS = idSequence).count()
+    print(nbAnswers)
+    print(nbGoodAnswers)
+    print(nbQ)
+    print([nbAnswers / nbQ, nbGoodAnswers / nbQ])
     return [nbAnswers / nbQ, nbGoodAnswers / nbQ]
 
 # calcule les résultats d'une question pour chaque élève
