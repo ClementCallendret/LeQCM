@@ -9,6 +9,7 @@ creation = Blueprint('creation',__name__)
 def sorting():
     idList = json.loads(request.form["selectedQ"])
     questions = []
+    tags = database.allTagsByProf(session["loginP"])
     for id in idList:
         q = database.loadQuestionById(id)
         q["state"] = formatage.formatageMD(q["state"])
@@ -19,7 +20,7 @@ def sorting():
     for q in allQuestions :
       q["state"] = formatage.formatageMD(q["state"])
     
-    return render_template("Sorting.html", questions=jsoned, id="new", title="", button="Creer une Séquence", allQuestions=allQuestions)
+    return render_template("Sorting.html", questions=jsoned, id="new", title="", button="Creer une Séquence", allQuestions=allQuestions, tags=tags)
 
 @creation.route("/MesQuestions/UpdateSequence/<id>")
 def updateSequence(id):

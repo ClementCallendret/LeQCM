@@ -41,6 +41,7 @@ function createList() {
     questions = JSON.parse(jsonQuestions);
     for (let index = 0; index < questions.length; index++) {
         $("#questionCard" + questions[index]["id"]).css("display", "none")
+        $("#questionCard" + questions[index]["id"]).removeClass("selectable")
 
         const listItem = document.createElement('li');
         listItem.setAttribute('data-index', index);
@@ -78,10 +79,12 @@ function removeQ(i) {
     listItems.splice(listItems.indexOf(parent), 1);
     parent.remove();
     $("#questionCard" + i).css("display", "block")
+    $("#questionCard" + i).addClass("selectable")
 }
 
 function addtoSequence(id) {
     $("#questionCard" + id).css("display", "none")
+    $("#questionCard" + id).removeClass("selectable")
 
     let index;
     if(listItems.length == 0)
@@ -177,4 +180,69 @@ function addEventListeners() {
         item.addEventListener('dragenter', dragEnter);
         item.addEventListener('dragleave', dragLeave);
     });
+}
+
+// ------------------------------ Tri par tags ------------------------------ //
+
+function filterByTags() {
+    document.getElementById("selectAll").checked = false;
+    questions = $("#questionCards").find(".questionCard.selectable");
+    allTags = $("#tagList").find(".tagCheck");
+    selectedTags = [];
+
+    // récupération des tags cochés
+    allTags.each(function () {
+        if (this.checked) {
+            selectedTags.push(this.name);
+            this.checked = false;
+        }
+    });
+
+    // si aucun montrer toutes les questions
+    if (selectedTags.length == 0) {
+        questions.each(function () {
+            this.setAttribute("style", "");
+        });
+    }
+    // sinon on verifie si le tag appartient à la question grace à la chaine de charactères
+    else {
+        questions.each(function () {
+            q = $(this)
+            tags = getTags(q.find(".card-footer"));
+            hasTag = false
+            for (let i = 0; i < tags.length; i++) {
+                if (selectedTags.includes(tags[i])) {
+                    hasTag = true;
+                }
+            }
+            if (!hasTag) {
+                this.setAttribute("style", "display : none");
+            }
+            else {
+                this.setAttribute("style", "");
+            }
+        })
+    }
+}
+
+function getTags(cardFooter){
+    tagsJQ = cardFooter.find(".etiquette")
+    tags = []
+    tagsJQ.each((i, v) => {
+        tags.push(v.innerText)
+    })
+    return tags
+}
+
+function selectAllTag(c) {
+    val = c.checked;
+    $(".tagCheck").each((i, v) => {
+        v.checked = val
+    })
+}
+
+function checkTag(c) {
+    if (! c.checked) {
+        document.getElementById("selectAll").checked = false;
+    }
 }
