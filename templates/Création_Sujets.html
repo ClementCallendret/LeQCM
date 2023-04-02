@@ -92,7 +92,7 @@
     <div class="toutLesSujets" id ="toutLesSujets" >
 
         {% for i in range (0,tabSujet|length) %}
-        <button onclick="pdf({{i}})">Télécharger sujet {{i+1}}</button>
+        <button onclick="pdf('sujet{{i}}')">Télécharger sujet {{i+1}}</button>
         <div class="sujet{{i}}" id="sujet{{i}}">
             <h1 id="titre">{{title}}</h1>
             <div id="identification">
@@ -163,9 +163,10 @@
 <script>
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.2/purify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
+<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
 
 {% endblock %}

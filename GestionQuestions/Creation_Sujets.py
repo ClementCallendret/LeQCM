@@ -49,7 +49,7 @@ def CreaS():
                     tabQ[i].append(allTags[i])
                 print("tabQ",tabQ)
                 #tabQ contient pour tout les tags, les valeurs de l'intervalle [min,max]
-                # [[[2,3,4,5],"java"][[5,,6,7],"C"]]
+                # [[[2,3,4,5],"java"][[5,6,7],"C"]]
                 tabIntervalle = []
                 for i in range(len(tabQ)):
                     tabIntervalle.append(tabQ[i][0])
