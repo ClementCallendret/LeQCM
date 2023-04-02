@@ -218,6 +218,8 @@ function verifMinMax() {
         inputsDiv.each((i, v) => {
             min = parseInt($(v).find(".inputMin").val());
             max = parseInt($(v).find(".inputMax").val());
+            nbQuestionMin += min;
+            nbQuestionMax += max;
             if (min > max) {
                 alert("Les minimum doivent être inferieurs au maximums");
                 return false

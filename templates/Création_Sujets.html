@@ -7,7 +7,7 @@
 <div class="PASPRINT" id="PASPRINT">
     <div class="container-fluid">
         </br></br>
-        <form method="POST" action="/CreaS" id="form">
+        <form method="POST" action="/CreaS" id="form" target="_blank">
             <label for="nbr_sujets">Nombres de sujets voulus :</label>
             <input type="number" id="nbr_sujets" name="nbr_sujets" min="1" style="width: 69px; margin-right: 50px;"
                 value="1" required>
@@ -21,7 +21,7 @@
             <label for="titre">Titre de vos sujets :</label>
             <input type="text" id="titre" name="titre" style="width: 222px;" required>
 
-            <div class="dropdown" id="etudiantsChoisis" style="display: inline; margin-left : 15px;"  hidden>
+            <div class="dropdown" id="etudiantsChoisis" style="display: inline; margin-left : 15px;" hidden>
                 <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
                     Etudiants
                 </button>
@@ -88,10 +88,11 @@
     <!--
         Boucle Pour chaque élèvre
     -->
-    <button onclick="window.print()"  class="buttonPrintAll" id="buttonPrintAll">Télécharger tout les sujets</button>
-    <div class="toutLesSujets" id ="toutLesSujets" >
+    <button onclick="window.print()" class="buttonPrintAll" id="buttonPrintAll">Télécharger tout les sujets</button>
+    <div class="toutLesSujets" id="toutLesSujets">
         {% for i in range (0,tabSujet|length) %}
-        <button onclick="generatePDF('sujet{{i}}')" class="buttonPrintS" id="buttonPrintS">Télécharger sujet {{i+1}}</button>
+        <button onclick="generatePDF('sujet{{i}}')" class="buttonPrintS" id="buttonPrintS">Télécharger sujet
+            {{i+1}}</button>
         <div class="sujet" id="sujet">
             <h1 id="titre">{{title}}</h1>
             <div id="identification">
@@ -125,7 +126,7 @@
             -->
                 <ol>
                     {% for j in range (0,tabSujet[i]|length) %}
-                    <li class="liste" id="liste">                    
+                    <li class="liste" id="liste">
                         <h3 class="questionIndex">{{tabSujet[i][j].title|safe}} :</h3>
                         <div class="question" id="question">
                             <div class="state">
@@ -145,10 +146,10 @@
                                     </div>
                                 </div>
 
-                            {% endfor %}
-                            {% else %}
+                                {% endfor %}
+                                {% else %}
                                 <p>.............................................................................</p>
-                            {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </li>
@@ -167,7 +168,9 @@
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.2/purify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>

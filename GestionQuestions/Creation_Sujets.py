@@ -25,6 +25,8 @@ def CreaS():
             #On récupère des données 
             idP = session["loginP"]
             allTags = database.allTagsByProf(idP)
+            nbQperTag = database.nbQuestionsPerTag(session["loginP"])
+            profStudents = database.getStudentsByProf(session["loginP"])
 
             nbr_sujets = int(request.form.get("nbr_sujets"))
             button_anonymat = request.form.get("button_anonymat")
@@ -41,12 +43,13 @@ def CreaS():
             if intervalle != None:
                 nbr_questions = int(request.form.get("nbr_questions"))
                 for i in range(len(allTags)):
-                    min = int(request.form.get(allTags[i]+"min"))
-                    max =int(request.form.get(allTags[i]+"max"))
-                    tabQ.append([[min]])
-                    for j in range(min+1, max+1, 1):
-                        tabQ[i][0].append(j)
-                    tabQ[i].append(allTags[i])
+                    if request.form.get(allTags[i]+"min"):
+                        min = int(request.form.get(allTags[i]+"min"))
+                        max =int(request.form.get(allTags[i]+"max"))
+                        tabQ.append([[min]])
+                        for j in range(min+1, max+1, 1):
+                            tabQ[i][0].append(j)
+                        tabQ[i].append(allTags[i])
                 print("tabQ",tabQ)
                 #tabQ contient pour tout les tags, les valeurs de l'intervalle [min,max]
                 # [[[2,3,4,5],"java"][[5,6,7],"C"]]
@@ -55,10 +58,9 @@ def CreaS():
                     tabIntervalle.append(tabQ[i][0])
                 print("TabIntervalle", tabIntervalle)
 
-
                 tabCombi = generateurS.combi(tabIntervalle, 0, [], nbr_questions)
                 print("tabCombi",tabCombi)
-                #tabcombi = [[1, 2], [1, 2]] 1Q tag A et 2Q tag B puis inversement
+                #tabcombi = [[1, 2], [2, 1]] 1Q tag A et 2Q tag B puis inversement
                 tabQAvecDiffCombi = []
                 for i in range(len(tabCombi)):
                     tabQAvecDiffCombi.append([])
@@ -68,19 +70,33 @@ def CreaS():
                 print("tabAvec diff combi", tabQAvecDiffCombi)
                 nbCombi = len(tabCombi)
                 print("nbCombi", nbCombi)
-                tabNbSujet = []
-                nbSujet = nbr_sujets
-                for i in range(nbCombi):
-                    nbSujet = ceil(nbr_sujets/nbCombi)
-                    tabNbSujet.append(nbSujet)
-                    nbr_sujets = nbr_sujets - nbSujet
-                    nbCombi = nbCombi - 1
-                print("tabNbSujet", tabNbSujet)
+
+                questionByTag = generateurS.getQuestionByTag(tabQ)
+                print("############### QByTag : ", questionByTag)
+                questionByTagBulle = sorted(questionByTag, key=lambda tab : len(tab[1]))
+                print("############### QBulle : ", questionByTagBulle)
+                questionsSansDoublons = generateurS.doublon(questionByTagBulle)
+                print("############### QSansDoub: ", questionsSansDoublons)
+                
+                combinaisonsRepartie = generateurS.repartirCombi(questionsSansDoublons, tabQAvecDiffCombi, nbr_sujets)
+                print("############### combinaisonsRepartie: ", combinaisonsRepartie)
+
+                if combinaisonsRepartie == None :
+                    flash("Vous ne pouvez pas faire suffisement de combinaisons avec les questions que vous possedez")
+                    return render_template("Création_Sujets.html", title=titre, tags = nbQperTag, tagsJSON=json.dumps(nbQperTag, indent=4), students=profStudents, tabSujet = [], anonyme = button_anonymat)
+
+                #for i in range(nbCombi):
+                #    nbSujet = ceil(nbr_sujets/nbCombi)
+                #    tabNbSujet.append(nbSujet)
+                #    nbr_sujets = nbr_sujets - nbSujet
+                #    nbCombi = nbCombi - 1
+                #print("tabNbSujet", tabNbSujet)
+
                 tabSujetID2 = []
-                for i in range(len(tabCombi)):
-                    print("tabAvecDIffCombi",tabQAvecDiffCombi[i])
-                    print("tabNbSujet",tabNbSujet[i])
-                    tabSujetID=(generateurS.generateurS(tabQAvecDiffCombi[i],tabNbSujet[i]))
+                for i in range(len(combinaisonsRepartie)):
+                    print("combinaisonsRepartie ",i," ",combinaisonsRepartie[i])
+                    #print("tabNbSujet",tabNbSujet[i])
+                    tabSujetID=(generateurS.generateurS(combinaisonsRepartie[i][0], combinaisonsRepartie[i][1], questionsSansDoublons))
                     for sujet in tabSujetID:
                         tabSujetID2.append(sujet)
                 print("tabSujetFinal",tabSujetID2)
@@ -93,7 +109,22 @@ def CreaS():
                 #tabQ contient pour tout les tags, leur nombre souhaités 
                 #exemple tabQ[[5,"java"],[7,"c"]]
                 #print("TEST CREAS", generateurS.generateurS([[1,'a'],[1,'b']],2))
-                tabSujetID2 = generateurS.generateurS(tabQ,nbr_sujets)
+
+                questionByTag = generateurS.getQuestionByTag(tabQ)
+                print("############### QByTag : ", questionByTag)
+                questionByTagBulle = sorted(questionByTag, key=lambda tab : len(tab[1]))
+                print("############### QBulle : ", questionByTagBulle)
+                questionsSansDoublons = generateurS.doublon(questionByTagBulle)
+                print("############### QSansDoub: ", questionsSansDoublons)
+                print("############### tabQ: ", tabQ)
+
+                nbSujetPossibles = generateurS.getNbSujetsPossibles(questionsSansDoublons, tabQ)
+
+                if(nbSujetPossibles < nbr_sujets):
+                    flash("vous n'avez pas assez de questions différentes pour autant de sujets")
+                    return render_template("Création_Sujets.html", title=titre, tags = nbQperTag, tagsJSON=json.dumps(nbQperTag, indent=4), students=profStudents, tabSujet = [], anonyme = button_anonymat)
+
+                tabSujetID2 = generateurS.generateurS(tabQ, nbr_sujets, questionsSansDoublons)
                 print("TAB FINALE",tabSujetID2)
                 #tabQ contient tout les sujets avec à la place des questions l'id des questions 
                 #Donc va falloir que je fasse une fonction 
@@ -107,4 +138,4 @@ def CreaS():
         print(tabSujetFinalLeVrai)
         tags = database.nbQuestionsPerTag(session["loginP"])
         profStudents = database.getStudentsByProf(session["loginP"])
-        return render_template("Création_Sujets.html", title=titre, tags = tags, tagsJSON=json.dumps(tags, indent=4), students=profStudents, tabSujet = tabSujetFinalLeVrai, anonyme = button_anonymat)
+        return render_template("Création_Sujets.html", title=titre, tags = nbQperTag, tagsJSON=json.dumps(nbQperTag, indent=4), students=profStudents, tabSujet = tabSujetFinalLeVrai, anonyme = button_anonymat)

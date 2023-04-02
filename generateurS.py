@@ -1,6 +1,9 @@
 from database import loadQuestionsByProfTag, getProfIdentity, loadQuestionById
 from flask import session
 from random import random
+from math import comb
+from math import ceil
+
 def doublon(tab):
     for i in range (len(tab)):
         j = 0
@@ -63,22 +66,29 @@ def conversion(E):
         dico[E[i][0]]=(E[i][1])
     return dico
 
+def conversion2(E):
+    dico = {}
+    for i in range (len(E)):
+        dico[E[i][1]]=(E[i][0])
+    return dico
 
-def generateurS(E=[[], int],nbSujet = int):
+
+def generateurS(E ,nbSujet, questionsSansDoublons): #E=[[], int] mais ptetre plus mtn
     #E est un tableau, contenant des sous de tableau de la forme [nbQuestionSouhaité,"Tag"]
     #E = [[2,"Java"],[3,"Compilation"],[6,"PHP"]]
 
     #BIENTOT On récupère pour chaque tag leur nombre de question
-    print("E",E)
-    tab = getQuestionByTag(E)
-    print("tab1",tab)
-    tab = triBulles(tab)
-    print("tab2",tab)
+    #print("E",E)
+        #tab = getQuestionByTag(E)
+    #print("tab1",tab)
+        #tab = triBulles(tab)
+    #print("tab2",tab)
 
-    tab = doublon(tab)
-    print("tab3",tab)
+        #tab = doublon(tab)
+    #print("tab3",tab)
 
-    dicoQ = conversion(tab)
+    dicoQ = conversion(questionsSansDoublons)
+
     #for a in range(len(E)):
         #res = requete BDD tag E[a][1]
         #dicoQ[E[a][1]].append(res)
@@ -129,8 +139,8 @@ def mixage(tabSujet):
 #fonction possInter qui calcule les différents intervalles de questions possibles
 def combi(tableaux, sum, combination, target_sum):
     combinations = []
-    # Si la somme de la combinaison actuelle est celle qu'on veut
-    if sum == target_sum:
+    # Si la somme de la combinaison actuelle est celle qu'on veut et qu'on a utilisé chaque tableau
+    if sum == target_sum and len(tableaux) == 0:
         combinations.append(combination)
     # Sinon faut rajouter des questions
     elif sum < target_sum:
@@ -152,3 +162,45 @@ def IdToQuestion(tabQ):
         for j in range(len(tabQ[i])):
             tabQ[i][j] = loadQuestionById(tabQ[i][j])
     return tabQ
+
+def getNbSujetsPossibles(tabQuestions, nbQuestionVouluParTag):
+    total = 1
+    dicoNbQ = conversion2(nbQuestionVouluParTag)
+    for tag in tabQuestions:
+        total *= comb(len(tag[1]), dicoNbQ[tag[0]])
+    return total
+
+def repartirCombi(tabQuestions, tabCombinaisons, nbSujetsVoulu):
+    nbSujetParCombi = [] #un tableau de tableaux à deux entré : [une combinaison, le nombre de sujets possibles avec]
+    nbSujetTotal = 0
+    for combi in tabCombinaisons:
+        nbPossible = getNbSujetsPossibles(tabQuestions, combi)
+        nbSujetTotal += nbPossible
+        if nbPossible > 0:
+            nbSujetParCombi.append([combi, nbPossible])
+
+    print("######## nbSujetTotalPossible : ", nbSujetTotal, " / ", nbSujetsVoulu)
+    print("######## combis : ", nbSujetParCombi)
+    if nbSujetTotal < nbSujetsVoulu :
+        return None
+
+    nbSujetParCombi.sort(key=lambda combi: combi[1]) #on tri par nombre de sujets possibles
+    print("######## combis triés : ", nbSujetParCombi)
+
+    nbSujetRestants = nbSujetsVoulu
+    nbCombiRestantes = len(nbSujetParCombi)
+    for combi in nbSujetParCombi:
+        print("#####################")
+        moy = ceil(nbSujetRestants / nbCombiRestantes)
+        print(nbSujetRestants)
+        print(moy)
+        print(combi[1])
+        if combi[1] <= moy :
+            nbSujetRestants -= combi[1]
+        else:
+            nbSujetRestants -= moy
+            combi[1] = moy
+        nbCombiRestantes -= 1
+
+    return nbSujetParCombi
+
