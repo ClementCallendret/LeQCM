@@ -38,38 +38,58 @@ function pluriel(word) {
 }
 
 // mesure de la ressemblance entre les mots en utilisant la distance de Levenshtein
-function ressemblance(word1, word2) {
+function ressemblanceLev(word1, word2) {
     const m = word1.length;
     const n = word2.length;
-    const matrix = [];
+    let matrice = [];
 
     for (let i = 0; i <= m; i++) {
-        matrix[i] = [i];
+        matrice[i] = [i];
     }
 
     for (let j = 0; j <= n; j++) {
-        matrix[0][j] = j;
+        matrice[0][j] = j;
     }
 
     for (let i = 1; i <= m; i++) {
         for (let j = 1; j <= n; j++) {
             if (word1[i - 1] === word2[j - 1]) {
-                matrix[i][j] = matrix[i - 1][j - 1];
+                matrice[i][j] = matrice[i - 1][j - 1];
             } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1],
-                    matrix[i][j - 1],
-                    matrix[i - 1][j]
+                matrice[i][j] = Math.min(
+                    matrice[i - 1][j - 1],
+                    matrice[i][j - 1],
+                    matrice[i - 1][j]
                 ) + 1;
             }
         }
     }
 
-    const distance = matrix[m][n];
+    const distance = matrice[m][n];
     const maxLength = Math.max(word1.length, word2.length);
     const similarity = (1 - distance / maxLength) * 100;
 
-    return similarity.toFixed(2);
+    return similarity;
+}
+
+// nous permet de differencier des mots comme "compatible" et "incompatible"
+function ressemblanceByLetter(word1, word2) {
+    let similarity = 0;
+    const minLength = Math.min(word1.length, word2.length);
+    const maxLength = Math.max(word1.length, word2.length);
+    for(let i =0; i < minLength; i++){
+        if(word1[i] == word2[i]){
+            similarity++;
+        }
+    }
+    return (similarity / maxLength * 100);
+}
+
+function seRessemble(word1, word2) {
+    const similarity = (ressemblanceByLetter(word1, word2) + ressemblanceLev(word1, word2)) / 2;
+    const similarityPlurl = (ressemblanceByLetter(pluriel(word1), pluriel(word2)) + ressemblanceLev(pluriel(word1), pluriel(word2))) / 2;
+    console.log(word1 + " == " + word2 + " : " + similarity + " | " + similarityPlurl)
+    return similarity > 50 || similarityPlurl > 50;
 }
 
 function groupSimilars(answers) {
@@ -81,10 +101,9 @@ function groupSimilars(answers) {
         let mostUsedSimilar = word1;
         for (let j = i+1; j < words.length; j++) {
             const word2 = words[j];
-            const similarity = ressemblance(word1, word2);
-            console.log(word1 + " == " + word2 + " : " + similarity)
+            const similar = seRessemble(word1, word2);
 
-            if (similarity > 80) {
+            if (similar) {
                 if (answers[mostUsedSimilar] >= answers[word2]) {
                     answers[mostUsedSimilar] += answers[word2];
                     delete answers[word2];
@@ -108,13 +127,11 @@ function groupSimilars(answers) {
 
 function addWord(word, answers) {
     for(let key in answers){
-        if(ressemblance(word, key) > 80){
+        if(seRessemble(word, key)){
             answers[key]++;
             return
         }
     }
     answers[word] = 1;
 }
-
-mySet = {"pithon" : 5, "javascript" : 10, "java script" : 9, "python" : 25, "java" : 15, "c++" : 12, "pyhton" : 1}
 

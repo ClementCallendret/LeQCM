@@ -84,6 +84,13 @@ def addStudent(idS, name, surname, password, sel) :
             return std.id
     return False
 
+def addHasStudent(idP, idS):
+    if not studentExist(idS) or not professorExist(idP):
+        return False
+    relation = models.HasStudent(idP=idP, idS=idS)
+    db.session.add(relation)
+    return dbCommit()
+
 def getStudentSel(idS):
     std = models.Student.query.filter_by(id=idS).first()
     if std :
@@ -106,6 +113,13 @@ def updateStudentPassword(id, newPswd, newSel):
         return dbCommit()
     else:
         return False
+    
+def getStudentsByProf(idP):
+    students = []
+    for student in models.HasStudent.query.filter_by(idP=idP):
+        id = getStudentIdentity(student.idS)
+        students.append([student.idS, id[0], id[1]])
+    return students
 
 ####################### TAG ######################
 
@@ -145,6 +159,7 @@ def nbQuestionsPerTag(idProf):
     result = {}
     for tag in allTagsByProf(idProf):
         result[tag] = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).filter(models.Question.idP == idProf, models.HasTag.idT == tag).count()
+    return result
 
 ####################### HAS TAG ######################
   

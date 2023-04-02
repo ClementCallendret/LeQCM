@@ -3,7 +3,7 @@
 const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('check');
 const form = document.getElementById("form");
-const tagList = JSON.parse(document.getElementById("allTags").value);
+const maxTags = JSON.parse(document.getElementById("allTags").value);
 const selectTag = document.getElementById("newTagSelect");
 
 // Store listitems
@@ -77,9 +77,9 @@ function addTag() {
                     <h4 style="padding-top: 38px;"> nombre de questions de ${tag}</h4> 
         
                     <div class="inputFix" style="position: auto;">
-                        <label class="inputFixe">quantité : <input type="number" min="1" class="inputQuantity inputFixe form-control" name="${tag}" placeholder="quantité" style="width: 70px;"></label>
-                        <label class="inputRange">min : <input type="number" min="1" class="inputQuantity inputRange form-control" name="${tag}min" placeholder="quantité" style="width: 70px;"></label>
-                        <label class="inputRange">max : <input type="number" min="1" class="inputQuantity inputRange form-control" name="${tag}max" placeholder="quantité" style="width: 70px;"></label>
+                        <label class="inputFixe">quantité : <input type="number" value="1" min="1" max="${maxTags[tag]}" class="inputQuantity inputFixe form-control" name="${tag}" style="width: 70px;"></label>
+                        <label class="inputRange">min : <input type="number" value="1" min="1" max="${maxTags[tag]}" class="inputQuantity inputRange form-control" name="${tag}min" style="width: 70px;"></label>
+                        <label class="inputRange">max : <input type="number" value="1" min="1" max="${maxTags[tag]}" class="inputQuantity inputRange form-control" name="${tag}max" style="width: 70px;"></label>
                     </div>
                     <button type="button" onclick="removeTag('${tag}')" class="btn btn-danger">supprimer</button>
                 </div>

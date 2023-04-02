@@ -16,6 +16,11 @@ class Student(db.Model):
     password = db.Column(db.String(50), nullable=False)
     sel = db.Column(db.String(64))
 
+class HasStudent(db.Model):
+    __tablename__ = "hasStudent"
+    idP = db.Column(db.Integer, db.ForeignKey("professor.username"), primary_key=True)
+    idS = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
+
 class Question(db.Model):
     __tablename__ = "question"
     id = db.Column(db.Integer, primary_key=True)

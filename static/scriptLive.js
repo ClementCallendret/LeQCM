@@ -6,6 +6,13 @@ let myAnswer;
 let layout;
 const colors = ['#F9801D', '#C74EBD', '#3AB3DA', '#FED83D', '#80C71F', '#ED6DAC', '#474F52', '#168B89', '#AA5DA1', '#3F4BA6', '#835432', '#5E7C16', '#B02E26', '#1D1D21']
 
+function test(){
+    totalAnswers = {"travail" : 10, "travaux" : 15, "pithon" : 5, "javascript" : 10, "java script" : 9, "python" : 25, "java" : 15, "c++" : 12, "pyhton" : 1, "compatible" : 10, "incompatible" : 15, "aimer" : 10, "amer" : 5};
+    groupSimilars(totalAnswers);
+    calculatePercentAnswers();
+    updateCloud();
+}
+
 //totalAnswers = { caca : 10, pipi : 25, popo: 15, algerie : 8, baleine : 39, orchide : 28, pissenlit : 2, weed : 20, raviolits : 55}
 
 // append the svg object to the body of the page
@@ -41,7 +48,7 @@ function updateCloud() {
         .words(JSON.parse(JSON.stringify(percentAnswers)))
         .padding(5)        //space between words
         .rotate(function () { return 0; })
-        .fontSize(function (d) { return d.size; })      // font size of words
+        .fontSize(function (d) { return d.size * 3; })      // font size of words
         .canvas(function () { return document.createElement("canvas"); })
         .on("end", draw);
     layout.start();
@@ -76,13 +83,16 @@ socket.on('newAnswer', (data) => {
             totalAnswers[a] += 1;
         }
     }
-    else {
+    else if (typeAnswer == 1) {
         if (data in totalAnswers) {
             totalAnswers[data] += 1;
         }
         else {
             totalAnswers[data] = 1;
         }
+    }
+    else{
+        addWord(data, totalAnswers)
     }
     calculatePercentAnswers();
     actualiseLiveAnswers();
@@ -100,6 +110,8 @@ socket.on("showLiveAnswers", (data) => {
     totalAnswers = data.answers;
     nbAnswers = data.nbAnswers;
     $("#nbAnswers").html(nbAnswers.toString());
+    if(typeAnswer == 2)
+        groupSimilars(totalAnswers);
     calculatePercentAnswers();
     actualiseLiveAnswers();
 })
@@ -151,7 +163,7 @@ function calculatePercentAnswers() {
         n = Object.values(totalAnswers).reduce((a, b) => a + b, 0);;
         percentAnswers = [];
         for (key in totalAnswers)
-            percentAnswers.push({ text: key, size: totalAnswers[key] / n * 250 })
+            percentAnswers.push({ text: key, size: totalAnswers[key] / n * 100 })
     }
 }
 

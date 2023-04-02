@@ -24,6 +24,7 @@ def AjoutStudents():
             password = tab[0]
             sel = tab[1]
             database.addStudent(e[0], e[1], e[2], password, sel)
+            database.addHasStudent(session["loginP"], e[0])
 
     return render_template("AjoutStudents.html")
 
