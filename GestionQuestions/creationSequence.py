@@ -49,14 +49,11 @@ def creationPageQCM():
     questions = []
     for id in idList:
         questions.append(database.loadQuestionById(id))
-    questions = formatage.dictTodictFormated(questions)
+    questions = formatage.formatQuestionList(questions)
     title = request.form.get("title")
     if title == "":
         title = "Sans Titre"
-    anonyme = request.form.get("anonyme")
-    if anonyme == "":
-        anonyme = False
-    return render_template("PageQcm.html",questions = questions, title=title, anonyme = anonyme)
+    return render_template("PageQcm.html",questions = questions, title=title, anonyme = False)
 
 @creation.route('/MesQuestions/CreerSequence',methods = ['POST'])
 def creationSequence():

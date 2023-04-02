@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename = 'sorting.css') }}">
 
-<form action="/MesQuestions/validerSelection" method="POST" id="form">
+<form action="/MesQuestions/validerSelection" method="POST" id="form" target="_blank">
     <input type="hidden" name="orderedId" id="orderedId" />
     <div class="d-flex flex-wrap justify-content-center navBar">
         <a href="{{url_for( 'mesQuestions.mainPage' )}}" class="btn btn-danger itemBut">Annuler</a>
