@@ -9,6 +9,7 @@ creation = Blueprint('creation',__name__)
 def sorting():
     idList = json.loads(request.form["selectedQ"])
     questions = []
+    tags = database.allTagsByProf(session["loginP"])
     for id in idList:
         q = database.loadQuestionById(id)
         q["state"] = formatage.formatageMD(q["state"])
@@ -19,7 +20,7 @@ def sorting():
     for q in allQuestions :
       q["state"] = formatage.formatageMD(q["state"])
     
-    return render_template("Sorting.html", questions=jsoned, id="new", title="", button="Creer une Séquence", allQuestions=allQuestions)
+    return render_template("Sorting.html", questions=jsoned, id="new", title="", button="Creer une Séquence", allQuestions=allQuestions, tags=tags)
 
 @creation.route("/MesQuestions/UpdateSequence/<id>")
 def updateSequence(id):
@@ -48,31 +49,26 @@ def creationPageQCM():
     questions = []
     for id in idList:
         questions.append(database.loadQuestionById(id))
-    questions = formatage.dictTodictFormated(questions)
+    questions = formatage.formatQuestionList(questions)
     title = request.form.get("title")
     if title == "":
         title = "Sans Titre"
-    anonyme = request.form.get("anonyme")
-    if anonyme == "":
-        anonyme = False
-    return render_template("PageQcm.html",questions = questions, title=title, anonyme = anonyme)
+    return render_template("PageQcm.html",questions = questions, title=title, anonyme = False)
 
 @creation.route('/MesQuestions/CreerSequence',methods = ['POST'])
 def creationSequence():
     idList = json.loads(request.form["orderedId"])
-    if len(idList) == 0:
-        flash("Vous n'avez pas sélectionné de questions")
+    title = request.form.get("title")
+    if title == "":
+        title = "Sans Titre"
+    
+    id = 0
+    if request.form["id"] == "new":
+        id = database.saveSequence(idList, session["loginP"], title)
     else:
-        title = request.form.get("title")
-        if title == "":
-            title = "Sans Titre"
-
-        if request.form["id"] == "new":
-            database.saveSequence(idList, session["loginP"], title)
-        else:
-            print(request.form["id"])
-            database.updateSequence(request.form["id"], idList, title)
-    return redirect(url_for('mesQuestions.mainPage'))
+        id = (int)(request.form["id"])
+        database.updateSequence(request.form["id"], idList, title)
+    return redirect(url_for('creation.updateSequence', id=id))
 
 def union(list1,list2):
    result = list(set(list1 + list2))

@@ -17,9 +17,6 @@
     <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar2">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="btn btn-warning itemBut" href="{{url_for('Création_Sujets.init')}}">Création de sujets</a>
-        </li>
-        <li class="nav-item">
           <form action="" method="GET" id="tagForm">
             <!-- Dropdown Boostrap avec tous les tags utilisés sur la page courante -->
             <div class="dropdown">
@@ -32,7 +29,8 @@
                       onchange="selectAllTag(this)">Tout sélectionner</label></li>
                 <hr />
                 {%for t in tags%}
-                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck" onchange="checkTag(this)">{{t}}</label></li>
+                <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
+                      onchange="checkTag(this)">{{t}}</label></li>
                 {%endfor%}
               </ul>
 
@@ -43,13 +41,9 @@
           <button type="button" class="btn btn-dark itemBut" onclick="filterByTags()">Filtrer par tag</button>
         </li>
 
-
         <li class="nav-item">
-          <a class="btn btn-dark itemBut" href="{{url_for('editeur.init', questionId='createNew')}}">Creer une
-            question</a>
-        </li>
-        <li class="nav-item">
-          <button type="button" class="btn btn-dark itemBut" onclick="submitForm('/MesQuestions/Sorting')">Créer une séquence / Page à imprimer</button>
+          <button type="button" class="btn btn-dark itemBut" onclick="submitForm('/MesQuestions/Sorting')">Créer une
+            séquence / Page à imprimer</button>
         </li>
         <li class="nav-item">
           <button type="button" class="btn btn-danger itemBut" onclick="submitForm('/MesQuestions/Delete')">Supprimer la
@@ -64,7 +58,7 @@
 <!-- Ceci dans un formulaire qui nous permetteras de selectionner les questions pour générer une page de qcm-->
 
 <div class="collapseTitles">
-  <input  type="checkbox" name="selctAllQ" id="selectAllQ" onchange="selectAllQ(this)">
+  <input type="checkbox" name="selctAllQ" id="selectAllQ" onchange="selectAllQ(this)">
   <button type="button" data-bs-toggle="collapse" data-bs-target="#questionsCollapse" class="collapseBut">
     <h3>Questions ⌄</h3>
   </button>
@@ -74,15 +68,27 @@
   <div id="questionsCollapse" class="collapse show">
     <input type="hidden" name="selectedQ" id="selectedQ">
     <div class="d-flex flex-wrap justify-content-around" style="margin-top: 20px;" id="questionCards">
-      <!-- Card Boostrap car cela rendait bien pour un bref apercu -->
+
+      <div class="card newQuestionCard">
+        <div class="card-header">
+          Nouvelle Question
+        </div>
+        <div class="card-body" id="newQuestionBody">
+          <a class="btn btn-success" href="{{url_for('editeur.init', questionId='createNew')}}" id="newQuestionLink"><p>+</p></a>
+        </div>
+      </div>
+
       {%for q in questions%}
       <div class="card questionCard">
         <div class="card-header">
           <input type="checkbox" name="{{q['id']}}" class="checkQuestion" onchange="checkQ(this)">
           <a href="{{url_for('editeur.init', questionId=q['id'])}}" class="link-dark">{{q['title']}}</a>
-          <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}" class="topRightBut btn btn-success">live</a>
+          <a href="{{url_for('questionLive.createNew', mode='Question', id=q['id'])}}"
+            class="topRightBut btn btn-success">live</a>
         </div>
-        <div class="card-body" ><div>{{q['state']|safe}}</div></div>
+        <div class="card-body">
+          <div>{{q['state']|safe}}</div>
+        </div>
         <div class="card-footer">
           {%for t in q['tags']%}
           <span class="etiquette">{{t}}</span>
@@ -111,12 +117,12 @@
         <div class="card-header">
           <input type="checkbox" name="{{s['id']}}" class="checkSequence" onchange="checkS(this)">
           <a href="/MesQuestions/UpdateSequence/{{s['id']}}">{{s['title']}}</a>
-          <a href="{{url_for('questionLive.createNew', mode='Sequence', id=s['id'])}}" class="topRightBut btn btn-success">live</a>
+          <a href="{{url_for('questionLive.createNew', mode='Sequence', id=s['id'])}}"
+            class="topRightBut btn btn-success">live</a>
         </div>
         <div class="card-body">
           <ul>{% for t in s['questionTitles'] %}<li>{{t}}</li>{%endfor%}</ul>
         </div>
-        <div class="card-footer" style="color:blue">tags quand yen auras</div>
       </div>
 
       {%endfor%}

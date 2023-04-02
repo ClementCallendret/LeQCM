@@ -34,6 +34,7 @@
           {% if isLogedP %}
           <li class="nav-item"><a class="nav-link" href="{{ url_for('profil.mainPage') }}">Profil</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('mesQuestions.mainPage') }}">Mes Questions</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{url_for('Création_Sujets.init')}}">Générateur de sujets</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('AjoutStudents.AjoutStudents') }}">Ajout
               d'élèves</a></li> <!--nom du fichier.nom de la fonction appelée-->
           <li class="nav-item"><a class="nav-link" href="{{ url_for('archives.init') }}">Archives sessions</a></li>

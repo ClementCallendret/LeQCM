@@ -193,10 +193,13 @@ def saveAnswers(data):
 
                 if room["activeQuestion"]["mode"] == 1 and answers == room["activeQuestion"]["numeralAnswer"]:
                     isCorrect = True
+                elif room["activeQuestion"]["mode"] == 2 :
+                    isCorrect = True
             if room["liveAnswersShown"]:
                 emit("newAnswer", answers, to=room["creatorSID"])
             emit("addOneAnswer", to=room["creatorSID"])
-            database.saveStudentAnswer(room["archiveId"], login, isCorrect, room["activeQuestion"]["id"])
+
+            database.saveStudentAnswer(room["archiveId"], login, isCorrect, room["activeQuestion"]["id"], answers if room["activeQuestion"]["mode"] == 2 else None)
 
 @socketio.on("stopAnswers")
 def stopAnswers(id):

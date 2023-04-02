@@ -67,4 +67,5 @@ class StudentAnswer(db.Model):
     idStudent = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
     idQuestion = db.Column(db.Integer, db.ForeignKey("question.id"), primary_key=True)
     correct = db.Column(db.Boolean, nullable=False)
+    openAnswer = db.Column(db.String(50), nullable=True)
     

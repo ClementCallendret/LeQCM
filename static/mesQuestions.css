@@ -25,3 +25,41 @@
 .card-header > input{
     margin-right: 5px;
 }
+
+#newQuestionBody{
+    position : relative;
+    padding: 20px;
+    max-height: 158px;
+    min-height: 158px;
+    border-bottom-left-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
+}
+
+.newQuestionCard{
+    border-width: 2px;
+    border-radius: 8px;
+    box-shadow: 24px 24px 1px rgba(0, 0, 0, 0.5);
+    position: relative;
+    border-style: solid, 10px;
+    border-color: black;
+    max-width: 400px;
+    min-width: 200px;
+    height: 200px;
+    margin: 10px;
+    margin-bottom: 10px;
+}
+
+#newQuestionLink {
+    position: absolute;
+    margin-left: auto;
+    width : 80%;
+    height: 118px;
+    font-size: 100px;
+}
+
+#newQuestionLink > p {
+    position : relative;
+    bottom: 30px;
+}
+
+#newQuestionLink:hover { text-decoration: none; }

@@ -5,7 +5,7 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'pageQcm.css') }}">
 
-<div class="container-fluid">
+<div class="container">
 
     <div class="printButton">
         <button onclick="window.print();" class="printButton">Imprimer le QCM</button>
@@ -14,44 +14,60 @@
         Boucle Pour chaque élèvre
     -->
     <h1 id="titre">{{title}}</h1>
-    {% if anonyme == true %}
+    <div id="identification">
+        {% if anonyme == true %}
         <!--
             faire numEtu avec des box remplis et vide
     -->
-    {% else %}
+
+        {% else %}
         <!--
         faire 3 encadrés pour Nom, preonm, num etu
     -->
-    {% endif %}
+        <table>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Num etu</th>
+            </tr>
+            <tr>
+                <td>__________</td>
+                <td>__________</td>
+                <td>__________</td>
+            </tr>
+        </table>
+        {% endif %}
+    </div>
+
     <div class="eleve">
-    <!--
+        <!--
         Boucle Pour chaque questions
     -->
-        {% for i in range(0, questions|length)%}
-        <div class="EQ">
-
-            <h3 class="questionIndex">Question {{i+1}} :</h3>
-            <div class="state">
-                <state>{{ questions[i].state|safe }}</state>
-            </div>
-
-            <div class="answers">
-            {% if questions[i].numeralAnswer %}
-            <div class="borderedDiv numberField"></div>
-            {% else %}
-            {% for answer in questions[i].answers %}
-    
-                <div class="caseacocher">
-                    <img src="{{url_for('static', filename='caseacocher.png')}}" width="50" height="25" align="left" />
+        <ol>
+            {% for i in range(0, questions|length)%}
+            <li>
+                <h3 class="questionIndex">Question {{i+1}} :</h3>
+                <div class="state">
+                    <state>{{ questions[i].state|safe }}</state>
                 </div>
-                <div class="answer">
-                    <answer>{{ answer.text|safe}}</answer>
-                </div>
-            {% endfor %}
-            {% endif %}
-            </div>
 
-        </div>
+                <div class="answers">
+                    {% if questions[i].mode == 0 %}
+                    {% for answer in questions[i].answers %}
+                    <div class="row">
+                        <div class="form-check col-6">
+                            <input class="form-check-input" type="checkbox">
+                            <label class="form-check-label">
+                                {{ answer.text|safe}}
+                            </label>
+                        </div>
+
+                        {% endfor %}
+                        {% else %}
+                        <p>.............................................................................</p>
+                        {% endif %}
+                    </div>
+            </li>
             {% endfor %}
             <p style="page-break-after: always;">&nbsp;</p>
 
@@ -62,7 +78,7 @@
 
 <script>
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
+    window.print();
 </script>
 
 {% endblock %}
-    

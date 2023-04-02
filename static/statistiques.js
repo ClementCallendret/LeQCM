@@ -127,6 +127,7 @@ function scrollSide(chart, gap) {
 }
 
 myChart.canvas.addEventListener("wheel", (e) => {
+    e.preventDefault();
     if (e.deltaY < 0) {
         scrollSide(myChart, -1);
     }

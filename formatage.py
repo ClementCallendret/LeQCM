@@ -8,10 +8,10 @@ def formatageMD(text):
     html = markdown.markdown(text, extensions=['codehilite','fenced_code','md_mermaid'])
     return html
 
-def dictTodictFormated(dico):
+def formatQuestionList(dico):
     for question in dico:
         question['state']=formatageMD(question['state'])
-        if not question.get("numeralAnswer"):
+        if question["mode"] == 0:
             for answer in question['answers']:
                 answer['text']=formatageMD(answer['text'])
     return dico

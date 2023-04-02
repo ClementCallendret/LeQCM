@@ -43,6 +43,7 @@
             Date de la session :
             {{res['date']}}
         </div>
+        <a href="{{ url_for('archives.deleteSession', idSession=res['id']) }}" class="btn btn-danger">supprimer de l'historique</a>
         <div class="stats-tab">
             <table class = "table">
                 <thead>
@@ -55,10 +56,18 @@
                     {% for numEtu in res['results'] %}
                         <tr>
                             <th>{{ numEtu }}</th>
-                            {% if res['results'][numEtu] == False %}
-                            <th>0%</th>
-                            {% else %}
-                            <th>{{ res['results'][numEtu] | round}}%</th>
+                            {% if not res['isSequence'] %}
+                                {% if res['results'][numEtu] == False %}
+                                <th style="color : red;">Incorrect</th>
+                                {% else %}
+                                <th style="color : green;">Correct</th>
+                                {% endif %}
+                            {%else%}
+                                {% if res['results'][numEtu] == False %}
+                                <th>0%</th>
+                                {% else %}
+                                <th>{{ res['results'][numEtu] | round}}%</th>
+                                {% endif %}
                             {% endif %}
                         </tr>
 
