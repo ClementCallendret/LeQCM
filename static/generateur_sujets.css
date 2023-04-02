@@ -53,20 +53,6 @@
     margin-right: 5px;
 }
 
-#newTagButton{
-    display: inline;
-    font-size:medium;
-}
-
-#newTagName{
-    display:inline;
-    width:80%;
-}
-
-.middleButton{
-    display: block;
-    margin:15px;
-}
 
 #submitButton{
     background-color: rgb(240, 178, 6);
