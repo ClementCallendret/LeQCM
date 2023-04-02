@@ -18,6 +18,23 @@
 
         <label for="titre">Titre de vos sujets :</label>
         <input type="text" id="titre" name="titre" style="width: 222px;" required>
+
+        <div class="dropdown" id="etudiantsChoisis">
+            <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
+              Etudiants
+            </button>
+
+            <ul class="dropdown-menu overflow-auto" id="tagList">
+              <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
+                    onchange="selectAllTag(this)">Tout sélectionner</label></li>
+              <hr />
+              {%for t in tags%}
+              <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
+                    onchange="checkTag(this)">{{t}}</label></li>
+              {%endfor%}
+            </ul>
+
+          </div>
         
         </br></br></br>
       
