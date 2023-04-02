@@ -3,44 +3,48 @@
 {% block title %}Creation de Sujets{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename = 'Page_sujets.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'generateur_sujets.css') }}">
 
 <div class="container-fluid">
     </br></br>
-    <form method="POST" action="/CreaS">
+    <form method="POST" action="/CreaS" id="form">
         <label for="nbr_sujets">Nombres de sujets voulus :</label>
-        <input type="number" id="nbr_sujets" name="nbr_sujets" min="0" style="width: 69px; margin-right: 50px;" placeholder="0" required>
+        <input type="number" id="nbr_sujets" name="nbr_sujets" min="1" style="width: 69px; margin-right: 50px;"
+            value="1" required>
 
 
         <label for="nbr_questions" id="text_nbr_questions" hidden>Nombres de questions voulues :
-        <input type="number" id="nbr_questions" name="nbr_questions" min="0" max="500" style="width: 69px; margin-right: 50px;" placeholder="0"></label>
-        
+            <input type="number" id="nbr_questions" name="nbr_questions" min="0" max="500"
+                style="width: 69px; margin-right: 50px;" value="1"></label>
+
 
         <label for="titre">Titre de vos sujets :</label>
         <input type="text" id="titre" name="titre" style="width: 222px;" required>
 
-        <div class="dropdown" id="etudiantsChoisis">
+        <div class="dropdown" id="etudiantsChoisis" hidden>
             <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
-              Etudiants
+                Etudiants
             </button>
 
-            <ul class="dropdown-menu overflow-auto" id="tagList">
-              <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
-                    onchange="selectAllTag(this)">Tout sélectionner</label></li>
-              <hr />
-              {%for t in tags%}
-              <li><label for="{{t}}"><input type="checkbox" name="{{t}}" class="tagCheck"
-                    onchange="checkTag(this)">{{t}}</label></li>
-              {%endfor%}
+            <ul class="dropdown-menu overflow-auto" id="stdList">
+                <!-- <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
+                            onchange="selectAllTag(this)">Tout sélectionner</label></li>
+                <hr /> -->
+                {%for s in students%}
+                <li><label for="{{t}}"><input type="checkbox" name="{{s[0]}}" class="stdCheck"
+                            onchange="calculateNbSujets()">{{s[0]}} : {{s[1]}} {{s[2]}}</label></li>
+                {%endfor%}
             </ul>
 
-          </div>
-        
+        </div>
+        <input type="hidden" name="studentList" id="stdListInput" value="">
+
         </br></br></br>
-      
+
         <div class="form-check form-switch">
             <label class="form-check-label" for="flexSwitchCheckChecked">Anonymat</label>
-            <input class="form-check-input" type="checkbox" id="button_anonymat" name="button_anonymat">
+            <input class="form-check-input" type="checkbox" id="button_anonymat" name="button_anonymat"
+                onchange="changeAnonymat(this)">
         </div>
         </br>
         <div class="form-check form-switch">
@@ -51,7 +55,8 @@
         </br>
         <div class="form-check form-switch">
             <label class="form-check-label" for="flexSwitchCheckChecked">Intervalle souhaité</label>
-            <input class="form-check-input" type="checkbox" id="intervalle" name="intervalle" onchange="intervalSetter()">
+            <input class="form-check-input" type="checkbox" id="intervalle" name="intervalle"
+                onchange="intervalSetter()">
         </div>
         </br></br></br>
         <!-- PARTIE AVEC LES TAGS ET LEUR NOMBRE -->
@@ -71,11 +76,11 @@
         </div>
 </div>
 </br>
-<button type="submit" id="submitButton" onclick="verifPossible()">Envoyer</button>
+<button type="button" id="submitButton" onclick="submitForm()">Envoyer</button>
 </form>
 
-
 <input type="hidden" id="allTags" value="{{tagsJSON}}">
+<input type="hidden" id="combiIntervalles" name="combiIntervalles" value="">
 
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
 
