@@ -141,6 +141,11 @@ def allTagsByProf(idProf):
         tags.append(tag[0])
     return tags
 
+def nbQuestionsPerTag(idProf):
+    result = {}
+    for tag in allTagsByProf(idProf):
+        result[tag] = models.Question.query.join(models.HasTag, models.HasTag.idQ == models.Question.id).filter(models.Question.idP == idProf, models.HasTag.idT == tag).count()
+
 ####################### HAS TAG ######################
   
 def addHasTag(idQ, idT):
