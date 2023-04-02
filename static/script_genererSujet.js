@@ -1,23 +1,41 @@
 window.jsPDF = window.jspdf.jsPDF;
 
-function pdf(id){
-    let texte = document.getElementById(id);
+// Define the jspdf instance
 
-    console.log(id);
-    console.log(texte);
+function pdf(id) {
+    var doc = new jsPDF();
+    console.log(id)
+    // Get the HTML content of the element specified by the `id` parameter
+    const texte = document.getElementById(id).innerHTML;
+    console.log(texte)
 
 
-    // Créer un objet jsPDF
-    const pdf = new jsPDF();
+
+    // Set font size and style
+    doc.setFont('helvetica', 'bold');
+
+    doc.setFontSize(2);
+
+    // Set font family
     
-    const html = texte.innerHTML;
-
-    // Ajouter le contenu HTML au PDF
-    pdf.html(html, 
-        {
-        callback: function () {
-            // Télécharger le fichier PDF
-            pdf.save('sujet1.pdf');
+    // Convert HTML content to PDF document using html2pdf
+    doc.html(texte, {
+        callback: function (doc) {
+            doc.save();
         }
-    });
+     });
+    
 }
+function generatePDF(id) {
+    var element = document.getElementById(id);
+    var opt = {
+      margin:       0.5,
+      filename:     'myfile.pdf',
+      image:        { type: 'jpeg', quality: 0.99 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    // New Promise-based usage:
+    html2pdf().set(opt).from(element).save();
+    }

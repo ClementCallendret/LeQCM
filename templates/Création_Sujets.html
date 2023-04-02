@@ -4,96 +4,95 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'generateur_sujets.css') }}">
-
-<div class="container-fluid">
-    </br></br>
-    <form method="POST" action="/CreaS" id="form">
-        <label for="nbr_sujets">Nombres de sujets voulus :</label>
-        <input type="number" id="nbr_sujets" name="nbr_sujets" min="1" style="width: 69px; margin-right: 50px;"
-            value="1" required>
-
-
-        <label for="nbr_questions" id="text_nbr_questions" hidden>Nombres de questions voulues :
-            <input type="number" id="nbr_questions" name="nbr_questions" min="0" max="500"
-                style="width: 69px; margin-right: 50px;" value="1"></label>
+<div class="PASPRINT" id="PASPRINT">
+    <div class="container-fluid">
+        </br></br>
+        <form method="POST" action="/CreaS" id="form">
+            <label for="nbr_sujets">Nombres de sujets voulus :</label>
+            <input type="number" id="nbr_sujets" name="nbr_sujets" min="1" style="width: 69px; margin-right: 50px;"
+                value="1" required>
 
 
-        <label for="titre">Titre de vos sujets :</label>
-        <input type="text" id="titre" name="titre" style="width: 222px;" required>
+            <label for="nbr_questions" id="text_nbr_questions" hidden>Nombres de questions voulues :
+                <input type="number" id="nbr_questions" name="nbr_questions" min="0" max="500"
+                    style="width: 69px; margin-right: 50px;" value="1"></label>
 
-        <div class="dropdown" id="etudiantsChoisis" style="display: inline; margin-left : 15px;"  hidden>
-            <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
-                Etudiants
-            </button>
 
-            <ul class="dropdown-menu overflow-auto" id="stdList">
-                <!-- <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
-                            onchange="selectAllTag(this)">Tout sélectionner</label></li>
-                <hr /> -->
-                {%for s in students%}
-                <li><label for="{{t}}"><input type="checkbox" name="{{s[0]}}" class="stdCheck"
-                            onchange="calculateNbSujets()">{{s[0]}} : {{s[1]}} {{s[2]}}</label></li>
-                {%endfor%}
-            </ul>
+            <label for="titre">Titre de vos sujets :</label>
+            <input type="text" id="titre" name="titre" style="width: 222px;" required>
 
-        </div>
-        <input type="hidden" name="studentList" id="stdListInput" value="">
+            <div class="dropdown" id="etudiantsChoisis" style="display: inline; margin-left : 15px;"  hidden>
+                <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
+                    Etudiants
+                </button>
 
-        </br></br></br>
-
-        <div class="form-check form-switch">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Anonymat</label>
-            <input class="form-check-input" type="checkbox" id="button_anonymat" name="button_anonymat"
-                onchange="changeAnonymat(this)">
-        </div>
-        </br>
-        <div class="form-check form-switch">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Questions mises aléatoirement OU</label>
-            <input class="form-check-input" type="checkbox" id="button_ordre" name="button_ordre">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
-        </div>
-        </br>
-        <div class="form-check form-switch">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Intervalle souhaité</label>
-            <input class="form-check-input" type="checkbox" id="intervalle" name="intervalle"
-                onchange="intervalSetter()">
-        </div>
-        </br></br></br>
-        <!-- PARTIE AVEC LES TAGS ET LEUR NOMBRE -->
-        <ol class="draggable-list" id="draggable-list"></ol>
-        <div id="divNewTag" class="row borderedDiv">
-            <div id="area" class="col-10">
-                <select id="newTagSelect">
-                    <option value="default">Choisissez un tag</option>
-                    {%for t in tags %}
-                    <option id="option{{t}}" value="{{t}}">{{t}}</option>
+                <ul class="dropdown-menu overflow-auto" id="stdList">
+                    <!-- <li><label for="selectAll"><input type="checkbox" name="selctAll" id="selectAll"
+                                onchange="selectAllTag(this)">Tout sélectionner</label></li>
+                    <hr /> -->
+                    {%for s in students%}
+                    <li><label for="{{t}}"><input type="checkbox" name="{{s[0]}}" class="stdCheck"
+                                onchange="calculateNbSujets()">{{s[0]}} : {{s[1]}} {{s[2]}}</label></li>
                     {%endfor%}
-                </select>
+                </ul>
+
             </div>
-            <div class="col-2">
-                <button type="button" class="btn btn-success" onclick="addTag()">+</button>
+            <input type="hidden" name="studentList" id="stdListInput" value="">
+
+            </br></br></br>
+
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="flexSwitchCheckChecked">Anonymat</label>
+                <input class="form-check-input" type="checkbox" id="button_anonymat" name="button_anonymat"
+                    onchange="changeAnonymat(this)">
             </div>
-        </div>
+            </br>
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Questions mises aléatoirement OU</label>
+                <input class="form-check-input" type="checkbox" id="button_ordre" name="button_ordre">
+                <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
+            </div>
+            </br>
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="flexSwitchCheckChecked">Intervalle souhaité</label>
+                <input class="form-check-input" type="checkbox" id="intervalle" name="intervalle"
+                    onchange="intervalSetter()">
+            </div>
+            </br></br></br>
+            <!-- PARTIE AVEC LES TAGS ET LEUR NOMBRE -->
+            <ol class="draggable-list" id="draggable-list"></ol>
+            <div id="divNewTag" class="row borderedDiv">
+                <div id="area" class="col-10">
+                    <select id="newTagSelect">
+                        <option value="default">Choisissez un tag</option>
+                        {%for t in tags %}
+                        <option id="option{{t}}" value="{{t}}">{{t}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-success" onclick="addTag()">+</button>
+                </div>
+            </div>
+    </div>
+    </br>
+    <button type="button" id="submitButton" onclick="submitForm()">Envoyer</button>
+    </form>
+
+    <input type="hidden" id="allTags" value="{{tagsJSON}}">
+    <input type="hidden" id="combiIntervalles" name="combiIntervalles" value="">
 </div>
-</br>
-<button type="button" id="submitButton" onclick="submitForm()">Envoyer</button>
-</form>
-
-<input type="hidden" id="allTags" value="{{tagsJSON}}">
-<input type="hidden" id="combiIntervalles" name="combiIntervalles" value="">
-
 
 <div class="container">
 
     <!--
         Boucle Pour chaque élèvre
     -->
-    <button onclick="pdf(toutLesSujets)">Télécharger tout les sujets</button>
+    <button onclick="window.print()"  class="buttonPrintAll" id="buttonPrintAll">Télécharger tout les sujets</button>
     <div class="toutLesSujets" id ="toutLesSujets" >
-
         {% for i in range (0,tabSujet|length) %}
-        <button onclick="pdf('sujet{{i}}')">Télécharger sujet {{i+1}}</button>
-        <div class="sujet{{i}}" id="sujet{{i}}">
+        <button onclick="generatePDF('sujet{{i}}')" class="buttonPrintS" id="buttonPrintS">Télécharger sujet {{i+1}}</button>
+        <div class="sujet" id="sujet">
             <h1 id="titre">{{title}}</h1>
             <div id="identification">
                 {% if tabSujet[i].anonyme == true %}
@@ -120,28 +119,30 @@
                 {% endif %}
             </div>
 
-            <div class="question">
+            <div class="questions" id="questions">
                 <!--
                 Boucle Pour chaque questions
             -->
                 <ol>
                     {% for j in range (0,tabSujet[i]|length) %}
-                    <li>                    
-                        <h3 class="questionIndex">Question {{j+1}} :</h3>
-                        <div class="state">
-                            <state>{{ tabSujet[i][j].state|safe }}</state>
-                        </div>
+                    <li class="liste" id="liste">                    
+                        <h3 class="questionIndex">{{tabSujet[i][j].title|safe}} :</h3>
+                        <div class="question" id="question">
+                            <div class="state">
+                                <state>{{ tabSujet[i][j].state|safe }}</state>
+                            </div>
 
-                        <div class="answers">
-                            {% if tabSujet[i][j].mode == 0 %}
-                            {% for answer in tabSujet[i][j].answers %}
+                            <div class="answers">
+                                {% if tabSujet[i][j].mode == 0 %}
+                                {% for answer in tabSujet[i][j].answers %}
 
-                            <div class="row">
-                                <div class="form-check col-6">
-                                    <input class="form-check-input" type="checkbox">
-                                    <label class="form-check-label">
-                                        {{ answer.text|safe}}
-                                    </label>
+                                <div class="row">
+                                    <div class="form-check col-6">
+                                        <input class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">
+                                            {{ answer.text|safe}}
+                                        </label>
+                                    </div>
                                 </div>
 
                             {% endfor %}
@@ -149,10 +150,11 @@
                                 <p>.............................................................................</p>
                             {% endif %}
                             </div>
+                        </div>
                     </li>
-                    {% endfor %}
-                    <!-- <p style="page-break-after: always;">&nbsp;</p>-->
 
+                    {% endfor %}
+                </ol>
             </div>
         </div>
         {% endfor %}
@@ -160,10 +162,12 @@
 
 </div>
 
+
 <script>
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.2/purify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>

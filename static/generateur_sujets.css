@@ -60,4 +60,37 @@
     margin: 5px;
 }
 
+@media print {
+    @page {
+        margin:1.6cm;
+    }
+
+    body {
+        margin: 1.6cm;
+    }
+
+    .navbar {
+        display: none;
+        visibility: hidden;
+    }
+    .buttonPrintS {
+        display: none;
+        visibility: hidden;
+    }    
+    .buttonPrintAll {
+        display: none;
+        visibility: hidden;
+    }
+    div.PASPRINT {
+        display: none;
+        visibility: hidden;
+    }
+
+    .liste {
+        break-inside: avoid;
+    }
+    div.sujet{
+        page-break-after: always;
+    }
+}
 

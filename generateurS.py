@@ -69,14 +69,14 @@ def generateurS(E=[[], int],nbSujet = int):
     #E = [[2,"Java"],[3,"Compilation"],[6,"PHP"]]
 
     #BIENTOT On récupère pour chaque tag leur nombre de question
-    #print("E",E)
+    print("E",E)
     tab = getQuestionByTag(E)
-    #print("tab1",tab)
+    print("tab1",tab)
     tab = triBulles(tab)
-    #print("tab2",tab)
+    print("tab2",tab)
 
     tab = doublon(tab)
-    #print("tab3",tab)
+    print("tab3",tab)
 
     dicoQ = conversion(tab)
     #for a in range(len(E)):
@@ -87,7 +87,7 @@ def generateurS(E=[[], int],nbSujet = int):
       #  "compilation" : ["C1","C2","C3","C4","C5","C6"]
     #}
 
-    #print(dicoQ)
+    print(dicoQ)
     #nbSuj = nombre d esujet voulu
     pas = 1
     tabSujet = []
