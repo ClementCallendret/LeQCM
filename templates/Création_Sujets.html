@@ -88,6 +88,7 @@
     <!--
         Boucle Pour chaque élèvre
     -->
+    <button onclick="pdf(toutLesSujets)">Télécharger tout les sujets</button>
     <div class="toutLesSujets" id ="toutLesSujets" >
 
         {% for i in range (0,tabSujet|length) %}
@@ -159,9 +160,9 @@
 
 </div>
 
+<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
 
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
-<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
 
 
 <script>
