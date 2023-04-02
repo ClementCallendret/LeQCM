@@ -77,6 +77,92 @@
 
 <input type="hidden" id="allTags" value="{{tagsJSON}}">
 
+
+<div class="container">
+
+    <!--
+        Boucle Pour chaque élèvre
+    -->
+    <div class="toutLesSujets" id ="toutLesSujets" >
+
+        {% for i in range (0,tabSujet|length) %}
+        <button onclick="pdf({{i}})">Télécharger sujet {{i+1}}</button>
+        <div class="sujet{{i}}" id="sujet{{i}}">
+            <h1 id="titre">{{title}}</h1>
+            <div id="identification">
+                {% if tabSujet[i].anonyme == true %}
+                <!--
+                    faire numEtu avec des box remplis et vide
+            -->
+
+                {% else %}
+                <!--
+                faire 3 encadrés pour Nom, preonm, num etu
+            -->
+                <table>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Num etu</th>
+                    </tr>
+                    <tr>
+                        <td>__________</td>
+                        <td>__________</td>
+                        <td>__________</td>
+                    </tr>
+                </table>
+                {% endif %}
+            </div>
+
+            <div class="question">
+                <!--
+                Boucle Pour chaque questions
+            -->
+                <ol>
+                    {% for j in range (0,tabSujet[i]|length) %}
+                    <li>                    
+                        <h3 class="questionIndex">Question {{j+1}} :</h3>
+                        <div class="state">
+                            <state>{{ tabSujet[i][j].state|safe }}</state>
+                        </div>
+
+                        <div class="answers">
+                            {% if tabSujet[i][j].mode == 0 %}
+                            {% for answer in tabSujet[i][j].answers %}
+
+                            <div class="row">
+                                <div class="form-check col-6">
+                                    <input class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">
+                                        {{ answer.text|safe}}
+                                    </label>
+                                </div>
+
+                            {% endfor %}
+                            {% else %}
+                                <p>.............................................................................</p>
+                            {% endif %}
+                            </div>
+                    </li>
+                    {% endfor %}
+                    <!-- <p style="page-break-after: always;">&nbsp;</p>-->
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
 <script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
+<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
+
+
+<script>
+    mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
+</script>
+
+
 
 {% endblock %}

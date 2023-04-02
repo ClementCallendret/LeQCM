@@ -160,4 +160,3 @@ function addEventListeners() {
         item.addEventListener('dragleave', dragLeave);
     });
 }
-
