@@ -286,5 +286,5 @@ function createCombiIntervalle(tableaux, current_sum, current_combination, targe
 
 function submitForm() {
     if (getSelectedStudents() && verifMinMax())
-        console.log("submitting")
+        form.submit();
 }

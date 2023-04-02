@@ -21,7 +21,7 @@
         <label for="titre">Titre de vos sujets :</label>
         <input type="text" id="titre" name="titre" style="width: 222px;" required>
 
-        <div class="dropdown" id="etudiantsChoisis" hidden>
+        <div class="dropdown" id="etudiantsChoisis" style="display: inline; margin-left : 15px;"  hidden>
             <button type="button" class="btn btn-dark dropdown-toggle itemBut" data-bs-toggle="dropdown">
                 Etudiants
             </button>
@@ -160,15 +160,12 @@
 
 </div>
 
-<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
-
-<script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
-
-
 <script>
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
 </script>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="{{ url_for('static', filename = 'script_genererSujet.js') }}"></script>
+<script src="{{ url_for('static', filename = 'script_crea_sujets.js') }}"></script>
 
 {% endblock %}

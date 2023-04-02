@@ -1,4 +1,4 @@
-import jsPDF from 'jspdf';
+window.jsPDF = window.jspdf.jsPDF;
 
 function pdf(id){
     console.log("test");
