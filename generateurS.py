@@ -1,4 +1,4 @@
-from database import loadQuestionsByProfTag, getProfIdentity
+from database import loadQuestionsByProfTag, getProfIdentity, loadQuestionById
 from flask import session
 from random import random
 def doublon(tab):
@@ -24,6 +24,7 @@ def doublon(tab):
                             longueur2 -= 1
                     l += 1
             j += 1
+    print("tab", tab)
     return tab
 #print(generateurS([[3,"java"],[2,"compilation"]],30))
 
@@ -127,6 +128,7 @@ def generateurS(E=[[], int],nbSujet = int):
         pas += 1
     print("TABSUJET",tabSujet)
     return tabSujet
+
 #Mixe si mixe == True
 def mixage(tabSujet):
     #Mélange les questions de chaque sujet
@@ -135,10 +137,28 @@ def mixage(tabSujet):
     return tabSujet
 
 #fonction possInter qui calcule les différents intervalles de questions possibles
-#Entrée forme [["tag1",[min1,max1]], ["tag2",[min2,max2]] ], int nbSujet
-#Entrée exemple : [["java",[3,5]], ["php",[2,3]]] , 5
-def possInter(tab, nbSujet):
-    tabPoss = []
-    #Pour 3,5
-    for i in range(len(tab)):
-        pass
+def possInter(tab, current_sum, current_combination, target_sum):
+    # Si la somme de la combinaison actuelle est égale à la somme cible
+    if current_sum == target_sum:
+        print(current_combination)
+    # Si la somme de la combinaison actuelle est inférieure à la somme cible
+    elif current_sum < target_sum:
+        # Si tous les tableaux ont été explorés
+        if len(tab) == 0:
+            return
+        else:
+            # Pour chaque élément du premier tableau
+            for element in tab[0]:
+                # Ajouter l'élément actuel à la combinaison
+                new_combination = current_combination + [element]
+                # Ajouter la valeur de l'élément actuel à la somme
+                new_sum = current_sum + element
+                # Appeler récursivement la fonction en utilisant les tableaux restants,
+                # la nouvelle somme et la nouvelle combinaison
+                possInter(tab[1:], new_sum, new_combination, target_sum)
+
+def IdToQuestion(tabQ):
+    for i in range(len(tabQ)):
+        for j in range(len(tabQ[1])):
+            tabQ[i][1][j] = loadQuestionById(tabQ[i][1][j])
+    return tabQ
