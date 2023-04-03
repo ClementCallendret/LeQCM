@@ -49,7 +49,7 @@ function updateCloud() {
         .words(JSON.parse(JSON.stringify(percentAnswers)))
         .padding(5)        //space between words
         .rotate(function () { return 0; })
-        .fontSize(function (d) { return d.size * 3; })      // font size of words
+        .fontSize(function (d) { return d.size * 5; })      // font size of words
         .canvas(function () { return document.createElement("canvas"); })
         .on("end", draw);
     layout.start();
