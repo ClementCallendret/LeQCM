@@ -63,7 +63,8 @@ def CreaS():
             # On récupère l'id des questions portant chaque tag en supprimant les doublons (question portant 2 tags)
             questionByTag = generateurS.getQuestionByTag(tabQ)
             print("Question par tags : ", questionByTag)
-            questionByTagTrie = sorted(questionByTag, key=lambda tab : len(tab[1]))
+            #questionByTagTrie = sorted(questionByTag, key=lambda tab : len(tab[1]))
+            questionByTagTrie = questionByTag
             print("Question par tags triés : ", questionByTagTrie)
             quesParTagSansDoubl = generateurS.doublon(questionByTagTrie)
             print("Question par tags sans doublons : ", quesParTagSansDoubl)
