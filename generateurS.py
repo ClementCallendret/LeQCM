@@ -3,6 +3,7 @@ from flask import session
 from random import random
 from math import comb
 from math import ceil
+import formatage
 
 def doublon(tab):
     for i in range (len(tab)):
@@ -160,8 +161,12 @@ def combi(tableaux, sum, combination, target_sum):
 def IdToQuestion(tabQ):
     for i in range(len(tabQ)):
         for j in range(len(tabQ[i])):
-            tabQ[i][j] = loadQuestionById(tabQ[i][j])
+            print("TAB I J", tabQ[i][j])
+
+            print("ID",loadQuestionById(tabQ[i][j]))
+            tabQ[i][j] = formatage.formatQuestion(loadQuestionById(tabQ[i][j]))
     return tabQ
+
 
 def getNbSujetsPossibles(tabQuestions, nbQuestionVouluParTag):
     total = 1

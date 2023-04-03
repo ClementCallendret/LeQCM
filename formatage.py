@@ -16,6 +16,15 @@ def formatQuestionList(dico):
                 answer['text']=formatageMD(answer['text'])
     return dico
 
+
+def formatQuestion(dico):
+    dico['state']=formatageMD(dico['state'])
+    if dico["mode"] == 0:
+        for answer in dico['answers']:
+            answer['text']=formatageMD(answer['text'])
+    return dico
+
+
 def formatAnswers(answers):
     formatedAns = []
     for a in answers:
