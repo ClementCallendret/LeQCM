@@ -83,7 +83,7 @@ function addTag() {
         <div id="divTag${tag}" class="draggable borderedDiv" draggable="true" data-tagName="${tag}">
                 <div id="area"> 
                 
-                    <h4 style="padding-top: 38px;"> nombre de questions de ${tag}</h4> 
+                    <h4 style="padding-top: 21px;"> nombre de questions de ${tag}</h4> 
         
                     <div class="inputDiv" style="position: auto;">
                         <label class="inputFixe">quantité : <input type="number" value="1" min="1" max="${maxTags[tag]}" class="inputQuantity inputFixe form-control" name="${tag}" style="width: 70px;"></label>
