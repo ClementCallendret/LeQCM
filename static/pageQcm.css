@@ -50,9 +50,8 @@ h3{
         display: none;
         visibility: hidden;
     }
-
-    .state {
-        break-inside: always;
+    .question{
+        break-inside: avoid;   
     }
 
 }

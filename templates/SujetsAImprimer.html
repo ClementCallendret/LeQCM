@@ -86,8 +86,9 @@
                     <ol>
                         {% for j in range (0,tabSujet[i]|length) %}
                         <li class="liste" id="liste">
-                            <h3 class="questionIndex">{{tabSujet[i][j].title|safe}} :</h3>
                             <div class="question" id="question">
+                            <h3 class="questionIndex">{{tabSujet[i][j].title|safe}} :</h3>
+                           
                                 <div class="state">
                                     <state>{{ tabSujet[i][j].state|safe }}</state>
                                 </div>
@@ -113,19 +114,16 @@
                             </div>
                         </li>
 
-                        {% if (i < (tabSujet|length -1))%}
-                        <p style="page-break-after: always;">&nbsp;</p>
-                        {%endif%}
-                        
+
                         {% endfor %}
                     </ol>
                 </div>
                 
             </div>
-            <div class="nestSujet" id="nextSujet">
-
-            </div>
-            <!--<p style="page-break-after: always;">&nbsp;</p>-->
+            {% if (i < (tabSujet|length -1))%}
+            <p style="page-break-after: always;">&nbsp;</p>
+            {%endif%}
+            
             {% endfor %}
         </div>
 

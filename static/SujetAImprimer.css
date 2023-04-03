@@ -48,11 +48,11 @@ body {
     visibility: hidden;
 }
 
-.liste {
-    break-inside: avoid;
-}
-.questions{
+.question{
     break-inside: avoid;   
+}
+.sujet{
+    break-inside: avoid;
 }
 
 
