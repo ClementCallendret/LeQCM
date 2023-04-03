@@ -3,10 +3,6 @@ body {
     font-size: 16px;
 }
 
-h1,
-h3 {
-    font-weight: bold;
-}
 
 h1{
     font-size: 30px;
@@ -55,8 +51,8 @@ h3{
         visibility: hidden;
     }
 
-    div.EQ {
-        break-inside: avoid;
+    .state {
+        break-inside: always;
     }
 
 }

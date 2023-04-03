@@ -39,7 +39,7 @@
         {% endif %}
     </div>
 
-    <div class="eleve">
+    <div class="eleve" id="eleve">
         <!--
         Boucle Pour chaque questions
     -->
@@ -47,7 +47,7 @@
             {% for i in range(0, questions|length)%}
             <li>
                 <h3 class="questionIndex">Question {{i+1}} :</h3>
-                <div class="state">
+                <div class="state" id ="state">
                     <state>{{ questions[i].state|safe }}</state>
                 </div>
 
@@ -67,6 +67,7 @@
                         <p>.............................................................................</p>
                         {% endif %}
                     </div>
+                </div>
             </li>
             {% endfor %}
             <!--

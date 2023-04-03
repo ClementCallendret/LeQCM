@@ -3,19 +3,6 @@ font-family: Arial, sans-serif;
 font-size: 16px;
 }
 
-h1,
-h3 {
-font-weight: bold;
-}
-
-h1 {
-font-size: 30px;
-}
-
-h3 {
-font-size: 20px;
-}
-
 .form-check-input {
 margin-right: 5px;
 border-color: black;
@@ -28,21 +15,23 @@ margin-bottom: 25px;
 #titre {
 text-align: center;
 margin-bottom: 50px;
+margin-top: 50px;
 }
 
-.printButton {
+.buttonPrintAll{
 font-size: 30px;
 text-align: center;
+margin-top : 50px;
+padding-left: 40%;
+padding-right: 40%;
+}
 
-}
-table, th, td {
-border: 1px solid black;
-text-align: center;
-}
+
 
 @media print {
+
 @page {
-    margin: 1.6cm;
+    margin: 0cm;
 }
 
 body {
@@ -62,8 +51,9 @@ body {
 .liste {
     break-inside: avoid;
 }
-
-div.sujet {
-    page-break-after: always;
+.questions{
+    break-inside: avoid;   
 }
+
+
 }
