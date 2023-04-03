@@ -216,7 +216,7 @@ function submitForm() {
         selectedTags.push($(v).attr("data-tagName"));
     })
 
-    $("#selectedTags").val(selectedTags);
+    $("#selectedTags").val(JSON.stringify(selectedTags));
 
     if (verifMinMax() && !$("#draggable-list").is(":empty"))
         form.submit();

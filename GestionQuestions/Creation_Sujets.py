@@ -27,7 +27,8 @@ def CreaS():
         intervalle = (request.form.get("intervalle") != None)
         titre = request.form.get("titre")
         anonymat = (request.form.get("button_anonymat") != None)
-        selectedTags = (request.form.get("selectedTags"))
+        selectedTags = json.loads(request.form.get("selectedTags"))
+        print(selectedTags)
         tabQ = []
         tabSujetID = []
 
@@ -89,6 +90,7 @@ def CreaS():
              #   if request.form.get(allTags[i]) != None:
               #      tabQ.append([allTags[i], int(request.form.get(allTags[i])) ])
             for i in range(len(selectedTags)):
+                print("selectedTags[i] : ", selectedTags[i])
                 if request.form.get(selectedTags[i]) != None:
                     tabQ.append([selectedTags[i], int(request.form.get(selectedTags[i])) ])
             #REMETTRE DANS L ORDRE ICI
