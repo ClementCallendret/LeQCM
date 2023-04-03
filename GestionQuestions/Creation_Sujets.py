@@ -27,20 +27,22 @@ def CreaS():
         intervalle = (request.form.get("intervalle") != None)
         titre = request.form.get("titre")
         anonymat = (request.form.get("button_anonymat") != None)
+        selectedTags = (request.form.get("selectedTags"))
         tabQ = []
         tabSujetID = []
 
         if intervalle:
             # On récupère tous les nombres inclus dans l'intervalle demandé par tag
             nbr_questions = int(request.form.get("nbr_questions"))
-            for i in range(len(allTags)):
-                if request.form.get(allTags[i]+"min"):
-                    min = int(request.form.get(allTags[i]+"min"))
-                    max = int(request.form.get(allTags[i]+"max"))
+            for i in range(len(selectedTags)):
+                if request.form.get(selectedTags[i]+"min"):
+                    min = int(request.form.get(selectedTags[i]+"min"))
+                    max = int(request.form.get(selectedTags[i]+"max"))
                     tagRange = []
                     for j in range(min, max+1, 1):
                         tagRange.append(j)
-                    tabQ.append([allTags[i], tagRange])
+                    tabQ.append([selectedTags[i], tagRange])
+                
             print("tabQ : ",tabQ)
             #tabQ contient pour chaque tag, toutes les valeurs de l'intervalle [min,max] (tabQ = [["java", [2,3,4,5]]["C", [5,6,7]])
 
@@ -81,9 +83,13 @@ def CreaS():
 
         else :
             #On récupère le nb de questions demandé par tag
-            for i in range(len(allTags)):
-                if request.form.get(allTags[i]) != None:
-                    tabQ.append([allTags[i], int(request.form.get(allTags[i])) ])
+            #SANS ORDRE
+            #for i in range(len(allTags)):
+             #   if request.form.get(allTags[i]) != None:
+              #      tabQ.append([allTags[i], int(request.form.get(allTags[i])) ])
+            for i in range(len(selectedTags)):
+                if request.form.get(selectedTags[i]) != None:
+                    tabQ.append([selectedTags[i], int(request.form.get(selectedTags[i])) ])
             #REMETTRE DANS L ORDRE ICI
             #tabQ contient pour tout les tags, leur nombre souhaités (tabQ = [["java",5], ["c", 7]])
             print("AAAAAAAAAAAAAAAAAA tabQ", tabQ)
