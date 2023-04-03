@@ -85,6 +85,7 @@ function ressemblanceByLetter(word1, word2) {
     return (similarity / maxLength * 100);
 }
 
+// on fait la moyenne entre les 2 algos de ressemblance et on test aussi avec les pluriels
 function seRessemble(word1, word2) {
     const similarity = (ressemblanceByLetter(word1, word2) + ressemblanceLev(word1, word2)) / 2;
     const similarityPlurl = (ressemblanceByLetter(pluriel(word1), pluriel(word2)) + ressemblanceLev(pluriel(word1), pluriel(word2))) / 2;
@@ -92,13 +93,14 @@ function seRessemble(word1, word2) {
     return similarity > 50 || similarityPlurl > 50;
 }
 
+// Groupe tous les mots qui se ressemblent
 function groupSimilars(answers) {
     const words = Object.keys(answers);
 
     for (let i = 0; i < words.length; i++) {
-        console.log(words);
         const word1 = words[i];
         let mostUsedSimilar = word1;
+
         for (let j = i+1; j < words.length; j++) {
             const word2 = words[j];
             const similar = seRessemble(word1, word2);
@@ -125,6 +127,7 @@ function groupSimilars(answers) {
     return answers;
 }
 
+// Ajoute un seul mot sans tout recalculer
 function addWord(word, answers) {
     for(let key in answers){
         if(seRessemble(word, key)){

@@ -6,14 +6,14 @@ let myAnswer;
 let layout;
 const colors = ['#F9801D', '#C74EBD', '#3AB3DA', '#FED83D', '#80C71F', '#ED6DAC', '#474F52', '#168B89', '#AA5DA1', '#3F4BA6', '#835432', '#5E7C16', '#B02E26', '#1D1D21']
 
+//---------------- NUAGE ------------------//
+
 function test(){
     totalAnswers = {"travail" : 10, "travaux" : 15, "pithon" : 5, "javascript" : 10, "java script" : 9, "python" : 25, "java" : 15, "c++" : 12, "pyhton" : 1, "compatible" : 10, "incompatible" : 15, "aimer" : 10, "amer" : 5};
     groupSimilars(totalAnswers);
     calculatePercentAnswers();
     updateCloud();
 }
-
-//totalAnswers = { caca : 10, pipi : 25, popo: 15, algerie : 8, baleine : 39, orchide : 28, pissenlit : 2, weed : 20, raviolits : 55}
 
 // append the svg object to the body of the page
 let svg = d3.select("#wordCloud").append("svg")
@@ -54,6 +54,7 @@ function updateCloud() {
     layout.start();
 }
 
+//-------------------- SOCKETS ------------------------//
 
 socket.on('connect', () => {
     socket.emit('joinRoom', { "rId": getCurrentSId() });
@@ -67,6 +68,7 @@ socket.on('rmOneConnected', () => {
     console.log("Nouvelle Déconnexion")
     $("#nbStudents").html((parseInt($("#nbStudents").text()) - 1).toString());
 })
+
 socket.on("addOneAnswer", () => {
     console.log("Nouvelle réponse")
     $("#nbAnswers").html((parseInt($("#nbAnswers").text()) + 1).toString());
@@ -76,27 +78,7 @@ function getCurrentSId() {
     return window.location.href.split('/').slice(-1)[0]
 }
 
-socket.on('newAnswer', (data) => {
-    nbAnswers += 1;
-    if (typeAnswer == 0) {
-        for (a of data) {
-            totalAnswers[a] += 1;
-        }
-    }
-    else if (typeAnswer == 1) {
-        if (data in totalAnswers) {
-            totalAnswers[data] += 1;
-        }
-        else {
-            totalAnswers[data] = 1;
-        }
-    }
-    else{
-        addWord(data, totalAnswers)
-    }
-    calculatePercentAnswers();
-    actualiseLiveAnswers();
-});
+//------------------ LIVE ANSWERS --------------------//
 
 function showLiveAnswers() {
     console.log("Demande des réponses lives")
@@ -187,6 +169,30 @@ function actualiseLiveAnswers() {
     }
 }
 
+socket.on('newAnswer', (data) => {
+    nbAnswers += 1;
+    if (typeAnswer == 0) {
+        for (a of data) {
+            totalAnswers[a] += 1;
+        }
+    }
+    else if (typeAnswer == 1) {
+        if (data in totalAnswers) {
+            totalAnswers[data] += 1;
+        }
+        else {
+            totalAnswers[data] = 1;
+        }
+    }
+    else{
+        addWord(data, totalAnswers)
+    }
+    calculatePercentAnswers();
+    actualiseLiveAnswers();
+});
+
+//------------------ CORRECTION --------------------//
+
 function showCorrection() {
     console.log("Demande de la correction")
     socket.emit("showCorrection", getCurrentSId())
@@ -207,6 +213,8 @@ socket.on('showCorrection', (corrects) => {
     }
 })
 
+//------------------ AUTRES --------------------//
+
 function stopAnswers() {
     console.log("Fermeture des réponses")
     socket.emit("stopAnswers", getCurrentSId())
@@ -216,6 +224,26 @@ socket.on("desactivateAnswers", () => {
     console.log("Désactivation de la réponse")
     $("#validation").addClass("disabled")
 })
+
+function nextQuestion() {
+    console.log("Demande de la question suivante")
+    socket.emit("nextQuestion", getCurrentSId());
+}
+
+socket.on("nextQuestion", () => {
+    window.location.reload();
+});
+
+function stopSession() {
+    console.log("arret de la session")
+    socket.emit("stopSession", getCurrentSId());
+}
+socket.on("stopSession", (url) => {
+    socket.emit("quitSession", getCurrentSId());
+    window.location = url;
+});
+
+//------------------ ENVOIE REPONSE --------------------//
 
 function sendAnswers() {
     console.log("Envoie des/de la réponses")
@@ -241,21 +269,3 @@ function sendAnswers() {
         myAnswer = val;
     }
 }
-
-function nextQuestion() {
-    console.log("Demande de la question suivante")
-    socket.emit("nextQuestion", getCurrentSId());
-}
-
-socket.on("nextQuestion", () => {
-    window.location.reload();
-});
-
-function stopSession() {
-    console.log("arret de la session")
-    socket.emit("stopSession", getCurrentSId());
-}
-socket.on("stopSession", (url) => {
-    socket.emit("quitSession", getCurrentSId());
-    window.location = url;
-});
