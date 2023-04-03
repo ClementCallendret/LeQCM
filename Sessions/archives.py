@@ -1,6 +1,5 @@
-from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
+from flask import Blueprint, redirect, url_for,render_template, flash, session
 import database
-import encryption
 import json
 
 archives = Blueprint('archives',__name__)

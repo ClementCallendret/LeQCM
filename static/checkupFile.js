@@ -9,7 +9,8 @@ function validation() {
     alert("Choisir un fichier !");
     return false;
   }
-  if (name_file.split('.').pop() != 'csv') {$('#scrollableDiv').removeClass("hidden");
+  if (name_file.split('.').pop() != 'csv') {
+    $('#scrollableDiv').removeClass("hidden");
     alert("Aie aie aie !! Ton fichier n'est pas un csv..");
     return false;
   }
@@ -38,11 +39,11 @@ function validation() {
 
 }
 
-function efface(isError=false) {
+function efface(isError = false) {
   $('#comfirmButtons').addClass("hidden")
 
   $('#myFile').val("")
-$('#scrollableDiv').removeClass("hidden");
+  $('#scrollableDiv').removeClass("hidden");
   $('#TabToSend').val("")
 
   $('#etudiant_ajt').empty()
@@ -68,9 +69,9 @@ function Verif_content() {
   StudentTab.val(JSON.stringify(tableau_des_bons_etudiants)); // pour mettre dans mon html mon tableau à l'emplacmeent hidden
 }
 
-function alreadyInTab(line, tab){
-  for(l of tab){
-    if(l[0] == line[0]){
+function alreadyInTab(line, tab) {
+  for (l of tab) {
+    if (l[0] == line[0]) {
       return true;
     }
   }

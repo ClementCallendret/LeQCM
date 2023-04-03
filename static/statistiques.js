@@ -3,6 +3,8 @@ let myLabelsLink = [];
 let nbParticipant = [[], []];
 let maxNbAnswers = 0;
 
+getDatas();
+
 function getDatas(){
     mySessions = JSON.parse(document.getElementById("datasJson").value);
     for(myS of mySessions){
@@ -16,8 +18,7 @@ function getDatas(){
     }
 }
 
-getDatas();
-
+// configuration pour l'affichage du diagramme 
 config = {
     type: 'bar',
     data: {
@@ -62,7 +63,7 @@ Chart.defaults.font.size = 14;
 const ctx = document.getElementById('myChart');
 const myChart = new Chart(ctx, config);
 
-
+// redirige sur la page de la session cliquée
 function clickHandler(click) {
     const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
     if (points.length) {
@@ -96,6 +97,7 @@ function changeTailleIntervalle(input) {
     myChart.update();
 }
 
+// défilage sur le diagramme
 function scrollButton(sens) {
     scrollSide(myChart, sens * myChart.config.options.tailleIntervale);
 }
@@ -139,9 +141,8 @@ myChart.canvas.addEventListener("wheel", (e) => {
 let lastTouchEnd = 0;
 let lastScrollLeft = false; // sens du dernier scroll tactile
 
+// décalage sur le diagramme (tactile)
 myChart.canvas.addEventListener('touchmove', (e) => {
-    // Iterate through the touch points that have moved and log each
-    // of the pageX/Y coordinates. The unit of each coordinate is CSS pixels.
     for (let i = 0; i < e.changedTouches.length; i++) {
         if (lastTouchEnd - e.changedTouches[i].pageX > 60) {
             if (!lastScrollLeft) {

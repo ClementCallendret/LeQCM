@@ -1,7 +1,0 @@
-Bonjour mon cher monsieur Elio
-Je souhaiterais avoir 2 petite feature pour la bdd si cela est possible mon grand seigneur
-fonction 1 : Il faudrait que je rentre (NumProf, TagQuestion) est que ça me retourne les ID de toutes les 
-            questions contenant ce tag
-
-Le résultat serait de la forme {"java" :[idq1, idq2, idq3]}
-Des bisous

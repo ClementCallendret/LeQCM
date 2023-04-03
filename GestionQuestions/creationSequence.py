@@ -1,4 +1,4 @@
-from flask import Blueprint, request,render_template, url_for, redirect, session, flash
+from flask import Blueprint, request,render_template, url_for, redirect, session
 import database
 import formatage
 import json

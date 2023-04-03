@@ -3,9 +3,13 @@ from flask_socketio import join_room, leave_room, emit
 from extension import socketio
 import database
 from random import choice
+from random import randint
 import string
 import formatage
 import json
+
+allStd = ["15369745", "26589647", "25478965", "86297563", "49786521", "89855122", "79935465", "79552368", "79852655", "98253381", "22568745", "12456882", "15975325", "78945612", "46853238"]
+nbStd = len(allStd)
 
 # a installer : 
 # flask-socketio
@@ -70,6 +74,8 @@ def createNew(mode, id):
             print(archiveId)
             newRoom["archiveId"] = archiveId
             rooms[roomId] = newRoom
+
+            #simulateAnswers(rooms[roomId]["archiveId"], rooms[roomId]["activeQuestion"])
             return redirect(url_for('questionLive.liveSessionRoute', id=roomId))
         else:
             flash("La question ou séquence demandé est introuvable")
@@ -106,6 +112,7 @@ def nextQuestion(id):
                 for s in room["connected"]:
                     room["connected"][s] = None
 
+                #simulateAnswers(room["archiveId"], room["activeQuestion"])
                 emit("nextQuestion", question, to=id)
             else:
                 emit("stopSession", url_for('accueil'), to=id)
@@ -200,6 +207,17 @@ def saveAnswers(data):
             emit("addOneAnswer", to=room["creatorSID"])
 
             database.saveStudentAnswer(room["archiveId"], login, isCorrect, room["activeQuestion"]["id"], answers if room["activeQuestion"]["mode"] == 2 else None)
+
+def simulateAnswers(id, question):
+    pourcentageCorrect = randint(50, 100)
+    for i in range(0, randint(8, nbStd)):
+        if question["mode"] == 2:
+            database.saveStudentAnswer(id, allStd[i], True, question["id"], "réponse Test")
+        else:
+            correct = False
+            if randint(0, 100) > pourcentageCorrect:
+                correct = True
+            database.saveStudentAnswer(id, allStd[i], correct, question["id"], None)
 
 @socketio.on("stopAnswers")
 def stopAnswers(id):

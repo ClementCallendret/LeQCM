@@ -1,4 +1,4 @@
-// crédit :  https://www.youtube.com/watch?v=wv7pvH1O5Ho
+// fortement aidé par https://www.youtube.com/watch?v=wv7pvH1O5Ho
 
 const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('check');
@@ -12,7 +12,7 @@ const listItems = [];
 let dragStartIndex;
 //createList();
 
-function intervalSetter() {
+function changeIntervalleMode() {
 
     if (document.getElementById("intervalle").checked) { // si intervalle est checked, c'est que on veut les range
         console.log("Les intervalles sont demandées");
@@ -102,7 +102,7 @@ function addTag() {
     document.getElementById("option" + tag).disabled = true;
     selectTag.value = "default";
 
-    intervalSetter();
+    changeIntervalleMode();
 }
 
 function dragStart() {
@@ -208,6 +208,7 @@ function getSelectedStudents() {
     return true;
 }
 */
+
 function verifMinMax() {
     if ($("#intervalle").is(":checked")) {
         inputsDiv = $(".inputDiv");

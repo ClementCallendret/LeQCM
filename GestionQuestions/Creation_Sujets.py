@@ -2,7 +2,6 @@ from flask import Blueprint, request,session, render_template, redirect, url_for
 import database
 import json
 import generateurS
-from math import ceil
 
 crea_sujets = Blueprint('Création_Sujets',__name__)
 
