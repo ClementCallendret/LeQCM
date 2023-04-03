@@ -1,6 +1,6 @@
 from database import loadQuestionsByProfTag, getProfIdentity, loadQuestionById
 from flask import session
-from random import random
+import random
 from math import comb
 from math import ceil
 import formatage

@@ -28,7 +28,6 @@ def CreaS():
         intervalle = (request.form.get("intervalle") != None)
         titre = request.form.get("titre")
         anonymat = (request.form.get("button_anonymat") != None)
-
         tabQ = []
         tabSujetID = []
 
@@ -86,12 +85,14 @@ def CreaS():
             for i in range(len(allTags)):
                 if request.form.get(allTags[i]) != None:
                     tabQ.append([allTags[i], int(request.form.get(allTags[i])) ])
+            #REMETTRE DANS L ORDRE ICI
             #tabQ contient pour tout les tags, leur nombre souhaités (tabQ = [["java",5], ["c", 7]])
-
+            print("AAAAAAAAAAAAAAAAAA tabQ", tabQ)
             # On récupère l'id des questions portant chaque tag en supprimant les doublons (question portant 2 tags)
             questionByTag = generateurS.getQuestionByTag(tabQ)
             print("############### QByTag : ", questionByTag)
-            questionByTagTrie = sorted(questionByTag, key=lambda tab : len(tab[1]))
+            #questionByTagTrie = sorted(questionByTag, key=lambda tab : len(tab[1]))
+            questionByTagTrie = questionByTag
             print("############### QBulle : ", questionByTagTrie)
             quesParTagSansDoubl = generateurS.doublon(questionByTagTrie)
             print("############### QSansDoub: ", quesParTagSansDoubl)
