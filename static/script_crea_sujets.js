@@ -80,7 +80,7 @@ function addTag() {
     listItem.setAttribute('data-index', index);
 
     listItem.innerHTML = `
-        <div id="divTag${tag}" class="draggable borderedDiv" draggable="true">
+        <div id="divTag${tag}" class="draggable borderedDiv" draggable="true" data-tagName="${tag}">
                 <div id="area"> 
                 
                     <h4 style="padding-top: 38px;"> nombre de questions de ${tag}</h4> 
@@ -170,45 +170,6 @@ function addEventListeners() {
     });
 }
 
-/*
-function calculateNbSujets() {
-    allStudent = $("#stdList").find(".stdCheck");
-    total = 0;
-
-    allStudent.each(function () {
-        if (this.checked) {
-            total++;
-        }
-    });
-
-    $("#nbr_sujets").val(total);
-}
-
-
-// Submit //
-
-function getSelectedStudents() {
-    if ($("#button_anonymat").is(":checked")) {
-        allStudent = $("#stdList").find(".stdCheck");
-        selectedStd = []
-
-        allStudent.each(function () {
-            if (this.checked) {
-                selectedStd.push(this.name);
-            }
-        });
-
-        $("#stdListInput").val(selectedStd);
-        if (selectedStd != $("#nbr_sujets").val()) {
-            alert("Vous devez sélectionner autant d'étudiants que le nombre de sujets voulus")
-            return false;
-        }
-        return true;
-    }
-    return true;
-}
-*/
-
 function verifMinMax() {
     if ($("#intervalle").is(":checked")) {
         inputsDiv = $(".inputDiv");
@@ -247,6 +208,56 @@ function fact(nbr) {
 function nbCombi(p, n) {
     return fact(n) / (fact(p) * fact(n - p));
 }
+
+function submitForm() {
+    selectedTags = [];
+    allTagsDivs = $(".draggable-list").find(".draggable");
+    allTagsDivs.each((i, v) => {
+        selectedTags.push($(v).attr("data-tagName"));
+    })
+
+    $("#selectedTags").val(selectedTags);
+
+    if (verifMinMax() && !$("#draggable-list").is(":empty"))
+        form.submit();
+}
+
+/*
+function calculateNbSujets() {
+    allStudent = $("#stdList").find(".stdCheck");
+    total = 0;
+
+    allStudent.each(function () {
+        if (this.checked) {
+            total++;
+        }
+    });
+
+    $("#nbr_sujets").val(total);
+}
+
+
+function getSelectedStudents() {
+    if ($("#button_anonymat").is(":checked")) {
+        allStudent = $("#stdList").find(".stdCheck");
+        selectedStd = []
+
+        allStudent.each(function () {
+            if (this.checked) {
+                selectedStd.push(this.name);
+            }
+        });
+
+        $("#stdListInput").val(selectedStd);
+        if (selectedStd != $("#nbr_sujets").val()) {
+            alert("Vous devez sélectionner autant d'étudiants que le nombre de sujets voulus")
+            return false;
+        }
+        return true;
+    }
+    return true;
+}
+*/
 
 /*
 function generateTabsIntervalle(intervalles) {
@@ -287,8 +298,3 @@ function createCombiIntervalle(tableaux, current_sum, current_combination, targe
     return combinations;
 }
 */
-
-function submitForm() {
-    if (verifMinMax() && !$("#draggable-list").is(":empty"))
-        form.submit();
-}

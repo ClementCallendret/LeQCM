@@ -48,9 +48,8 @@
         </div>
         </br>
         <div class="form-check form-switch">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Questions mises aléatoirement OU</label>
-            <input class="form-check-input" type="checkbox" id="button_ordre" name="button_ordre">
-            <label class="form-check-label" for="flexSwitchCheckChecked">Ordre des tags important</label>
+            <label class="form-check-label" for="flexSwitchCheckDefault">Questions mélangés
+            <input class="form-check-input" type="checkbox" id="button_ordre" name="button_ordre"></label>
         </div>
         </br>
         <div class="form-check form-switch">
@@ -81,6 +80,7 @@
 
 <input type="hidden" id="allTags" value="{{tagsJSON}}">
 <input type="hidden" id="combiIntervalles" name="combiIntervalles" value="">
+<input type="hidden" id="selectedTags" name="selectedTags" value="">
 
 <script>
     mermaid.initialize({ startOnLoad: true }); // Lancement de mermaid
