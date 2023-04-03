@@ -41,7 +41,7 @@ function intervalSetter() {
         $("#nbr_questions").removeAttr("required");
     }
 }
-
+/*
 function changeAnonymat(input) {
     if (input.checked) {
         $("#etudiantsChoisis").removeAttr("hidden");
@@ -50,7 +50,7 @@ function changeAnonymat(input) {
         $("#etudiantsChoisis").prop("hidden", true);
     }
 }
-
+*/
 function removeTag(tag) {
     parent = document.getElementById("divTag" + tag).parentElement;
     for (ele of listItems) {
@@ -170,10 +170,11 @@ function addEventListeners() {
     });
 }
 
+/*
 function calculateNbSujets() {
     allStudent = $("#stdList").find(".stdCheck");
     total = 0;
-    
+
     allStudent.each(function () {
         if (this.checked) {
             total++;
@@ -206,7 +207,7 @@ function getSelectedStudents() {
     }
     return true;
 }
-
+*/
 function verifMinMax() {
     if ($("#intervalle").is(":checked")) {
         inputsDiv = $(".inputDiv");
@@ -287,9 +288,6 @@ function createCombiIntervalle(tableaux, current_sum, current_combination, targe
 */
 
 function submitForm() {
-    if (getSelectedStudents() && verifMinMax())
-    {
-        if(!$("#draggable-list").is(":empty"))
-            form.submit();
-    }
+    if (verifMinMax() && !$("#draggable-list").is(":empty"))
+        form.submit();
 }
