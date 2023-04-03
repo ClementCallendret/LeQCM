@@ -12,8 +12,7 @@ def init():
     if "loginP" in session:
         tags = database.nbQuestionsPerTag(session["loginP"])
         profStudents = database.getStudentsByProf(session["loginP"])
-        #print(generateurS.generateurS([[1,"a"],[1,"b"]],2))
-        return render_template("Création_Sujets.html", title="", tags = tags, tagsJSON=json.dumps(tags, indent=4), students=profStudents, tabSujet = [], anonyme = False)
+        return render_template("Création_Sujets.html", title="", tags = tags, tagsJSON=json.dumps(tags, indent=4), students=profStudents)
     else:
         flash("Vous devez être connecté pour acceder à cette page")
         return redirect(url_for('login.initRedirect', redirection="Création_Sujets"))
@@ -21,121 +20,97 @@ def init():
 @crea_sujets.route('/CreaS',methods = ['POST'])
 def CreaS():
     if "loginP" in session:
-        if (request.method == 'POST'):
-            #On récupère des données 
-            idP = session["loginP"]
-            allTags = database.allTagsByProf(idP)
-            nbQperTag = database.nbQuestionsPerTag(session["loginP"])
-            profStudents = database.getStudentsByProf(session["loginP"])
+        #On récupère des données 
+        idP = session["loginP"]
+        allTags = database.allTagsByProf(idP)
 
-            nbr_sujets = int(request.form.get("nbr_sujets"))
-            button_anonymat = request.form.get("button_anonymat")
-            button_ordre = request.form.get("button_ordre")
-            intervalle = request.form.get("intervalle")
-            titre = request.form.get("titre")
-            print(nbr_sujets,button_anonymat,button_ordre,intervalle,titre)
-            #Si intervalle 
-            if button_anonymat == None:
-                button_anonymat = False
-            else:
-                button_anonymat = True
-            tabQ = []
-            if intervalle != None:
-                nbr_questions = int(request.form.get("nbr_questions"))
-                for i in range(len(allTags)):
-                    if request.form.get(allTags[i]+"min"):
-                        min = int(request.form.get(allTags[i]+"min"))
-                        max =int(request.form.get(allTags[i]+"max"))
-                        tabQ.append([[min]])
-                        for j in range(min+1, max+1, 1):
-                            tabQ[i][0].append(j)
-                        tabQ[i].append(allTags[i])
-                print("tabQ",tabQ)
-                #tabQ contient pour tout les tags, les valeurs de l'intervalle [min,max]
-                # [[[2,3,4,5],"java"][[5,6,7],"C"]]
-                tabIntervalle = []
-                for i in range(len(tabQ)):
-                    tabIntervalle.append(tabQ[i][0])
-                print("TabIntervalle", tabIntervalle)
+        nbr_sujets = int(request.form.get("nbr_sujets"))
+        mixage = (request.form.get("button_ordre") != None)
+        intervalle = (request.form.get("intervalle") != None)
+        titre = request.form.get("titre")
+        anonymat = (request.form.get("button_anonymat") != None)
 
-                tabCombi = generateurS.combi(tabIntervalle, 0, [], nbr_questions)
-                print("tabCombi",tabCombi)
-                #tabcombi = [[1, 2], [2, 1]] 1Q tag A et 2Q tag B puis inversement
-                tabQAvecDiffCombi = []
-                for i in range(len(tabCombi)):
-                    tabQAvecDiffCombi.append([])
-                    for j in range (len(tabCombi[i])):
-                        tabQAvecDiffCombi[i].append([tabCombi[i][j]])
-                        tabQAvecDiffCombi[i][j].append(tabQ[j][1])
-                print("tabAvec diff combi", tabQAvecDiffCombi)
-                nbCombi = len(tabCombi)
-                print("nbCombi", nbCombi)
+        tabQ = []
+        tabSujetID = []
 
-                questionByTag = generateurS.getQuestionByTag(tabQ)
-                print("############### QByTag : ", questionByTag)
-                questionByTagBulle = sorted(questionByTag, key=lambda tab : len(tab[1]))
-                print("############### QBulle : ", questionByTagBulle)
-                questionsSansDoublons = generateurS.doublon(questionByTagBulle)
-                print("############### QSansDoub: ", questionsSansDoublons)
-                
-                combinaisonsRepartie = generateurS.repartirCombi(questionsSansDoublons, tabQAvecDiffCombi, nbr_sujets)
-                print("############### combinaisonsRepartie: ", combinaisonsRepartie)
+        if intervalle:
+            # On récupère tous les nombres inclus dans l'intervalle demandé par tag
+            nbr_questions = int(request.form.get("nbr_questions"))
+            for i in range(len(allTags)):
+                if request.form.get(allTags[i]+"min"):
+                    min = int(request.form.get(allTags[i]+"min"))
+                    max = int(request.form.get(allTags[i]+"max"))
+                    tagRange = []
+                    for j in range(min, max+1, 1):
+                        tagRange.append(j)
+                    tabQ.append([allTags[i], tagRange])
+            print("tabQ : ",tabQ)
+            #tabQ contient pour chaque tag, toutes les valeurs de l'intervalle [min,max] (tabQ = [["java", [2,3,4,5]]["C", [5,6,7]])
 
-                if combinaisonsRepartie == None :
-                    flash("Vous ne pouvez pas faire suffisement de combinaisons avec les questions que vous possedez")
-                    return render_template("Création_Sujets.html", title=titre, tags = nbQperTag, tagsJSON=json.dumps(nbQperTag, indent=4), students=profStudents, tabSujet = [], anonyme = button_anonymat)
+            # On calcule toutes les combinaisons possibles respectant le nombre de question demandé
+            allCombi = generateurS.combi(tabQ, 0, [], nbr_questions)
+            print("allCombi : ",allCombi)
+            # allCombi = [[1, 2], [2, 1]] 1 question avec tag A et 2 questions avec tag B puis inversement
 
-                #for i in range(nbCombi):
-                #    nbSujet = ceil(nbr_sujets/nbCombi)
-                #    tabNbSujet.append(nbSujet)
-                #    nbr_sujets = nbr_sujets - nbSujet
-                #    nbCombi = nbCombi - 1
-                #print("tabNbSujet", tabNbSujet)
+            # On rajoute des infos pour savoir à quel tag correspond chaque quantité
+            combiIdentifiees = []
+            for i in range(len(allCombi)):
+                combiCourante = []
+                for j in range (len(allCombi[i])):
+                    combiCourante.append([tabQ[j][0], allCombi[i][j]])
+                combiIdentifiees.append(combiCourante)
+            print("combinaisons Identifiées : ", combiIdentifiees)
 
-                tabSujetID2 = []
-                for i in range(len(combinaisonsRepartie)):
-                    print("combinaisonsRepartie ",i," ",combinaisonsRepartie[i])
-                    #print("tabNbSujet",tabNbSujet[i])
-                    tabSujetID=(generateurS.generateurS(combinaisonsRepartie[i][0], combinaisonsRepartie[i][1], questionsSansDoublons))
-                    for sujet in tabSujetID:
-                        tabSujetID2.append(sujet)
-                print("tabSujetFinal",tabSujetID2)
-            else :
-                for i in range(len(allTags)):
-                    #On récupère le nb de questions par Tag pour les tag où y a des questions
-                    if request.form.get(allTags[i]) != None:
-                        tabQ.append([int(request.form.get(allTags[i]))])
-                        tabQ[i].append(allTags[i])
-                #tabQ contient pour tout les tags, leur nombre souhaités 
-                #exemple tabQ[[5,"java"],[7,"c"]]
-                #print("TEST CREAS", generateurS.generateurS([[1,'a'],[1,'b']],2))
+            # On récupère l'id des questions portant chaque tag en supprimant les doublons (question portant 2 tags)
+            questionByTag = generateurS.getQuestionByTag(tabQ)
+            print("Question par tags : ", questionByTag)
+            questionByTagTrie = sorted(questionByTag, key=lambda tab : len(tab[1]))
+            print("Question par tags triés : ", questionByTagTrie)
+            quesParTagSansDoubl = generateurS.doublon(questionByTagTrie)
+            print("Question par tags sans doublons : ", quesParTagSansDoubl)
+            
+            # On calcule le nombre de sujet que l'on fera avec chaque combinaisons et on voit si c'est possible
+            combinaisonsRepartie = generateurS.repartirCombi(quesParTagSansDoubl, combiIdentifiees, nbr_sujets)
+            print("Combinaisons Reparties : ", combinaisonsRepartie)
+            if combinaisonsRepartie == None :
+                flash("Vous ne pouvez pas faire suffisement de combinaisons avec les questions que vous possedez")
+                return render_template("SujetsAImprimer.html", tabSujet = [], anonyme = False, title="")
 
-                questionByTag = generateurS.getQuestionByTag(tabQ)
-                print("############### QByTag : ", questionByTag)
-                questionByTagBulle = sorted(questionByTag, key=lambda tab : len(tab[1]))
-                print("############### QBulle : ", questionByTagBulle)
-                questionsSansDoublons = generateurS.doublon(questionByTagBulle)
-                print("############### QSansDoub: ", questionsSansDoublons)
-                print("############### tabQ: ", tabQ)
+            #on génère le bon nombre de sujet pour chaque combinaison
+            for i in range(len(combinaisonsRepartie)):
+                tabSujetID += (generateurS.generateurS(combinaisonsRepartie[i][0], combinaisonsRepartie[i][1], quesParTagSansDoubl))
+            
+            print("Sujet finaux (id) : ", tabSujetID)
 
-                nbSujetPossibles = generateurS.getNbSujetsPossibles(questionsSansDoublons, tabQ)
+        else :
+            #On récupère le nb de questions demandé par tag
+            for i in range(len(allTags)):
+                if request.form.get(allTags[i]) != None:
+                    tabQ.append([allTags[i], int(request.form.get(allTags[i])) ])
+            #tabQ contient pour tout les tags, leur nombre souhaités (tabQ = [["java",5], ["c", 7]])
 
-                if(nbSujetPossibles < nbr_sujets):
-                    flash("vous n'avez pas assez de questions différentes pour autant de sujets")
-                    return render_template("Création_Sujets.html", title=titre, tags = nbQperTag, tagsJSON=json.dumps(nbQperTag, indent=4), students=profStudents, tabSujet = [], anonyme = button_anonymat)
+            # On récupère l'id des questions portant chaque tag en supprimant les doublons (question portant 2 tags)
+            questionByTag = generateurS.getQuestionByTag(tabQ)
+            print("############### QByTag : ", questionByTag)
+            questionByTagTrie = sorted(questionByTag, key=lambda tab : len(tab[1]))
+            print("############### QBulle : ", questionByTagTrie)
+            quesParTagSansDoubl = generateurS.doublon(questionByTagTrie)
+            print("############### QSansDoub: ", quesParTagSansDoubl)
 
-                tabSujetID2 = generateurS.generateurS(tabQ, nbr_sujets, questionsSansDoublons)
-                print("TAB FINALE",tabSujetID2)
-                #tabQ contient tout les sujets avec à la place des questions l'id des questions 
-                #Donc va falloir que je fasse une fonction 
-    
-        if button_ordre != None:
-            tabSujetFinal = generateurS.mixage(tabSujetID2)
-        else:
-            tabSujetFinal = tabSujetID2
+            #on calcule le nombre de sujets faisables avec nos questions pour voir si c'est possible
+            nbSujetPossibles = generateurS.getNbSujetsPossibles(quesParTagSansDoubl, tabQ)
+            if(nbSujetPossibles < nbr_sujets):
+                flash("vous n'avez pas assez de questions différentes pour autant de sujets")
+                return render_template("SujetsAImprimer.html", tabSujet = [], anonyme = False, title="")
 
-        tabSujetFinalLeVrai = generateurS.IdToQuestion(tabSujetFinal)
-        print(tabSujetFinalLeVrai)
-        tags = database.nbQuestionsPerTag(session["loginP"])
-        profStudents = database.getStudentsByProf(session["loginP"])
-        return render_template("Création_Sujets.html", title=titre, tags = nbQperTag, tagsJSON=json.dumps(nbQperTag, indent=4), students=profStudents, tabSujet = tabSujetFinalLeVrai, anonyme = button_anonymat)
+            tabSujetID = generateurS.generateurS(tabQ, nbr_sujets, quesParTagSansDoubl)
+            print("Sujet finaux (id) : ", tabSujetID)
+
+    # On mélange les questions si demandé
+    if mixage:
+        tabSujetID = generateurS.mixage(tabSujetID)
+
+    #on remplace les identifiants par leur questions respectives
+    tabSujetQuestions = generateurS.IdToQuestion(tabSujetID)
+    print("Sujets finaux (avec les questions) : ", tabSujetQuestions)
+    return render_template("SujetsAImprimer.html", tabSujet = tabSujetQuestions, anonyme = anonymat, title=titre)

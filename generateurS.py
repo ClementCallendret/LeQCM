@@ -48,8 +48,8 @@ def getQuestionByTag(E=[[], int]):
     tab = []
     idP = session['loginP']
     for i in range (len(E)):
-         tab.append([E[i][1]]) #ajout tag
-         tab[i].append(loadQuestionsByProfTag(idP,E[i][1])) #ajout idQ en fonctino des tags
+         tab.append([E[i][0]]) #ajout tag
+         tab[i].append(loadQuestionsByProfTag(idP,E[i][0])) #ajout idQ en fonctino des tags
          #requête BDD pour chaque tag E[i][1]
     #trier les tabs de manière croissante en fonction de leur nb de questions
     #tab = [["java",[1,2,3]],["C",[3,4]],["Meynard",[4,5,6,7,8]]]
@@ -111,21 +111,21 @@ def generateurS(E ,nbSujet, questionsSansDoublons): #E=[[], int] mais ptetre plu
     #Pour chaque tag
     for j in range(len(E)):
         #Pour chaque question dans 1 tag
-        #E[j][0] = nb de Question pour un tag (premier tour de boucle c'est 2 car [2,"Java"] )
+        #E[j][1] = nb de Question pour un tag (premier tour de boucle c'est 2 car ["Java", 2] )
 
-        for k in range(E[j][0]):
+        for k in range(E[j][1]):
             #pour chaque sujet
             #On évite que le pas soit un multiple sinon on retourne sur les mêmes valeurs 
 
             #Si nbQ pair alors pas doit être impair
             #Si nbQ impair alors pas doit être tout sauf multipe de nbQ et inversement
 
-            while (( (len(dicoQ[E[j][1]])%2 == 0 and pas%2 == 0) or ((len(dicoQ[E[j][1]]))%2 != 0 and (pas%len(dicoQ[E[j][1]]) == 0))or (len(dicoQ[E[j][1]])%pas == 0)) and len(dicoQ[E[j][1]]) != 1):
+            while (( (len(dicoQ[E[j][0]])%2 == 0 and pas%2 == 0) or ((len(dicoQ[E[j][0]]))%2 != 0 and (pas%len(dicoQ[E[j][0]]) == 0))or (len(dicoQ[E[j][0]])%pas == 0)) and len(dicoQ[E[j][0]]) != 1):
                 pas += 1
             l = k
             for compteur in range (nbSujet):             
-                tabSujet[compteur].append(dicoQ[E[j][1]][l])
-                l = (l+pas)%len(dicoQ[E[j][1]])
+                tabSujet[compteur].append(dicoQ[E[j][0]][l])
+                l = (l+pas)%len(dicoQ[E[j][0]])
         pas += 1
     return tabSujet
 
@@ -148,7 +148,7 @@ def combi(tableaux, sum, combination, target_sum):
             return []
         else:
             # Pour chaque élément du premier tableau
-            for element in tableaux[0]:
+            for element in tableaux[0][1]:
                 # on ajoute l'élément actuel à la combinaison
                 new_combination = combination + [element]
                 # puis on ajoute la valeur de l'élément actuel à la somme
@@ -165,7 +165,7 @@ def IdToQuestion(tabQ):
 
 def getNbSujetsPossibles(tabQuestions, nbQuestionVouluParTag):
     total = 1
-    dicoNbQ = conversion2(nbQuestionVouluParTag)
+    dicoNbQ = conversion(nbQuestionVouluParTag)
     for tag in tabQuestions:
         total *= comb(len(tag[1]), dicoNbQ[tag[0]])
     return total
