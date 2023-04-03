@@ -30,6 +30,13 @@ function submitForm(destination) {
 
     $("#orderedId").val(JSON.stringify(orderedId))
 
+    if(destination == '/MesQuestions/PageQCM'){
+        form.target = '_blank'
+    }
+    else{
+        form.target = '_self'
+    }
+
     form.action = destination;
     if (orderedId.length > 0)
         form.submit()

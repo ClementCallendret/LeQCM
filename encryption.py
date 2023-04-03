@@ -1,5 +1,4 @@
 import secrets
-import string
 import bcrypt
 import database
 #Alors, oui on est pas en https, oui on est sur python, oui on utilise flask avec le debug donc c'est absolument pas sécurisé

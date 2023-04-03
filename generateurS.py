@@ -1,4 +1,4 @@
-from database import loadQuestionsByProfTag, getProfIdentity, loadQuestionById
+from database import loadQuestionsByProfTag, loadQuestionById
 from flask import session
 from random import random
 from math import comb

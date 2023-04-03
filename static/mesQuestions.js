@@ -39,6 +39,7 @@ function filterByTags() {
     }
 }
 
+// trouve tous les tags d'une question
 function getTags(cardFooter){
     tagsJQ = cardFooter.find(".etiquette")
     tags = []
@@ -54,14 +55,12 @@ function selectAllTag(c) {
         v.checked = val
     })
 }
-
 function selectAllSeq(c) {
     val = c.checked;
     $(".checkSequence").each((i, v) => {
         v.checked = val
     })
 }
-
 function selectAllQ(c) {
     val = c.checked;
     $(".checkQuestion").each((i, v) => {
@@ -69,18 +68,21 @@ function selectAllQ(c) {
     })
 }
 
+//si on décheck une question on décheck le selectAll
 function checkTag(c) {
     if (! c.checked) {
         document.getElementById("selectAll").checked = false;
     }
 }
 
+//si on décheck une séquence on décheck le selectAll
 function checkSeq(c) {
     if (! c.checked) {
         document.getElementById("selectAllSeq").checked = false;
     }
 }
 
+//si on décheck une question on décheck le selectAll
 function checkQ(c) {
     if (! c.checked) {
         document.getElementById("selectAllQ").checked = false;

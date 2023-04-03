@@ -1,5 +1,4 @@
-from flask import Blueprint, Flask, request, redirect, url_for,render_template, flash, session
-import database
+from flask import Blueprint, request, redirect, url_for,render_template, flash, session
 import encryption
 login = Blueprint('login',__name__)
 
