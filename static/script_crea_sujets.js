@@ -287,7 +287,9 @@ function createCombiIntervalle(tableaux, current_sum, current_combination, targe
 */
 
 function submitForm() {
-    if (getSelectedStudents() && verifMinMax())
+    //getSelectedStudents()
+    form.submit();
+    if (verifMinMax())
     {
         if(!$("#draggable-list").is(":empty"))
             form.submit();

@@ -3,8 +3,7 @@ import database
 import json
 import generateurS
 from math import ceil
-#A virer plus tard mais jsp il veut idToquestion en plus
-from generateurS import IdToQuestion
+
 crea_sujets = Blueprint('Création_Sujets',__name__)
 
 @crea_sujets.route('/Création_Sujets/')

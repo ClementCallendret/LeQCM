@@ -16,27 +16,6 @@
   }
 
 </style>
-    <div class="row borderedDiv">
-        <div class="col-md-6">
-                <h4>Importez un fichier '.png afin d'ajouter votre pp.</h4>
-                <div id="fileInput">
-                    <input type="file" id="myFile" name="fichier" onchange="validation()" accept=".png">
-                </div>
-                <h5> Ou Déposez-le ci-dessus</h5>
-                <!-- si tu veux que ca filtre direct dans tes fichiers les jpg possibles utilise accept=".jpg"-->
-                <form id="FormAjout" action="" onsubmit="" method="post" required>
-                    <!-- <button class="btn btn-dark" type="button" id="Soumettre" onclick="validation()"
-                        style="display: block;">SOUMETTRE</button> -->
-                    <input type="hidden" id="pp" value="" name="ppdisp">
-                    <div id="comfirmButtons" class="d-flex flex-wrap justify-content-center hidden">
-                        <button class="btn btn-danger" type="button" id="boutoncancel" onclick="efface()">Annuler <!-- class btn-danger pour le mettre en rouge-->
-                            !</button>
-                        <input class="btn btn-success" type="submit" form="FormAjout" id="boutonsubmit" onclick="nice.play()"
-                            value="Confirmer !"> <!-- class btn-success pour le mettre en vert-->
-                    </div>
-                </form>
-        </div>
-    </div>
 <div class="centerPage">
     <h2>Bonjour {{identity[0] + " " + identity[1]}}</h2>
     <form action="/profil/password" method="post" id="changePassword" class="borderedDiv">
