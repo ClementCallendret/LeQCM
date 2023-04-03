@@ -60,6 +60,11 @@
     margin: 5px;
 }
 
+#newTagSelect{
+    background-color: rgb(161, 161, 161);
+}
+
+
 
 @media print {
     @page {
