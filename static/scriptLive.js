@@ -9,7 +9,8 @@ const colors = ['#F9801D', '#C74EBD', '#3AB3DA', '#FED83D', '#80C71F', '#ED6DAC'
 //---------------- NUAGE ------------------//
 
 function test(){
-    totalAnswers = {"travail" : 10, "travaux" : 15, "pithon" : 5, "javascript" : 10, "java script" : 9, "python" : 25, "java" : 15, "c++" : 12, "pyhton" : 1, "compatible" : 10, "incompatible" : 15, "aimer" : 10, "amer" : 5};
+    totalAnswers = {"travail" : 10, "travaux" : 15, "pithon" : 5, "javascript" : 10, "java script" : 9, "python" : 25, "java" : 15, "c++" : 12, 
+    "pyhton" : 1, "compatible" : 10, "incompatible" : 15, "aimer" : 10, "amer" : 5, "nuage" : 19, "muage" : 6};
     groupSimilars(totalAnswers);
     calculatePercentAnswers();
     updateCloud();
@@ -48,7 +49,7 @@ function updateCloud() {
         .words(JSON.parse(JSON.stringify(percentAnswers)))
         .padding(5)        //space between words
         .rotate(function () { return 0; })
-        .fontSize(function (d) { return d.size * 3; })      // font size of words
+        .fontSize(function (d) { return d.size * 5; })      // font size of words
         .canvas(function () { return document.createElement("canvas"); })
         .on("end", draw);
     layout.start();
